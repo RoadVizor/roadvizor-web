@@ -1,15 +1,12 @@
 {
-  "name": "web-data-viz",
+  "name": "roadvizor-web",
   "version": "1.0.0",
-  "description": "",
+  "description": "RoadVizor - Módulo WEB",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon --exec node app.js",
-    "style": "npx @tailwindcss/cli -i ./public/css/style.css -o ./public/css/output.css --watch"
+    "start": "npx @tailwindcss/cli -i ./public/css/style.css -o ./public/css/output.css & node app.js",
+    "dev": "concurrently \"npx @tailwindcss/cli -i ./public/css/style.css -o ./public/css/output.css --watch\" \"nodemon --exec node app.js\""
   },
-  "author": "Feito pelos desenvolvedores @ São Paulo Tech School / Bandtec Digital School",
-  "license": "MIT",
   "dependencies": {
     "@tailwindcss/cli": "^4.3.3",
     "axios": "^1.19.0",
@@ -20,5 +17,8 @@
     "nodemon": "^2.0.7",
     "path": "^0.12.7",
     "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
   }
 }

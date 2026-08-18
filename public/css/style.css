@@ -1,2 +1,15 @@
 @import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap");
+
+/* TailwindCSS custom styles */
+@theme {
+  --font-title: "MuseoModerno", "sans-serif";
+}
+
+/* Styles Padrão */
+body {
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
