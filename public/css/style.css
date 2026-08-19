@@ -1,15 +1,95 @@
 @import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap");
 
-/* TailwindCSS custom styles */
-@theme {
-  --font-title: "MuseoModerno", "sans-serif";
+:root {
+  color-scheme: light dark;
+
+  --background: #eaf4fb;
+  --foreground: #071a2b;
+
+  --primary: #0e5aa7;
+  --secondary: #4fb3e8;
+  --accent: #28c76f;
+
+  --muted: #516d85;
+  --disabled: #98a7b3;
+
+  --success-bg: #e6f9ef;
+  --success-text: #157942;
+  --warning-bg: #fef3e2;
+  --warning-text: #97640c;
+  --destructive-bg: #fde9e7;
+  --destructive-text: #8f1d14;
+
+  --chart-1: #0e5aa7;
+  --chart-2: #28c76f;
+  --chart-3: #4fb3e8;
+  --chart-4: #e4af44;
+  --chart-5: #9b6ecf;
 }
 
-/* Styles Padrão */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #071a2b;
+    --foreground: #eaf4fb;
+
+    --muted: #9dafbe;
+    --disabled: #657481;
+
+    --success-bg: #1e3e2c;
+    --success-text: #88ddae;
+    --warning-bg: #40331c;
+    --warning-text: #ebbe70;
+    --destructive-bg: #401e1c;
+    --destructive-text: #ec8179;
+  }
+}
+
+/* Customização do TailwindCSS */
+@theme {
+  --font-museo: "MuseoModerno", sans-serif;
+  --font-mont: "Montserrat", sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  
+  --color-muted: var(--muted);
+  --color-disabled: var(--disabled);
+
+  --color-success: var(--success-bg);
+  --color-success-foreground: var(--success-text);
+  --color-warning: var(--warning-bg);
+  --color-warning-foreground: var(--warning-text);
+  --color-destructive: var(--destructive-bg);
+  --color-destructive-foreground: var(--destructive-text);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+}
+
 body {
-  width: 100%;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
+  @apply w-full min-h-dvh flex flex-col bg-background text-foreground font-mont;
+}
+
+.title {
+  @apply font-museo font-bold capitalize text-3xl md:text-4xl;
+}
+ 
+.subtitle {
+  @apply font-mont font-medium text-lg md:text-xl;
+}
+ 
+.body {
+  @apply font-mont font-normal text-sm md:text-base;
+}
+ 
+.caption {
+  @apply font-museo font-bold text-xs md:text-sm;
 }
