@@ -29,7 +29,7 @@
 }
 
 /* Inverte as variáveis para o tema Dark */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #071a2b;
     --foreground: #eaf4fb;
@@ -44,7 +44,7 @@
     --destructive-bg: #401e1c;
     --destructive-text: #ec8179;
   }
-}
+} */
 
 /* Customização do TailwindCSS */
 @theme {
@@ -93,4 +93,8 @@ body {
 
 .caption {
   @apply font-museo font-bold text-xs md:text-sm;
+}
+
+.container {
+  @apply max-w-6xl w-full mx-auto px-8 lg:px-16;
 }
