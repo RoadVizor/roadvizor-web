@@ -30,8 +30,8 @@
 
       <!-- Seção 3: Recursos -->
       <section id="section-resources">
-        <div class="container m-16">
-          <div class="flex justify-center text-chart-2 verde">
+        <div class="container my-26">
+          <div class="flex justify-center text-chart-2 caption">
             <h1>
               RECURSOS
             </h1>
@@ -49,7 +49,7 @@
             </p>
           </div>
 
-          <div class="flex flex-row justify-between flex-wrap">
+          <div class="flex gap-1 flex-wrap justify-center">
 
 
             <div class="border-[#373838] border bg-[#060D18] rounded-2xl p-4 card ">
@@ -106,7 +106,6 @@
             </div>    
             
             <div class="border-[#373838] border bg-[#060D18] rounded-2xl p-4 card">
-              
               <div class="border-2 border-[#04423C] p-1 w-fit h-fit rounded-2xl bg-[#052025] text-3xl icones">
                 <i class="ph ph-chart-bar"></i>
               </div>
@@ -168,9 +167,9 @@
 
       <!-- Seção 4: Depoimentos -->
       <section id="section-reviews">
-        <div class="container m-16">
+        <div class="container m-26">
 
-          <div class="flex justify-center text-chart-2 verde">
+          <div class="flex justify-center text-chart-2 caption">
             <h1>
               DEPOIMENTOS
             </h1>
@@ -182,11 +181,11 @@
             </p>
           </div>
           
-          <div class="dizem">
+          <div class="flex justify-evenly">
             
             <div class="border-[#373838] border bg-[#060D18] rounded-2xl p-4 card2 ml-10">
               
-              <div class="icone text-3xl mb-8">
+              <div class="text-3xl mb-5">
                 <i class="ph-fill ph-star estrelas"></i>
                 <i class="ph-fill ph-star estrelas"></i>
                 <i class="ph-fill ph-star estrelas"></i>
@@ -195,11 +194,11 @@
               </div>
               
               <div class="text-muted pt-3">
-                <p class="text-justify">"O FlowSight nos deu visibilidade total sobre os servidores Free Flow da nossa concessão. Reduzimos nosso MTTR em 68% e eliminamos praticamente todas as falhas não detectadas."</p>
+                <p class="text-justify">"O RoadVizor nos deu visibilidade total sobre os servidores Free Flow da nossa concessão. Reduzimos nosso MTTR em 68% e eliminamos praticamente todas as falhas não detectadas."</p>
               </div>
               
               <div class="flex flex-row">
-                <div class="avaliacao">RF</div>
+                <div class="flex w-10 h-10 bg-muted rounded-full justify-center items-center m-4">RF</div>
 
                 <div class="flex-col w-fit p-2.5">
                   <div class="font-bold">
@@ -207,7 +206,7 @@
                   </div>
                   
                   <div>
-                    <p class="verde">Diretora de TI · Via Expressa S.A.</p>
+                    <p class="caption text-muted">Diretora de TI · Via Expressa S.A.</p>
                   </div>
                 </div>
 
@@ -219,7 +218,7 @@
             
             <div class="border-[#373838] border bg-[#060D18] rounded-2xl p-4 card2 ml-10">
               
-              <div class="icone text-3xl mb-8">
+              <div class="icone text-3xl mb-5">
                 <i class="ph-fill ph-star estrelas"></i>
                 <i class="ph-fill ph-star estrelas"></i>
                 <i class="ph-fill ph-star estrelas"></i>
@@ -232,7 +231,7 @@
               </div>
               
               <div class="flex flex-row">
-                <div class="avaliacao">MA</div>
+                <div class="flex w-10 h-10 bg-muted rounded-full justify-center items-center m-4">MA</div>
 
                 <div class="flex-col w-fit p-2.5">
                   <div class="font-bold">
@@ -240,7 +239,7 @@
                   </div>
                   
                   <div>
-                    <p class="verde">Gerente de Infraestrutura · RodoVias Nordeste.</p>
+                    <p class="caption text-muted">Gerente de Infraestrutura · RodoVias Nordeste.</p>
                   </div>
                 </div>
 
@@ -255,9 +254,9 @@
         
         <!-- Seção 5: Contato -->
         <section id="section-contact">
-        <div class="container m-16">
+        <div class="container m-26">
 
-          <div class="flex justify-center text-chart-2 verde p-4">
+          <div class="flex justify-center text-chart-2 caption p-4">
             <h1 class="border-2 caption rounded-2xl p-1.5">
               <i class="ph ph-lightning"></i>Pronto para começar?
             </h1>
@@ -279,16 +278,78 @@
           </div>
 
           <div class="flex flex-row justify-center items-center ">
-            <button class="botao ">Solicitar Demo Gratuita <i class="ph ph-arrow-right"></i></button>
-            <button class="botao2">Falar com especialista <i class="ph ph-arrow-right"></i></button>
+            <button class="p-4 bg-[#28c76f] rounded-2xl text-black m-6 transition duration-300 hover:cursor-pointer hover:bg-[#0aa24f] ">Solicitar Demo Gratuita <i class="ph ph-arrow-right"></i></button>
+            <button class="p-4 bg-transparent border border-white rounded-2xl text-white m-6 transition duration-300 hover:cursor-pointer hover:bg-[#1a1f24]">Falar com especialista <i class="ph ph-arrow-right"></i></button>
 
           </div>
 
         </section>
     </main>
-
+      
     <!-- Footer -->
-    <footer class="container"></footer>
+    <footer class="container">
+      <div class=" w-full h-60 flex flex-row justify-between">
+        <div class="flex flex-col w-1/4">
+          <div class="flex flex-row gap-4 subtitle">
+            <i class="ph ph-pulse"></i> <p>RoadVizor</p>
+          </div>
+
+          <div class="text-muted justify-center mt-8 text-justify items-center caption">
+            <p>Observabilidade inteligente para <br>infraestrutura de pedágios Free Flow.</p>
+          </div>          
+          
+          <div class="text-muted justify-center mt-8 text-justify items-center caption">
+            <p>contato@roadvizor.com
+              <br>
+              +55 11 000000000</p>
+          </div>
+
+
+        </div>
+
+        <div class="flex flex-col w-1/4 text-right">
+          <p class="caption pb-4">Site institucional</p>
+          <ul class="caption text-muted flex flex-col gap-2"> 
+            
+            <li>
+              <a href="#section-hero" class="hover:underline">
+                Produto
+              </a>
+            </li>            
+            
+            <li>
+              <a href="#section-solution" class="hover:underline">
+                Nossa Solução
+              </a>
+            </li>
+            
+            <li>
+            <a href="#section-resources" class="hover:underline">
+              Recursos
+            </a>  
+            </li>
+            <li>
+            <a href="#section-reviews" class="hover:underline">
+              Depoimentos
+            </a>  
+            </li>
+            <li>
+              <a href="#section-contact" class="hover:underline">
+                Contato
+              </a>
+            </li>
+
+          </ul>
+        </div>
+
+
+
+      </div>
+
+      <div class="flex border-t border-muted h-12 justify-center">
+        <p class="caption text-muted m-4">© 2025 RoadVizor Ltda. Todos os direitos reservados.</p>
+      </div>
+    </footer>
   </body>
 </html>
- DEPOIMENTOS 
+  

@@ -96,84 +96,17 @@ body {
 }
 
 .container {
-  @apply max-w-7xl w-full mx-auto px-4 lg:px-8;
+  @apply max-w-[1600px] w-full mx-auto px-4 lg:px-8;
 }
 
 .card{
-  width: 33%;
-  margin-top: 1rem;
-  transition: 0.3s;
-}
-
-.card:hover{
-  border-color: var(--success-text);
-background-color: #191f25;
+  @apply max-w-[33%] hover:border-success hover:bg-[#191f25] transition duration-400 
 }
 
 .card2{
-  width: 45%;
-  margin-top: 1rem;
-  transition: 0.3s;
-}
-
-.card2:hover{
-  border-color: var(--success-text);
-  background-color: #191f25;
-}
-
-.verde{
-  font-size: 0.75rem;
-}
-
-.dizem{
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.icones{
-  color: var(--chart-2);
+  @apply w-1/2 mt-4 transition duration-400 hover:bg-[#191f25] hover:border-success
 }
 
 .estrelas{
-  color:var(--chart-4);
-}
-
-.avaliacao{
-  display: flex;
-  width: 2.5rem;
-  background-color: var(--muted);
-  border-radius: 100%;
-  height: 2.5rem;
-  justify-content: center;
-  align-items: center;
-  margin: 1rem;
-}
-
-.botao{
-  padding: 1rem;
-  background-color: #28c76f;
-  border-radius:1rem;
-  color: black;
-  margin: 1.5rem;
-  transition: 0.3s;
-}
-
-.botao:hover{
-  cursor: pointer;
-background-color: #0aa24f;
-}
-
-.botao2{
-  padding: 1rem;
-  background-color: transparent;
-  border: 1px solid white;
-  border-radius:1rem;
-  color: white;
-  margin: 1.5rem;
-  transition: 0.3s;
-}
-
-.botao2:hover{
-  cursor: pointer;
-  background-color: #1a1f24;
+  @apply text-chart-2;
 }
