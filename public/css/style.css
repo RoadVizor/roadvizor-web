@@ -27,6 +27,8 @@
   /* Variantes Light */
   /* --background: #eaf4fb;
   --foreground: #040d18b;
+  --background: #040d18;
+  --foreground: #071a2b;
 
   --primary: #0e5aa7;
   --secondary: #4fb3e8;
@@ -50,7 +52,7 @@
 }
 
 /* Inverte as variáveis para o tema Dark */
-/* @media (prefers-color-scheme: dark) {
+ @media (prefers-color-scheme: dark) {
   :root {
     --background: #040d18;
     --foreground: #eaf4fb;
@@ -65,7 +67,7 @@
     --destructive-bg: #401e1c;
     --destructive-text: #ec8179;
   }
-} */
+} 
 
 /* Customização do TailwindCSS */
 @theme {
@@ -141,4 +143,18 @@ body {
     after:bg-accent
     after:transition-all
     hover:after:w-full;
+
+  @apply max-w-[1600px] w-full mx-auto px-4 lg:px-8;
+}
+
+.card{
+  @apply max-w-[33%] hover:border-success hover:bg-[#191f25] transition duration-400 
+}
+
+.card2{
+  @apply w-1/2 mt-4 transition duration-400 hover:bg-[#191f25] hover:border-success
+}
+
+.estrelas{
+  @apply text-chart-2;
 }
