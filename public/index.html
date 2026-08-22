@@ -12,25 +12,334 @@
     <link rel="stylesheet" href="./css/output.css" />
 
     <!-- Phosphor Icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/icons.min.css"
-    />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
   </head>
   <body>
     <!-- Header -->
-    <header>
-      <div class="container"></div>
+    <header class="w-full" id="header">
+      <!-- Header - Desktop -->
+      <div
+        class="container flex items-center justify-between space-x-4 lg:space-x-8 py-2 lg:py-4"
+      >
+        <a href="/" class="text-xl md:text-2xl font-bold">RoadVizor</a>
+
+        <nav class="w-full flex items-center">
+          <ul
+            id="nav-menu"
+            class="hidden lg:flex items-center mx-auto gap-8 lg:gap-12"
+          >
+            <li class="navitem">
+              <a href="#section-solution">Como Funciona</a>
+            </li>
+            <li class="navitem">
+              <a href="#section-resources">Recursos</a>
+            </li>
+            <li class="navitem">
+              <a href="#section-reviews">Reviews</a>
+            </li>
+            <li class="navitem">
+              <a href="#section-contact">Contato</a>
+            </li>
+          </ul>
+
+          <div
+            class="flex items-center gap-2 md:gap-4 w-full lg:w-fit justify-end"
+          >
+            <a href="./login.html" class="navitem hidden md:inline">Entrar</a>
+            <a
+              href="./login.html"
+              class="hidden md:flex items-center gap-1 hover:gap-2 border border-border rounded-md py-2 px-3 md:px-4 transition-all hover:border-accent hover:text-accent"
+            >
+              <span class="text-sm sm:text-base">Vision Center</span>
+              <i class="ph-fill ph-caret-right transition-all"></i>
+            </a>
+
+            <button
+              id="menu-toggle"
+              class="lg:hidden flex items-center justify-center p-2 rounded-md border border-border text-foreground transition-all hover:border-accent hover:text-accent"
+            >
+              <i id="menu-icon" class="ph ph-list text-2xl"></i>
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Header - Mobile -->
+      <div
+        id="mobile-menu"
+        class="hidden lg:hidden w-full overflow-hidden transition-all border-b-2 border-border shadow-md"
+      >
+        <ul class="container flex flex-col text-center gap-6 py-8">
+          <li class="navitem py-2">
+            <a href="#section-solution">Como Funciona</a>
+          </li>
+          <li class="navitem py-2 bg-surface">
+            <a href="#section-resources">Recursos</a>
+          </li>
+          <li class="navitem py-2">
+            <a href="#section-reviews">Reviews</a>
+          </li>
+          <li class="navitem py-2 bg-surface">
+            <a href="#section-contact">Contato</a>
+          </li>
+          <li class="navitem py-2">
+            <a href="./login.html">Entrar</a>
+          </li>
+          <li class="w-full flex justify-center">
+            <a
+              href="./login.html"
+              class="w-full flex items-center gap-1 hover:gap-2 border border-border rounded-md py-2 px-4 transition-all hover:border-accent hover:text-accent"
+            >
+              <span class="w-full text-center">Vision Center</span>
+              <i class="ph-fill ph-caret-right transition-all"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
     </header>
 
-    <!-- Main -->
-    <main>
+    <main class="w-full flex flex-col">
       <!-- Seção 1: Hero -->
-      <section id="section-hero"></section>
+      <section
+        id="section-hero"
+        class="bg-linear-to-tr from-background to-surface/40 overflow-hidden py-8 lg:py-12 border border-border/20"
+      >
+        <div
+          class="container relative z-10 min-h-dvh flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16"
+        >
+          <div class="flex flex-col gap-4 md:gap-6 lg:flex-1">
+            <div class="flex flex-col gap-4">
+              <h1
+                class="text-4xl sm:text-5xl lg:text-6xl font-bold font-museo text-center lg:text-left"
+              >
+                Observabilidade total para
+                <span class="text-accent">Pedágios Free Flow</span>
+              </h1>
 
-      <!-- Seção 2: Como Funciona (Solução) -->
-      <section id="section-solution"></section>
+              <p
+                class="text-muted text-sm md:text-base text-center lg:text-left"
+              >
+                <span class="italic text-accent font-bold">Client</span> local +
+                plataforma web. Monitore servidores de pedágio eletrônico em
+                tempo real, detecte falhas antes que elas afetem operações e
+                garanta SLAs para sua concessão.
+              </p>
+            </div>
 
+            <div class="mt-4 lg:mt-16 w-full flex flex-col sm:flex-row gap-4">
+              <a
+                href="./login.html"
+                class="flex items-center justify-center gap-1 hover:gap-2 border border-border rounded-md py-2 px-4 transition-all hover:border-accent hover:text-accent"
+              >
+                <span>Vision Center</span>
+                <i class="ph-fill ph-caret-right transition-all"></i>
+              </a>
+              <a href="#section-solution" class="w-full sm:w-auto">
+                <button
+                  class="w-full flex items-center justify-center cursor-pointer group gap-1 hover:gap-2 py-2 px-4 border border-secondary rounded-sm bg-secondary/10 text-secondary transition-all"
+                >
+                  <span>Como Funciona</span><i class="ph ph-arrow-right"></i>
+                </button>
+              </a>
+            </div>
+          </div>
+
+          <div
+            class="bg-disabled rounded-md w-full lg:flex-1 aspect-square"
+          ></div>
+
+          <div
+            class="hidden lg:flex lg:flex-col absolute bottom-0 left-1/2 -translate-x-1/2 items-center text-muted gap-4"
+          >
+            <span class="uppercase text-xs tracking-[15px]">Explorar</span>
+            <i
+              class="ph-duotone ph-arrow-fat-line-down p-2 bg-accent/20 text-accent rounded-full"
+            ></i>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção 2: Como Funciona -->
+      <section
+        id="section-solution"
+        class="bg-linear-to-tl from-background to-surface/30 py-8 lg:py-12 border border-border/20"
+      >
+        <div
+          class="container min-h-dvh relative flex flex-col gap-8 lg:gap-16 py-8 lg:py-16"
+        >
+          <div class="flex flex-col gap-8 mb-8 lg:mb-16">
+            <span class="caption uppercase bg-accent/20 px-2 text-accent w-fit"
+              >Arquitetura</span
+            >
+            <div>
+              <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold font-museo">
+                Como o RoadVizor Funciona
+              </h1>
+              <p class="text-muted text-sm md:text-base">
+                Dois camadas complementares: um client leve, instalado no
+                <span class="text-accent">Servidor</span><br />
+                e uma plataforma web na <span>cloud</span> — o sistema trabalha
+                em conjunto para .
+              </p>
+            </div>
+          </div>
+
+          <ul class="flex flex-col lg:flex-row items-stretch">
+            <li
+              class="w-full hover:bg-background transition-all py-4 px-8 lg:rounded-l-2xl flex flex-col gap-4"
+            >
+              <div class="flex items-center gap-2">
+                <h2 class="text-6xl font-bold text-disabled/20">01</h2>
+                <i
+                  class="ph-duotone ph-codesandbox-logo p-3 rounded-md border border-accent bg-accent/10 text-accent"
+                ></i>
+              </div>
+              <h3 class="text-xl text-muted font-bold">
+                Client Local Instalado
+              </h3>
+              <p class="text-justify text-disabled text-sm md:text-base">
+                O cliente local é instalado nos servidores dos pedágios Free
+                Flow sem impactar na sua infraestrutura. Ele coleta métricas em
+                tempo real de recursos, como: CPU, memória, latência, taxa de
+                leitura OCR/RFID e outros status.
+              </p>
+            </li>
+
+            <li
+              class="w-full hover:bg-background transition-all py-4 px-8 border-y-2 lg:border-y-0 lg:border-x-2 border-border flex flex-col gap-4"
+            >
+              <div class="flex items-center gap-2">
+                <h2 class="text-6xl font-bold text-disabled/20">02</h2>
+                <i
+                  class="ph-duotone ph-cloud p-3 rounded-md border border-accent bg-accent/10 text-accent"
+                ></i>
+              </div>
+              <h3 class="text-xl text-muted font-bold">Caminho da Nuvem</h3>
+              <p class="text-justify text-disabled text-sm md:text-base">
+                Os dados coletados são encriptados e enviados à nossa
+                infraestrutura AWS, onde são tratados por nossos ETLs. A
+                comunicação é unidirecional — o client sempre envia, nunca
+                recebe.
+              </p>
+            </li>
+
+            <li
+              class="w-full hover:bg-background transition-all py-4 px-8 lg:rounded-r-2xl flex flex-col gap-4"
+            >
+              <div class="flex items-center gap-2">
+                <h2 class="text-6xl font-bold text-disabled/20">03</h2>
+                <i
+                  class="ph-duotone ph-devices p-3 rounded-md border border-accent bg-accent/10 text-accent"
+                ></i>
+              </div>
+              <h3 class="text-xl text-muted font-bold">Vision Center</h3>
+              <p class="text-justify text-disabled text-sm md:text-base">
+                Ao acessar a plataforma web, a concessionária tem acesso a
+                insights e métricas de observabilidade geradas em tempo real com
+                base nos dados captados. O Vision Center tem um design moderno e
+                intuitivo.
+              </p>
+            </li>
+          </ul>
+
+          <div
+            class="bg-background border-2 border-border rounded-lg p-4 flex flex-col items-center"
+          >
+            <p class="caption uppercase mb-4">fluxo de dados</p>
+            <ul
+              class="w-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-4 px-4 md:px-8 lg:px-12 py-10"
+            >
+              <li class="flex flex-col gap-2 items-center justify-center">
+                <div
+                  class="w-16 h-16 relative p-6 flex items-center justify-center border border-border rounded-lg text-border bg-surface"
+                >
+                  <span
+                    class="bg-accent/20 text-accent absolute top-1/2 -left-10 -translate-y-1/2 font-bold font-museo px-1"
+                    >01</span
+                  >
+                  <i class="ph-duotone ph-hard-drives text-3xl"></i>
+                </div>
+                <div class="mt-4 flex flex-col items-center">
+                  <p class="text-sm font-bold">Servidor de Pedágio</p>
+                  <span class="text-xs text-disabled font-semibold"
+                    >Free Flow</span
+                  >
+                </div>
+              </li>
+              <li class="flex flex-col gap-2 items-center justify-center">
+                <div
+                  class="w-16 h-16 relative p-6 flex items-center justify-center border border-accent rounded-lg text-accent bg-accent/20"
+                >
+                  <span
+                    class="bg-foreground/10 text-disabled absolute top-1/2 -left-10 -translate-y-1/2 font-bold font-museo px-1"
+                    >02</span
+                  >
+                  <i class="ph-duotone ph-codesandbox-logo text-3xl"></i>
+                </div>
+                <div class="mt-4 flex flex-col items-center">
+                  <p class="text-sm font-bold text-accent">Client</p>
+                  <span class="text-xs text-disabled font-semibold"
+                    >Agente Local</span
+                  >
+                </div>
+              </li>
+              <li class="flex flex-col gap-2 items-center justify-center">
+                <div
+                  class="w-16 h-16 relative p-6 flex items-center justify-center border border-border rounded-lg text-border bg-surface"
+                >
+                  <span
+                    class="bg-accent/20 text-accent absolute top-1/2 -left-10 -translate-y-1/2 font-bold font-museo px-1"
+                    >03</span
+                  >
+                  <i class="ph-duotone ph-cloud text-3xl"></i>
+                </div>
+                <div class="mt-4 flex flex-col items-center">
+                  <p class="text-sm font-bold">Plataforma Cloud</p>
+                  <span class="text-xs text-disabled font-semibold"
+                    >API RoadVizor</span
+                  >
+                </div>
+              </li>
+              <li class="flex flex-col gap-2 items-center justify-center">
+                <div
+                  class="w-16 h-16 relative p-6 flex items-center justify-center border border-accent rounded-lg text-accent bg-accent/20"
+                >
+                  <span
+                    class="bg-foreground/10 text-disabled absolute top-1/2 -left-10 -translate-y-1/2 font-bold font-museo px-1"
+                    >04</span
+                  >
+                  <i class="ph-duotone ph-cloud text-3xl"></i>
+                </div>
+                <div class="mt-4 flex flex-col items-center">
+                  <p class="text-sm font-bold text-accent">
+                    RoadVizor Vision Center
+                  </p>
+                  <span class="text-xs text-disabled font-semibold"
+                    >Dashboard</span
+                  >
+                </div>
+              </li>
+              <li class="flex flex-col gap-2 items-center justify-center">
+                <div
+                  class="w-16 h-16 relative p-6 flex items-center justify-center border border-border rounded-lg text-border bg-surface"
+                >
+                  <span
+                    class="bg-accent/20 text-accent absolute top-1/2 -left-10 -translate-y-1/2 font-bold font-museo px-1"
+                    >05</span
+                  >
+                  <i class="ph-duotone ph-users text-3xl"></i>
+                </div>
+                <div class="mt-4 flex flex-col items-center">
+                  <p class="text-sm font-bold">Equipe CCO</p>
+                  <span class="text-xs text-disabled font-semibold"
+                    >Concessionária</span
+                  >
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
       <!-- Seção 3: Recursos -->
       <section id="section-resources"></section>
 
@@ -43,5 +352,8 @@
 
     <!-- Footer -->
     <footer class="container"></footer>
+
+    <!-- Scripts JS -->
+    <script src="./js/navbar.js"></script>
   </body>
 </html>

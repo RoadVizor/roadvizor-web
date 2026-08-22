@@ -4,8 +4,29 @@
 :root {
   color-scheme: light dark;
 
-  --background: #eaf4fb;
-  --foreground: #071a2b;
+  /* Variantes Dark */
+  --background: #040d18;
+  --foreground: #eaf4fb;
+  --surface: #0a192b;
+
+  --muted: #9dafbe;
+  --disabled: #657481;
+  --border: #657481;
+
+  --primary: #0e5aa7;
+  --secondary: #4fb3e8;
+  --accent: #28c76f;
+
+  --success-bg: #1e3e2c;
+  --success-text: #88ddae;
+  --warning-bg: #40331c;
+  --warning-text: #ebbe70;
+  --destructive-bg: #401e1c;
+  --destructive-text: #ec8179;
+
+  /* Variantes Light */
+  /* --background: #eaf4fb;
+  --foreground: #040d18b;
 
   --primary: #0e5aa7;
   --secondary: #4fb3e8;
@@ -19,7 +40,7 @@
   --warning-bg: #fef3e2;
   --warning-text: #97640c;
   --destructive-bg: #fde9e7;
-  --destructive-text: #8f1d14;
+  --destructive-text: #8f1d14; */
 
   --chart-1: #0e5aa7;
   --chart-2: #28c76f;
@@ -31,7 +52,7 @@
 /* Inverte as variáveis para o tema Dark */
 /* @media (prefers-color-scheme: dark) {
   :root {
-    --background: #071a2b;
+    --background: #040d18;
     --foreground: #eaf4fb;
 
     --muted: #9dafbe;
@@ -53,6 +74,7 @@
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
 
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
@@ -60,6 +82,7 @@
 
   --color-muted: var(--muted);
   --color-disabled: var(--disabled);
+  --color-border: var(--border);
 
   --color-success: var(--success-bg);
   --color-success-foreground: var(--success-text);
@@ -73,6 +96,10 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -96,5 +123,22 @@ body {
 }
 
 .container {
-  @apply max-w-6xl w-full mx-auto px-8 lg:px-16;
+  @apply max-w-7xl w-full mx-auto px-8 lg:px-12;
+}
+
+/* Navbar */
+.navitem {
+  @apply relative
+    text-disabled
+    hover:text-foreground
+    hover:font-semibold
+    transition-all
+    after:absolute
+    after:left-0
+    after:-bottom-0.5
+    after:w-0
+    after:h-0.5
+    after:bg-accent
+    after:transition-all
+    hover:after:w-full;
 }
