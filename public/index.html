@@ -4,10 +4,631 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RoadVizor | Home</title>
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+    <title>RoadVizor | Observabilidade em Pedágios Eletrônicos</title>
 
+    <!-- CSS Styles -->
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/output.css" />
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
   </head>
-  <body></body>
+  <body>
+    <!-- Header -->
+    <header class="w-full" id="header">
+      <!-- Header - Desktop -->
+      <div
+        class="container flex items-center justify-between space-x-4 lg:space-x-8 py-2 lg:py-4"
+      >
+        <a href="/" class="text-xl md:text-2xl font-bold">RoadVizor</a>
+
+        <nav class="w-full flex items-center">
+          <ul
+            id="nav-menu"
+            class="hidden lg:flex items-center mx-auto gap-8 lg:gap-12"
+          >
+            <li class="navitem">
+              <a href="#section-solution">Como Funciona</a>
+            </li>
+            <li class="navitem">
+              <a href="#section-resources">Recursos</a>
+            </li>
+            <li class="navitem">
+              <a href="#section-reviews">Depoimentos</a>
+            </li>
+            <li class="navitem">
+              <a href="#section-contact">Contato</a>
+            </li>
+          </ul>
+
+          <div
+            class="flex items-center gap-2 md:gap-4 w-full lg:w-fit justify-end"
+          >
+            <a href="./login.html" class="navitem hidden md:inline">Entrar</a>
+            <a
+              href="./login.html"
+              class="hidden md:flex items-center gap-1 hover:gap-2 border border-border rounded-md py-2 px-3 md:px-4 transition-all hover:border-accent hover:text-accent"
+            >
+              <span class="text-sm sm:text-base">Vision Center</span>
+              <i class="ph-fill ph-caret-right transition-all"></i>
+            </a>
+
+            <button
+              id="menu-toggle"
+              class="lg:hidden flex items-center justify-center p-2 rounded-md border border-border text-foreground transition-all hover:border-accent hover:text-accent"
+            >
+              <i id="menu-icon" class="ph ph-list text-2xl"></i>
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Header - Mobile -->
+      <div
+        id="mobile-menu"
+        class="hidden lg:hidden w-full overflow-hidden transition-all border-b-2 border-border shadow-md"
+      >
+        <ul class="container flex flex-col text-center gap-6 py-8">
+          <li class="navitem py-2">
+            <a href="#section-solution">Como Funciona</a>
+          </li>
+          <li class="navitem py-2 bg-surface">
+            <a href="#section-resources">Recursos</a>
+          </li>
+          <li class="navitem py-2">
+            <a href="#section-reviews">Reviews</a>
+          </li>
+          <li class="navitem py-2 bg-surface">
+            <a href="#section-contact">Contato</a>
+          </li>
+          <li class="navitem py-2">
+            <a href="./login.html">Entrar</a>
+          </li>
+          <li class="w-full flex justify-center">
+            <a
+              href="./login.html"
+              class="w-full flex items-center gap-1 hover:gap-2 border border-border rounded-md py-2 px-4 transition-all hover:border-accent hover:text-accent"
+            >
+              <span class="w-full text-center">Vision Center</span>
+              <i class="ph-fill ph-caret-right transition-all"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="w-full flex flex-col">
+      <!-- Seção 1: Hero -->
+      <section
+        id="section-hero"
+        class="z-10 relative bg-[url(/assets/images/hero-banner.png)] bg-cover bg-no-repeat bg-center overflow-hidden py-8 lg:py-12"
+      >
+        <div
+          class="absolute inset-0 backdrop-blur-xs -z-10 bg-radial from-transparent from-55% to-background to-95%"
+        ></div>
+        <div class="container flex flex-col items-center justify-center">
+          <div class="flex flex-col gap-4 text-center">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold font-museo">
+              Observabilidade total para
+              <span class="text-accent">Pedágios Free Flow</span>
+            </h1>
+
+            <p class="text-sm md:text-base text-center">
+              <span class="italic text-accent font-bold">Client</span> local +
+              plataforma web. Monitore servidores de pedágio eletrônico em tempo
+              real, detecte falhas antes que elas afetem operações e garanta
+              SLAs para sua concessão.
+            </p>
+          </div>
+
+          <div
+            class="mt-4 lg:mt-16 w-full flex flex-col items-center justify-center sm:flex-row gap-4"
+          >
+            <a
+              href="./login.html"
+              class="flex items-center justify-center gap-1 hover:gap-2 border border-border rounded-md py-2 px-4 transition-all hover:border-accent hover:text-accent"
+            >
+              <span>Vision Center</span>
+              <i class="ph-fill ph-caret-right transition-all"></i>
+            </a>
+            <a href="#section-solution" class="w-full sm:w-auto">
+              <button
+                class="w-full flex items-center justify-center cursor-pointer group gap-1 hover:gap-2 py-2 px-4 border border-secondary rounded-sm bg-secondary/10 text-secondary transition-all"
+              >
+                <span>Como Funciona</span><i class="ph ph-arrow-right"></i>
+              </button>
+            </a>
+          </div>
+        </div>
+        <div
+          class="mt-16 hidden lg:flex lg:flex-col items-center text-muted gap-4"
+        >
+          <span class="uppercase text-xs tracking-[15px]">Explorar</span>
+          <i
+            class="ph-duotone ph-arrow-fat-line-down p-2 bg-accent/20 text-accent rounded-full"
+          ></i>
+        </div>
+      </section>
+
+      <!-- Seção 2: Como Funciona -->
+      <section
+        id="section-solution"
+        class="bg-linear-to-tl from-background to-surface/30 py-8 lg:py-12 border border-border/20"
+      >
+        <div class="container flex flex-col gap-8 lg:gap-16 py-8 lg:py-16">
+          <div class="flex flex-col gap-8 mb-8 lg:mb-16">
+            <span class="caption uppercase bg-accent/20 px-2 text-accent w-fit"
+              >Arquitetura</span
+            >
+            <div>
+              <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold font-museo">
+                Como o RoadVizor Funciona
+              </h1>
+              <p class="text-muted text-sm md:text-base">
+                Dois camadas complementares: um client leve, instalado no
+                <span class="text-accent">Servidor</span><br />
+                e uma plataforma web na <span>cloud</span> — o sistema trabalha
+                em conjunto para .
+              </p>
+            </div>
+          </div>
+
+          <ul class="flex flex-col lg:flex-row items-stretch">
+            <li
+              class="w-full hover:bg-surface transition-all py-4 px-8 lg:rounded-l-2xl flex flex-col gap-4"
+            >
+              <div class="flex items-center gap-2">
+                <h2 class="text-6xl font-bold text-disabled/20">01</h2>
+                <i
+                  class="ph-duotone ph-codesandbox-logo p-3 rounded-md border border-accent bg-accent/10 text-accent"
+                ></i>
+              </div>
+              <h3 class="text-xl text-muted font-bold">
+                Client Local Instalado
+              </h3>
+              <p class="text-justify text-disabled text-sm md:text-base">
+                O cliente local é instalado nos servidores dos pedágios Free
+                Flow sem impactar na sua infraestrutura. Ele coleta métricas em
+                tempo real de recursos, como: CPU, memória, latência, taxa de
+                leitura OCR/RFID e outros status.
+              </p>
+            </li>
+
+            <li
+              class="w-full hover:bg-surface transition-all py-4 px-8 border-y-2 lg:border-y-0 lg:border-x-2 border-border flex flex-col gap-4"
+            >
+              <div class="flex items-center gap-2">
+                <h2 class="text-6xl font-bold text-disabled/20">02</h2>
+                <i
+                  class="ph-duotone ph-cloud p-3 rounded-md border border-accent bg-accent/10 text-accent"
+                ></i>
+              </div>
+              <h3 class="text-xl text-muted font-bold">Caminho da Nuvem</h3>
+              <p class="text-justify text-disabled text-sm md:text-base">
+                Os dados coletados são encriptados e enviados à nossa
+                infraestrutura AWS, onde são tratados por nossos ETLs. A
+                comunicação é unidirecional — o client sempre envia, nunca
+                recebe.
+              </p>
+            </li>
+
+            <li
+              class="w-full hover:bg-surface transition-all py-4 px-8 lg:rounded-r-2xl flex flex-col gap-4"
+            >
+              <div class="flex items-center gap-2">
+                <h2 class="text-6xl font-bold text-disabled/20">03</h2>
+                <i
+                  class="ph-duotone ph-devices p-3 rounded-md border border-accent bg-accent/10 text-accent"
+                ></i>
+              </div>
+              <h3 class="text-xl text-muted font-bold">Vision Center</h3>
+              <p class="text-justify text-disabled text-sm md:text-base">
+                Ao acessar a plataforma web, a concessionária tem acesso a
+                insights e métricas de observabilidade geradas em tempo real com
+                base nos dados captados. O Vision Center tem um design moderno e
+                intuitivo.
+              </p>
+            </li>
+          </ul>
+
+          <div
+            class="bg-background border-2 border-border rounded-lg p-4 flex flex-col items-center"
+          >
+            <p class="caption uppercase mb-4">fluxo de dados</p>
+            <ul
+              class="w-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-4 px-4 md:px-8 lg:px-12 py-10"
+            >
+              <li class="flex flex-col gap-2 items-center justify-center">
+                <div
+                  class="w-16 h-16 relative p-6 flex items-center justify-center border border-border rounded-lg text-border bg-surface"
+                >
+                  <span
+                    class="bg-accent/20 text-accent absolute top-1/2 -left-10 -translate-y-1/2 font-bold font-museo px-1"
+                    >01</span
+                  >
+                  <i class="ph-duotone ph-hard-drives text-3xl"></i>
+                </div>
+                <div class="mt-4 flex flex-col items-center">
+                  <p class="text-sm font-bold">Servidor de Pedágio</p>
+                  <span class="text-xs text-disabled font-semibold"
+                    >Free Flow</span
+                  >
+                </div>
+              </li>
+              <li class="flex flex-col gap-2 items-center justify-center">
+                <div
+                  class="w-16 h-16 relative p-6 flex items-center justify-center border border-accent rounded-lg text-accent bg-accent/20"
+                >
+                  <span
+                    class="bg-foreground/10 text-disabled absolute top-1/2 -left-10 -translate-y-1/2 font-bold font-museo px-1"
+                    >02</span
+                  >
+                  <i class="ph-duotone ph-codesandbox-logo text-3xl"></i>
+                </div>
+                <div class="mt-4 flex flex-col items-center">
+                  <p class="text-sm font-bold text-accent">Client</p>
+                  <span class="text-xs text-disabled font-semibold"
+                    >Agente Local</span
+                  >
+                </div>
+              </li>
+              <li class="flex flex-col gap-2 items-center justify-center">
+                <div
+                  class="w-16 h-16 relative p-6 flex items-center justify-center border border-border rounded-lg text-border bg-surface"
+                >
+                  <span
+                    class="bg-accent/20 text-accent absolute top-1/2 -left-10 -translate-y-1/2 font-bold font-museo px-1"
+                    >03</span
+                  >
+                  <i class="ph-duotone ph-cloud text-3xl"></i>
+                </div>
+                <div class="mt-4 flex flex-col items-center">
+                  <p class="text-sm font-bold">Plataforma Cloud</p>
+                  <span class="text-xs text-disabled font-semibold"
+                    >API RoadVizor</span
+                  >
+                </div>
+              </li>
+              <li class="flex flex-col gap-2 items-center justify-center">
+                <div
+                  class="w-16 h-16 relative p-6 flex items-center justify-center border border-accent rounded-lg text-accent bg-accent/20"
+                >
+                  <span
+                    class="bg-foreground/10 text-disabled absolute top-1/2 -left-10 -translate-y-1/2 font-bold font-museo px-1"
+                    >04</span
+                  >
+                  <i class="ph-duotone ph-cloud text-3xl"></i>
+                </div>
+                <div class="mt-4 flex flex-col items-center">
+                  <p class="text-sm font-bold text-accent">
+                    RoadVizor Vision Center
+                  </p>
+                  <span class="text-xs text-disabled font-semibold"
+                    >Dashboard</span
+                  >
+                </div>
+              </li>
+              <li class="flex flex-col gap-2 items-center justify-center">
+                <div
+                  class="w-16 h-16 relative p-6 flex items-center justify-center border border-border rounded-lg text-border bg-surface"
+                >
+                  <span
+                    class="bg-accent/20 text-accent absolute top-1/2 -left-10 -translate-y-1/2 font-bold font-museo px-1"
+                    >05</span
+                  >
+                  <i class="ph-duotone ph-users text-3xl"></i>
+                </div>
+                <div class="mt-4 flex flex-col items-center">
+                  <p class="text-sm font-bold">Equipe CCO</p>
+                  <span class="text-xs text-disabled font-semibold"
+                    >Concessionária</span
+                  >
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <!-- Seção 3: Recursos -->
+      <section
+        id="section-resources"
+        class="bg-linear-to-tr from-background to-surface/30 py-8 lg:py-12 border border-border/20"
+      >
+        <div class="container flex flex-col gap-8 lg:gap-16 py-8 lg:py-16">
+          <div class="flex flex-col justify-center items-end gap-3 self-end">
+            <span class="caption uppercase bg-accent/20 px-2 text-accent w-fit"
+              >Recursos</span
+            >
+            <h1
+              class="text-end text-3xl md:text-4xl lg:text-5xl font-bold font-museo"
+            >
+              Tudo que seu CCO precisa
+            </h1>
+            <p class="text-end text-muted text-sm md:text-base max-w-2xl">
+              Do agente de coleta ao relatório de SLA — uma plataforma completa
+              para observabilidade de pedágios eletrônicos Free Flow.
+            </p>
+          </div>
+
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6"
+          >
+            <div
+              class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-4 transition-all hover:border-accent"
+            >
+              <div
+                class="p-3 rounded-md border border-accent bg-accent/10 text-accent w-fit text-2xl"
+              >
+                <i class="ph ph-pulse"></i>
+              </div>
+              <h3 class="text-lg font-bold">Monitoramento em tempo real</h3>
+              <p class="text-muted text-sm text-justify">
+                Visibilidade instantânea dos KPIs críticos: latência,
+                throughput, erros de leitura OCR/RFID e status de hardware por
+                pista.
+              </p>
+            </div>
+
+            <div
+              class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-4 transition-all hover:border-accent"
+            >
+              <div
+                class="p-3 rounded-md border border-accent bg-accent/10 text-accent w-fit text-2xl"
+              >
+                <i class="ph ph-bell"></i>
+              </div>
+              <h3 class="text-lg font-bold">Alertas Inteligentes</h3>
+              <p class="text-muted text-sm text-justify">
+                Notificações pelo Slack <i class="ph ph-slack-logo"></i> em caso
+                de incidentes. Limites configuráveis por tipo de servidor e
+                pedágio.
+              </p>
+            </div>
+
+            <div
+              class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-4 transition-all hover:border-accent"
+            >
+              <div
+                class="p-3 rounded-md border border-accent bg-accent/10 text-accent w-fit text-2xl"
+              >
+                <i class="ph ph-lock"></i>
+              </div>
+              <h3 class="text-lg font-bold">Segurança por Design</h3>
+              <p class="text-muted text-sm text-justify">
+                Agente com comunicação unidirecional. Zero exposição de portas
+                na infraestrutura crítica. Conformidade LGPD e ISO 27001.
+              </p>
+            </div>
+
+            <div
+              class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-4 transition-all hover:border-accent"
+            >
+              <div
+                class="p-3 rounded-md border border-accent bg-accent/10 text-accent w-fit text-2xl"
+              >
+                <i class="ph ph-chart-bar"></i>
+              </div>
+              <h3 class="text-lg font-bold">Análise Histórica</h3>
+              <p class="text-muted text-sm text-justify">
+                Retenção de métricas por até 6 meses. Identifique padrões,
+                sazonalidade e degradações graduais antes que virem incidentes.
+              </p>
+            </div>
+
+            <div
+              class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-4 transition-all hover:border-accent"
+            >
+              <div
+                class="p-3 rounded-md border border-accent bg-accent/10 text-accent w-fit text-2xl"
+              >
+                <i class="ph ph-database"></i>
+              </div>
+              <h3 class="text-lg font-bold">Multi-Pórtico & Multi-Rodovia</h3>
+              <p class="text-muted text-sm text-justify">
+                Gerencie centenas de pórticos e pontos Free Flow em uma única
+                interface.
+              </p>
+            </div>
+
+            <div
+              class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-4 transition-all hover:border-accent"
+            >
+              <div
+                class="p-3 rounded-md border border-accent bg-accent/10 text-accent w-fit text-2xl"
+              >
+                <i class="ph ph-webhooks-logo"></i>
+              </div>
+              <h3 class="text-lg font-bold">Integrações & API REST</h3>
+              <p class="text-muted text-sm text-justify">
+                API documentada para integração com diversas plataformas, como AWS e todos os seus serviços.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção 4: Depoimentos -->
+      <section
+        id="section-reviews"
+        class="bg-linear-to-tl from-background to-surface/30 py-8 lg:py-12 border border-border/20"
+      >
+        <div class="container flex flex-col gap-8 lg:gap-16 py-8 lg:py-16">
+          <div class="flex flex-col items-center gap-3 text-center">
+            <span class="caption uppercase bg-accent/20 px-2 text-accent w-fit"
+              >Depoimentos</span
+            >
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold font-museo">
+              O que dizem as concessionárias
+            </h1>
+          </div>
+
+          <div class="flex flex-col lg:flex-row gap-6">
+            <div
+              class="w-full border border-border bg-surface rounded-lg p-4 flex flex-col gap-4"
+            >
+              <div class="flex text-lg gap-1 text-chart-4">
+                <i class="ph-fill ph-star"></i>
+                <i class="ph-fill ph-star"></i>
+                <i class="ph-fill ph-star"></i>
+                <i class="ph-fill ph-star"></i>
+                <i class="ph-fill ph-star"></i>
+              </div>
+
+              <p class="text-muted text-sm md:text-base text-justify">
+                "O RoadVizor nos deu visibilidade total sobre os servidores Free
+                Flow da nossa concessão. Reduzimos nosso MTTR em 68% e
+                eliminamos praticamente todas as falhas não detectadas."
+              </p>
+
+              <div class="flex items-center gap-3 mt-2">
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-accent/20 text-accent font-bold text-sm"
+                >
+                  RF
+                </div>
+                <div class="flex flex-col">
+                  <p class="font-bold text-sm">Renata Fonseca</p>
+                  <span class="caption text-muted"
+                    >Diretora de TI · Via Expressa S.A.</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="w-full border border-border bg-surface rounded-lg p-4 flex flex-col gap-4"
+            >
+              <div class="flex text-lg gap-1 text-chart-4">
+                <i class="ph-fill ph-star"></i>
+                <i class="ph-fill ph-star"></i>
+                <i class="ph-fill ph-star"></i>
+                <i class="ph-fill ph-star"></i>
+                <i class="ph-fill ph-star"></i>
+              </div>
+
+              <p class="text-muted text-sm md:text-base text-justify">
+                "A combinação do agente local com o dashboard web é exatamente o
+                que precisávamos. Sem impacto na infraestrutura crítica e com
+                observabilidade completa para nossa equipe."
+              </p>
+
+              <div class="flex items-center gap-3 mt-2">
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-accent/20 text-accent font-bold text-sm"
+                >
+                  MA
+                </div>
+                <div class="flex flex-col">
+                  <p class="font-bold text-sm">Marcos Albuquerque</p>
+                  <span class="caption text-muted"
+                    >Gerente de Infraestrutura · RodoVias Nordeste</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção 5: Contato -->
+      <section
+        id="section-contact"
+        class="bg-linear-to-tr from-background to-surface/30 py-8 lg:py-12 border border-border/20"
+      >
+        <div
+          class="container flex flex-col items-center gap-6 py-8 lg:py-16 text-center"
+        >
+          <span
+            class="caption uppercase bg-accent/20 px-2 text-accent w-fit flex items-center gap-1"
+          >
+            Pronto para começar?
+          </span>
+
+          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold font-museo">
+            Visibilidade total para sua concessão em
+            <span class="text-accent">menos de 24 horas</span>
+          </h1>
+
+          <p class="text-muted text-sm md:text-base max-w-2xl">
+            Instale o agente nos seus servidores Free Flow e tenha o dashboard
+            operacional no mesmo dia. Sem mudanças na infraestrutura crítica,
+            sem janelas de manutenção.
+          </p>
+
+          <div
+            class="w-full flex flex-col sm:flex-row justify-center items-center gap-4 mt-4"
+          >
+            <button
+              class="w-full sm:w-auto flex items-center justify-center gap-1 hover:gap-2 py-3 px-6 rounded-md bg-accent text-background font-bold cursor-pointer transition-all hover:bg-accent/90"
+            >
+              <span>Vision Center</span>
+              <i class="ph ph-arrow-right"></i>
+            </button>
+            <a
+              href="https://grupo-7.atlassian.net/servicedesk/customer/portal/2"
+              target="_blank"
+              class="group w-full sm:w-auto flex items-center justify-center gap-1 hover:gap-2 py-3 px-6 rounded-md border border-border cursor-pointer transition-all hover:border-accent hover:text-accent"
+            >
+              <span>Fale Conosco</span>
+              <i
+                class="ph-duotone ph-phone group-hover:rotate-45 transition-all"
+              ></i>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-7xl w-full mx-auto px-8 lg:px-12 py-4 lg:py-8">
+      <div
+        class="w-full flex flex-col lg:flex-row justify-center gap-10 lg:gap-8"
+      >
+        <div class="flex flex-col gap-4 lg:w-1/4">
+          <div class="flex items-center gap-2 subtitle">
+            <p>RoadVizor</p>
+          </div>
+
+          <p class="caption text-muted">
+            Observabilidade inteligente para infraestrutura de pedágios Free
+            Flow.
+          </p>
+
+          <p class="caption text-muted">
+            contato@roadvizor.com
+            <br />
+            +55 11 00000-0000
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-4 lg:w-1/4 lg:text-right lg:items-end">
+          <p class="caption">Site institucional</p>
+          <ul class="caption flex flex-col gap-2">
+            <li class="navitem">
+              <a href="#section-solution">Como Funciona</a>
+            </li>
+            <li class="navitem">
+              <a href="#section-resources">Recursos</a>
+            </li>
+            <li class="navitem">
+              <a href="#section-reviews">Depoimentos</a>
+            </li>
+            <li class="navitem">
+              <a href="#section-contact">Contato</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex border-t border-border justify-center py-4 mt-8">
+        <p class="caption text-muted">
+          © 2025 RoadVizor Ltda. Todos os direitos reservados.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Scripts JS -->
+    <script src="./js/navbar.js"></script>
+  </body>
 </html>

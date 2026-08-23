@@ -8,9 +8,195 @@
     <title>RoadVizor | Cadastro</title>
     <link rel="stylesheet" href="./css/style.css" />
     <link href="./css/output.css" rel="stylesheet" />
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
   </head>
 
   <body>
-    <h1>Cadastro</h1>
+    <div class="w-full min-h-dvh flex flex-col lg:flex-row">
+      <!-- Painel lateral  -->
+      <div
+        class="hidden lg:flex lg:w-2/5 xl:w-1/3 min-h-screen flex-col justify-between border-r border-border bg-linear-to-b from-background to-secondary/10 from-45% p-8 xl:p-12"
+      >
+        <div class="flex flex-col gap-8">
+          <div class="flex items-center gap-3">
+            <p class="text-2xl font-bold">RoadVizor</p>
+          </div>
+
+          <h1 class="text-2xl xl:text-3xl font-bold font-museo">
+            Observabilidade total para
+            <span class="text-accent">pedágios Free Flow</span>
+          </h1>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div
+              class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-1"
+            >
+              <p class="text-xl xl:text-2xl font-bold text-accent font-museo">
+                99.97%
+              </p>
+              <p class="text-muted text-sm">Uptime médio</p>
+            </div>
+            <div
+              class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-1"
+            >
+              <p class="text-xl xl:text-2xl font-bold text-accent font-museo">
+                500+
+              </p>
+              <p class="text-muted text-sm">Servidores</p>
+            </div>
+            <div
+              class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-1"
+            >
+              <p class="text-xl xl:text-2xl font-bold text-accent font-museo">
+                &lt;30s
+              </p>
+              <p class="text-muted text-sm">Tempo de alerta</p>
+            </div>
+            <div
+              class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-1"
+            >
+              <p class="text-xl xl:text-2xl font-bold text-accent font-museo">
+                24/7
+              </p>
+              <p class="text-muted text-sm">Monitoramento</p>
+            </div>
+          </div>
+
+          <div
+            class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-4"
+          >
+            <p class="text-muted text-sm text-justify">
+              "Reduzimos nosso MTTR em 68% e eliminamos praticamente todas as
+              falhas não detectadas nos servidores de pedágio."
+            </p>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 flex items-center justify-center rounded-full bg-accent/20 text-accent font-bold text-sm"
+              >
+                RF
+              </div>
+              <div class="flex flex-col">
+                <p class="font-bold text-sm">Renata Fonseca</p>
+                <span class="caption text-muted"
+                  >Diretora de TI · Via Expressa S.A.</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center text-muted caption pt-8">
+          <span>© 2025 FlowSight Tecnologia Ltda.</span>
+        </div>
+      </div>
+
+      <!-- Formulário -->
+      <div
+        class="w-full lg:w-3/5 xl:w-2/3 flex flex-col justify-center items-center px-6 py-12 sm:px-8"
+      >
+        <div
+          class="w-full sm:w-3/4 md:w-1/2 lg:w-full lg:max-w-md flex flex-col gap-6"
+        >
+          <div class="flex justify-start">
+            <span
+              class="caption uppercase bg-accent/20 px-2 text-accent w-fit flex items-center gap-1"
+            >
+              <i class="ph ph-user-plus"></i>
+              Nova conta
+            </span>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <h1 class="title">Criar sua conta</h1>
+            <p class="caption text-muted">
+              Comece a monitorar seus servidores Free Flow hoje.
+            </p>
+          </div>
+
+          <form id="register-form" class="flex flex-col gap-4">
+            <div class="flex flex-col gap-1">
+              <label for="nome" class="text-sm text-muted">Nome completo</label>
+              <input
+                id="nome"
+                name="nome"
+                type="text"
+                placeholder="Nome completo"
+                class="bg-surface border border-border rounded-md w-full h-12 px-4 transition-all focus:border-accent focus:outline-none"
+              />
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label for="email" class="text-sm text-muted"
+                >E-mail corporativo</label
+              >
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="email@empresa.com"
+                class="bg-surface border border-border rounded-md w-full h-12 px-4 transition-all focus:border-accent focus:outline-none"
+              />
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label for="cargo" class="text-sm text-muted">Cargo</label>
+              <input
+                id="cargo"
+                name="cargo"
+                type="text"
+                placeholder="Analista de TI"
+                class="bg-surface border border-border rounded-md w-full h-12 px-4 transition-all focus:border-accent focus:outline-none"
+              />
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label for="senha" class="text-sm text-muted">Senha</label>
+              <input
+                id="senha"
+                name="senha"
+                type="password"
+                placeholder="********"
+                class="bg-surface border border-border rounded-md w-full h-12 px-4 transition-all focus:border-accent focus:outline-none"
+              />
+            </div>
+
+            <button
+              id="register-submit"
+              type="submit"
+              class="w-full h-12 flex items-center justify-center gap-1 hover:gap-2 bg-accent rounded-md text-background font-bold transition-all hover:bg-accent/90 cursor-pointer"
+            >
+              <span>Entrar no Vision Center</span>
+              <i class="ph ph-user-plus transition-all"></i>
+            </button>
+          </form>
+
+          <div class="flex items-center gap-3">
+            <div class="w-full border-t border-border"></div>
+            <span class="text-xs uppercase text-disabled">ou</span>
+            <div class="w-full border-t border-border"></div>
+          </div>
+
+          <p class="text-center text-sm">
+            Já tem uma conta?
+            <a
+              href="login.html"
+              class="text-accent hover:underline transition-all"
+              >Entre aqui</a
+            >
+          </p>
+
+          <div class="flex justify-center text-disabled">
+            <a href="index.html" class="hover:text-muted transition-all">
+              <i class="ph ph-arrow-u-up-left"></i>
+              <span>voltar ao site</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts JS -->
   </body>
 </html>
