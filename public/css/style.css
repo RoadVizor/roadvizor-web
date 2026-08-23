@@ -52,7 +52,7 @@
 }
 
 /* Inverte as variáveis para o tema Dark */
- @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
   :root {
     --background: #040d18;
     --foreground: #eaf4fb;
@@ -67,7 +67,7 @@
     --destructive-bg: #401e1c;
     --destructive-text: #ec8179;
   }
-} 
+}
 
 /* Customização do TailwindCSS */
 @theme {
@@ -125,7 +125,7 @@ body {
 }
 
 .container {
-  @apply max-w-7xl w-full mx-auto px-8 lg:px-12;
+  @apply max-w-6xl w-full mx-auto px-8 lg:px-12;
 }
 
 /* Navbar */
@@ -143,22 +143,24 @@ body {
     after:bg-accent
     after:transition-all
     hover:after:w-full;
-
-  @apply max-w-[1600px] w-full mx-auto px-4 lg:px-8;
 }
 
-.card{
-  @apply max-w-[33%] hover:border-success hover:bg-[#191f25] transition duration-400 
+.card {
+  @apply max-w-[33%] hover:border-success hover:bg-[#191f25] transition duration-400;
 }
 
-.card2{
-  @apply w-1/2 mt-4 transition duration-400 hover:bg-[#191f25] hover:border-success
+.card2 {
+  @apply w-1/2 mt-4 transition duration-400 hover:bg-[#191f25] hover:border-success;
 }
 
-.estrelas{
+.estrelas {
   @apply text-chart-2;
 }
 
-.icones{
-  @apply text-accent
+.icones {
+  @apply text-accent;
+}
+
+.header-fixed {
+  @apply  max-w-5xl fixed top-0 left-1/2 -translate-x-1/2 my-2 border border-border rounded-xl w-full z-50 bg-surface/95 backdrop-blur-sm shadow-md transition-all;
 }

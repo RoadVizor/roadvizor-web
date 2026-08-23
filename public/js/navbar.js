@@ -1,6 +1,7 @@
 var menuToggle = document.getElementById("menu-toggle");
 var menuIcon = document.getElementById("menu-icon");
 var mobileMenu = document.getElementById("mobile-menu");
+var header = document.getElementById("header");
 
 var isMenuOpen = false;
 
@@ -36,5 +37,28 @@ mobileMenuLinks.forEach(function (link) {
 window.addEventListener("resize", function () {
   if (window.innerWidth >= 1024 && isMenuOpen) {
     closeMenu();
+  }
+});
+
+var headerHeight = header.offsetHeight;
+var isHeaderFixed = false;
+
+function handleHeaderScroll() {
+  if (window.scrollY > headerHeight && !isHeaderFixed) {
+    isHeaderFixed = true;
+    header.classList.add("header-fixed");
+    document.body.style.paddingTop = headerHeight + "px"; 
+  } else if (window.scrollY <= headerHeight && isHeaderFixed) {
+    isHeaderFixed = false;
+    header.classList.remove("header-fixed");
+    document.body.style.paddingTop = "";
+  }
+}
+
+window.addEventListener("scroll", handleHeaderScroll);
+
+window.addEventListener("resize", function () {
+  if (!isHeaderFixed) {
+    headerHeight = header.offsetHeight;
   }
 });
