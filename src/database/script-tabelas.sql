@@ -49,7 +49,9 @@ CREATE TABLE IF NOT EXISTS usuario(
     atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     
 	CONSTRAINT fk_usuario_empresa FOREIGN KEY (empresa_id)
-		REFERENCES empresa(id_empresa)
+		REFERENCES empresa(id_empresa),
+        
+	CONSTRAINT chk_usuario_cargo CHECK(cargo IN('supervisor', 'analista_de_sistemas'))
 );
 
 CREATE TABLE IF NOT EXISTS cco(
@@ -109,3 +111,34 @@ CREATE TABLE IF NOT EXISTS codigo_ativacao(
 	CONSTRAINT fk_scodigo_ativacao_empresa FOREIGN KEY (empresa_id)
 		REFERENCES empresa(id_empresa)
 );
+
+-- Stored Procedure
+DELIMITER $$
+CREATE PROCEDURE sp_cadastrar_empresa(
+	IN in_cnpj CHAR(14),
+    IN in_razao_social VARCHAR(120),
+    IN in_nome_fantasia VARCHAR(120),
+    IN in_email VARCHAR(255),
+    IN in_senha VARCHAR(255)
+) BEGIN
+
+	-- Tratamento de Erro na Procedure
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Erro no Cadastro de Empresa.';
+	END;
+
+	-- Corpo da Procedure
+	START TRANSACTION;
+		-- 1. Criar Empresa
+		INSERT INTO empresa(cnpj, razao_social, nome_fantasia, email)
+			VALUES (in_cnpj, in_razao_social, in_nome_fantasia, in_email);
+			
+		-- 2. Criar Usuário ADM da Empresa criada
+		INSERT INTO usuario(empresa_id, nome, email, senha, cargo, nivel_acesso)
+			VALUES (LAST_INSERT_ID(), in_nome_fantasia, in_email, SHA2(in_senha, 256), 'Supervisor', 0);
+    COMMIT;
+
+END$$
+DELIMITER ;
