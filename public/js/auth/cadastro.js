@@ -11,11 +11,11 @@ function cadastrar() {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      nomeServer: nome,
-      emailServer: email,
-      senhaServer: senha,
-      cargoServer: cargo,
-      empresaServer: empresa,
+      nome: nome,
+      email: email,
+      senha: senha,
+      cargo: cargo,
+      empresa: empresa,
     }),
   })
     .then(function (resposta) {
@@ -26,7 +26,7 @@ function cadastrar() {
           "Cadastro realizado com sucesso! Redirecionando para tela de Login...",
         );
 
-        window.location = "login.html";
+        window.location = "../login.html";
       } else {
         throw "Houve um erro ao tentar realizar o cadastro!";
       }
