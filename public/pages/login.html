@@ -5,19 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>RoadVizor | Cadastro</title>
-    <link rel="stylesheet" href="./css/style.css" />
-    <link href="./css/output.css" rel="stylesheet" />
+    <title>RoadVizor | Login</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link href="/css/output.css" rel="stylesheet" />
 
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
   </head>
 
   <body>
-    <div class="w-full min-h-dvh flex flex-col lg:flex-row">
-      <!-- Painel lateral  -->
+    <div class="w-full min-h-dvh flex flex-col lg:flex-row-reverse">
+      <!-- Painel lateral -->
       <div
-        class="hidden lg:flex lg:w-2/5 xl:w-1/3 min-h-screen flex-col justify-between border-r border-border bg-linear-to-b from-background to-secondary/10 from-45% p-8 xl:p-12"
+        class="hidden lg:flex lg:w-2/5 xl:w-1/3 min-h-screen flex-col justify-between border-l border-border bg-linear-to-b from-background to-secondary/10 from-45% p-8 xl:p-12"
       >
         <div class="flex flex-col gap-8">
           <div class="flex items-center gap-3">
@@ -88,7 +88,7 @@
         </div>
 
         <div class="flex items-center text-muted caption pt-8">
-          <span>© 2025 RoadVizor Tecnologia Ltda.</span>
+          <span>© 2026 RoadVizor Tecnologia Ltda.</span>
         </div>
       </div>
 
@@ -103,75 +103,48 @@
             <span
               class="caption uppercase bg-accent/20 px-2 text-accent w-fit flex items-center gap-1"
             >
-              <i class="ph ph-user-plus"></i>
-              Nova conta
+              <i class="ph ph-sign-in"></i>
+              Acesso à plataforma
             </span>
           </div>
 
           <div class="flex flex-col gap-1">
-            <h1 class="title">Criar sua conta</h1>
-            <p class="caption text-muted">
-              Comece a monitorar seus servidores Free Flow hoje.
-            </p>
+            <h1 class="title">Bem-vindo de volta</h1>
+            <p class="caption text-muted">Acesse o seu Vision Center.</p>
           </div>
 
-          <form id="register-form" class="flex flex-col gap-4">
+          <form
+            id="login-form"
+            onsubmit="entrar(event)"
+            class="flex flex-col gap-4"
+          >
             <div class="flex flex-col gap-1">
-              <label for="nome" class="text-sm text-muted">Nome completo</label>
+              <label for="email" class="text-sm text-muted">E-mail</label>
               <input
-                id="nome"
-                name="nome"
-                type="text"
-                placeholder="Nome completo"
-                class="bg-surface border border-border rounded-md w-full h-12 px-4 transition-all focus:border-accent focus:outline-none"
-              />
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <label for="email" class="text-sm text-muted"
-                >E-mail corporativo</label
-              >
-              <input
-                id="email"
+                id="ipt-email"
                 name="email"
                 type="email"
-                placeholder="email@empresa.com"
-                class="bg-surface border border-border rounded-md w-full h-12 px-4 transition-all focus:border-accent focus:outline-none"
+                placeholder="empresa@dominio.com"
               />
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <label for="cargo" class="text-sm text-muted">Cargo</label>
-              <select
-                id="cargo"
-                name="cargo"
-                class="bg-surface border border-border rounded-md w-full h-12 px-4 transition-all focus:border-accent focus:outline-none"
-              >
-                <option value="supervisor" disabled>Supervisor</option>
-                <option value="analista_de_sistemas" selected>
-                  Analista de Sistemas
-                </option>
-              </select>
             </div>
 
             <div class="flex flex-col gap-1">
               <label for="senha" class="text-sm text-muted">Senha</label>
               <input
-                id="senha"
+                id="ipt-senha"
                 name="senha"
                 type="password"
-                placeholder="********"
-                class="bg-surface border border-border rounded-md w-full h-12 px-4 transition-all focus:border-accent focus:outline-none"
+                placeholder="* * * * * * * *"
               />
             </div>
 
             <button
-              id="register-submit"
+              id="login-submit"
               type="submit"
               class="w-full h-12 flex items-center justify-center gap-1 hover:gap-2 bg-accent rounded-md text-background font-bold transition-all hover:bg-accent/90 cursor-pointer"
             >
               <span>Entrar no Vision Center</span>
-              <i class="ph ph-user-plus transition-all"></i>
+              <i class="ph ph-sign-in transition-all"></i>
             </button>
           </form>
 
@@ -182,7 +155,7 @@
           </div>
 
           <div class="flex justify-center text-disabled">
-            <a href="index.html" class="hover:text-muted transition-all">
+            <a href="../index.html" class="hover:text-muted transition-all">
               <i class="ph ph-arrow-u-up-left"></i>
               <span>voltar ao site</span>
             </a>
@@ -192,6 +165,8 @@
     </div>
 
     <!-- Scripts JS -->
-    <script src="./js/auth/cadastro.js"></script>
+    <script src="../js/utils/storage.js"></script>
+    <script src="../js/utils/toast.js"></script>
+    <script src="../js/auth.js"></script>
   </body>
 </html>

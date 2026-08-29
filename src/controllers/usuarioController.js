@@ -34,10 +34,10 @@ function autenticar(req, res) {
 }
 
 function cadastrar(req, res) {
-  const { nome, email, senha, cargo, empresa_id } = req.body;
+  const { nome, email, senha, cargo, empresaId } = req.body;
 
   usuarioModel
-    .cadastrar(nome, email, senha, cargo, empresa_id)
+    .cadastrar(nome, email, senha, cargo, empresaId)
     .then(function (resultado) {
       res.json({ message: "Usuário cadastrado com sucesso!" });
     })

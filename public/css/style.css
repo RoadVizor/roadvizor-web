@@ -1,5 +1,8 @@
-@import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap");
+
+@import "tailwindcss";
+@import "./components/navbar.css";
+@import "./components/toast.css";
 
 :root {
   color-scheme: light dark;
@@ -108,6 +111,12 @@ body {
   @apply w-full min-h-dvh flex flex-col bg-background text-foreground font-mont;
 }
 
+input,
+textarea,
+select {
+  @apply bg-surface border border-border rounded-md w-full min-h-12 px-4 transition-all focus:border-accent focus:outline-none;
+}
+
 .title {
   @apply font-museo font-bold capitalize text-3xl md:text-4xl;
 }
@@ -126,41 +135,4 @@ body {
 
 .container {
   @apply max-w-6xl w-full mx-auto px-8 lg:px-12;
-}
-
-/* Navbar */
-.navitem {
-  @apply relative
-    text-disabled
-    hover:text-foreground
-    hover:font-semibold
-    transition-all
-    after:absolute
-    after:left-0
-    after:-bottom-0.5
-    after:w-0
-    after:h-0.5
-    after:bg-accent
-    after:transition-all
-    hover:after:w-full;
-}
-
-.card {
-  @apply max-w-[33%] hover:border-success hover:bg-[#191f25] transition duration-400;
-}
-
-.card2 {
-  @apply w-1/2 mt-4 transition duration-400 hover:bg-[#191f25] hover:border-success;
-}
-
-.estrelas {
-  @apply text-chart-2;
-}
-
-.icones {
-  @apply text-accent;
-}
-
-.header-fixed {
-  @apply  max-w-5xl fixed top-0 left-1/2 -translate-x-1/2 my-2 border border-border rounded-xl w-full z-50 bg-surface/95 backdrop-blur-sm shadow-md transition-all;
 }

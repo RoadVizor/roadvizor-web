@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+    <title>RoadVizor | Equipe</title>
+
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="../../css/output.css" />
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  </head>
+  <body class="container">
+    <h1 class="text-4xl font-bold">RoadVizor | Equipe</h1>
+    <div>
+      <form id="register-form" class="flex flex-col gap-4">
+        <div class="flex flex-col gap-1">
+          <label for="nome" class="text-sm text-muted">Nome completo</label>
+          <input
+            id="ipt-nome"
+            name="nome"
+            type="text"
+            placeholder="Nome completo"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="email" class="text-sm text-muted"
+            >E-mail corporativo</label
+          >
+          <input
+            id="ipt-email"
+            name="email"
+            type="email"
+            placeholder="email@empresa.com"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="cargo" class="text-sm text-muted">Cargo</label>
+          <select id="ipt-cargo" name="cargo">
+            <option value="supervisor" disabled>Supervisor</option>
+            <option value="analista_de_sistemas" selected>
+              Analista de Sistemas
+            </option>
+          </select>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="senha" class="text-sm text-muted">Senha</label>
+          <input
+            id="ipt-senha"
+            name="senha"
+            type="password"
+            placeholder="********"
+          />
+        </div>
+
+        <button
+          id="register-submit"
+          type="submit"
+          class="w-full h-12 flex items-center justify-center gap-1 hover:gap-2 bg-accent rounded-md text-background font-bold transition-all hover:bg-accent/90 cursor-pointer"
+        >
+          <span>Cadastrar Membro</span>
+          <i class="ph ph-plus transition-all"></i>
+        </button>
+      </form>
+    </div>
+
+    <script src="../../js/auth.js"></script>
+  </body>
+</html>

@@ -8,8 +8,7 @@
     <title>RoadVizor | Observabilidade em Pedágios Eletrônicos</title>
 
     <!-- CSS Styles -->
-    <link rel="stylesheet" href="./css/style.css" />
-    <link rel="stylesheet" href="./css/output.css" />
+    <link rel="stylesheet" href="css/output.css" />
 
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -26,7 +25,7 @@
         <nav class="w-full flex items-center">
           <ul
             id="nav-menu"
-            class="hidden lg:flex items-center mx-auto gap-8 lg:gap-12"
+            class="hidden lg:flex items-center mx-auto gap-4 lg:gap-8"
           >
             <li class="navitem">
               <a href="#section-solution">Como Funciona</a>
@@ -45,9 +44,11 @@
           <div
             class="flex items-center gap-2 md:gap-4 w-full lg:w-fit justify-end"
           >
-            <a href="./login.html" class="navitem hidden md:inline">Entrar</a>
+            <a href="./pages/login.html" class="navitem hidden md:inline"
+              >Entrar</a
+            >
             <a
-              href="./login.html"
+              href="./pages/login.html"
               class="hidden md:flex items-center gap-1 hover:gap-2 border border-border rounded-md py-2 px-3 md:px-4 transition-all hover:border-accent hover:text-accent"
             >
               <span class="text-sm sm:text-base">Vision Center</span>
@@ -69,7 +70,7 @@
         id="mobile-menu"
         class="hidden lg:hidden w-full overflow-hidden transition-all border-b-2 border-border shadow-md"
       >
-        <ul class="container flex flex-col text-center gap-6 py-8">
+        <ul class="container flex flex-col text-center gap-12 py-8">
           <li class="navitem py-2">
             <a href="#section-solution">Como Funciona</a>
           </li>
@@ -83,11 +84,11 @@
             <a href="#section-contact">Contato</a>
           </li>
           <li class="navitem py-2">
-            <a href="./login.html">Entrar</a>
+            <a href="./pages/login.html">Entrar</a>
           </li>
           <li class="w-full flex justify-center">
             <a
-              href="./login.html"
+              href="./pages/login.html"
               class="w-full flex items-center gap-1 hover:gap-2 border border-border rounded-md py-2 px-4 transition-all hover:border-accent hover:text-accent"
             >
               <span class="w-full text-center">Vision Center</span>
@@ -126,7 +127,7 @@
             class="mt-4 lg:mt-16 w-full flex flex-col items-center justify-center sm:flex-row gap-4"
           >
             <a
-              href="./login.html"
+              href="./pages/login.html"
               class="flex items-center justify-center gap-1 hover:gap-2 border border-border rounded-md py-2 px-4 transition-all hover:border-accent hover:text-accent"
             >
               <span>Vision Center</span>
@@ -441,7 +442,8 @@
               </div>
               <h3 class="text-lg font-bold">Integrações & API REST</h3>
               <p class="text-muted text-sm text-justify">
-                API documentada para integração com diversas plataformas, como AWS e todos os seus serviços.
+                API documentada para integração com diversas plataformas, como
+                AWS e todos os seus serviços.
               </p>
             </div>
           </div>
@@ -629,6 +631,6 @@
     </footer>
 
     <!-- Scripts JS -->
-    <script src="./js/navbar.js"></script>
+    <script src="../js/components/navbar.js"></script>
   </body>
 </html>
