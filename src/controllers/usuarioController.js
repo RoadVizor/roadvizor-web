@@ -1,4 +1,5 @@
 var usuarioModel = require("../models/usuarioModel");
+var jwt = require("jsonwebtoken");
 
 function autenticar(req, res) {
   const { email, senha } = req.body;
@@ -13,8 +14,26 @@ function autenticar(req, res) {
       .then(function (resultado) {
         if (resultado.length == 1) {
           console.log(resultado);
+          var usuario = resultado[0]
+          var payload = {
+            id: usuario.id_usuario,
+            empresa: usuario.empresa_id
+          };
 
-          res.json({
+          var token = jwt.sign(payload, process.env.JWT_SECRET, {
+            algorithm: "HS256",
+            expiresIn: "24h"
+          });
+
+          res.cookie("cookie_token", token, {
+            httpOnly: true,
+            secure: process.env.AMBIENTE_PROCESSO === "desenvolvimento",
+            sameSite: "lax",
+            maxAge: 24 * 60 * 60 * 1000,
+            path: "/api"
+          });
+
+          return res.json({
             message: "Usuário logado com sucesso!",
             user: resultado[0],
           });
