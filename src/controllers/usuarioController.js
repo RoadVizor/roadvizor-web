@@ -1,5 +1,6 @@
 const usuarioModel = require("../models/usuarioModel");
 const { isInvalid, isEmailValid, isPasswordValid } = require("../utils");
+const jwt = require("jsonwebtoken");
 
 async function autenticar(req, res) {
   const { email, senha } = req.body;
@@ -33,9 +34,28 @@ async function autenticar(req, res) {
       throw new Error("Usuário inexistente ou credenciais inválidas.");
     }
 
+    const usuario = result[0];
+
+    const payload = {
+      id: usuario.id_usuario,
+      empresa: usuario.empresa_id,
+    };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      algorithm: "HS256",
+      expiresIn: "24h",
+    });
+
+    res.cookie("access_token", token, {
+      httpOnly: true,
+      secure: process.env.AMBIENTE_PROCESSO === "desenvolvimento",
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000,
+      path: "/api",
+    });
+
     res.status(200).send({
       message: "Usuário logado com sucesso!",
-      user: result[0],
+      user: usuario,
     });
   } catch (error) {
     const msg = error.message || error.sqlMessage;
