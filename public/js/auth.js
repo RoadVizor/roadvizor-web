@@ -57,7 +57,6 @@ async function cadastrar(event) {
   const email = String(document.getElementById("ipt-email").value).trim();
   const senha = String(document.getElementById("ipt-senha").value).trim();
   const cargo = String(document.getElementById("ipt-cargo").value).trim();
-  const empresaId = 1;
 
   try {
     const response = await fetch("/api/usuarios/cadastrar", {
@@ -70,7 +69,6 @@ async function cadastrar(event) {
         email: email,
         senha: senha,
         cargo: cargo,
-        empresaId: empresaId,
       }),
     });
 
