@@ -1,10 +1,12 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const autenticar = require("../middlewares/auth");
 
-var usuarioRouter = require("./usuarios");
-var empresaRouter = require("./empresa");
+const usuarioRouter = require("./usuarios");
+const empresaRouter = require("./empresa");
+
+const router = express.Router();
 
 router.use("/usuarios", usuarioRouter);
-router.use("/empresas", empresaRouter);
+router.use("/empresas", autenticar, empresaRouter);
 
 module.exports = router;

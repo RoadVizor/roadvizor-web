@@ -26,7 +26,7 @@ async function entrar(event) {
       throw new Error(data.message);
     }
 
-    storage.set("user", data.user);
+    storage.set("usuario", data.usuario);
     toast({
       title: "Login Efetuado!",
       message: "Redirecionando...",

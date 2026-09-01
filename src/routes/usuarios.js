@@ -1,9 +1,10 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const autenticar = require("../middlewares/auth");
+const usuarioController = require("../controllers/usuarioController");
 
-var usuarioController = require("../controllers/usuarioController");
+const router = express.Router();
 
-router.post("/cadastrar", function (req, res) {
+router.post("/cadastrar", autenticar, function (req, res) {
   usuarioController.cadastrar(req, res);
 });
 

@@ -1,21 +1,28 @@
-var usuarioModel = require("../models/usuarioModel");
-var jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
-async function autenticar(req, res, next) {
-    var token = req.cookies.cookie_token
-    console.log('Cookies: ', req.cookies.cookie_token);
+function autenticar(req, res, next) {
+  const token = req.cookies?.access_token;
 
-    if (!token) {
-        res.status(403).send({
-        message: "Faça a autenticação"
-    })};
-    try {
-        var payload = jwt.verify(token, process.env.JWT_SECRET);
-        console.log("Autenticação válida")
-        next()
-    } catch {
-        console.log("Erro na autenticação")
-    };
+  if (!token) {
+    return res.status(401).json({
+      message: "Token de acesso não encontrado.",
+    });
+  }
+
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    req.usuario = payload;
+
+    return next();
+  } catch (error) {
+    const isExpired = error.name === "TokenExpiredError";
+
+    return res.status(401).json({
+      message: isExpired
+        ? "Token expirado. Faça login novamente."
+        : "Token inválido.",
+    });
+  }
 }
 
 module.exports = autenticar;
