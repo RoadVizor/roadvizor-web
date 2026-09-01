@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-function autenticar(req, res, next) {
+function verificarAutenticacao(req, res, next) {
   const token = req.cookies?.access_token;
 
   if (!token) {
@@ -25,4 +25,4 @@ function autenticar(req, res, next) {
   }
 }
 
-module.exports = autenticar;
+module.exports = { verificarAutenticacao };
