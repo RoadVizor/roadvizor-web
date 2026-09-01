@@ -108,13 +108,19 @@ html {
 }
 
 body {
-  @apply w-full min-h-dvh flex flex-col bg-background text-foreground font-mont;
+  @apply w-full min-h-dvh bg-background text-foreground font-mont;
 }
 
 input,
 textarea,
 select {
   @apply bg-surface border border-border rounded-md w-full min-h-12 px-4 transition-all focus:border-accent focus:outline-none;
+}
+
+input[data-has-errors="true"],
+textarea[data-has-errors="true"],
+select[data-has-errors="true"] {
+  @apply border-destructive-foreground text-destructive-foreground;
 }
 
 .title {

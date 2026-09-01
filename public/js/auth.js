@@ -50,7 +50,9 @@ async function entrar(event) {
   }
 }
 
-async function cadastrar() {
+async function cadastrar(event) {
+  event.preventDefault();
+
   const nome = String(document.getElementById("ipt-nome").value).trim();
   const email = String(document.getElementById("ipt-email").value).trim();
   const senha = String(document.getElementById("ipt-senha").value).trim();
@@ -58,7 +60,7 @@ async function cadastrar() {
   const empresaId = 1;
 
   try {
-    const response = await fetch("/usuarios/cadastrar", {
+    const response = await fetch("/api/usuarios/cadastrar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -97,6 +99,7 @@ async function cadastrar() {
 async function sair() {
   try {
     // limpa todo o session storage
+    // todo: lembrar de limpar os Cookies também
     storage.clear();
 
     toast({

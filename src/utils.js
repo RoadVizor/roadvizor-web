@@ -6,7 +6,7 @@ function isNull(value) {
   return value === null;
 }
 
-function isInvalid(value) {
+function isMissing(value) {
   return isUndefined(value) || isNull(value);
 }
 
@@ -15,15 +15,13 @@ function isEmailValid(email) {
 }
 
 function isPasswordValid(password) {
-  return /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,12}$/.test(
-    password,
-  );
+  return /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{6,}$/.test(password);
 }
 
 module.exports = {
   isUndefined,
   isNull,
-  isInvalid,
+  isMissing,
   isEmailValid,
   isPasswordValid,
 };

@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
 
     <title>RoadVizor | Login</title>
     <link rel="stylesheet" href="/css/style.css" />
@@ -21,7 +22,11 @@
       >
         <div class="flex flex-col gap-8">
           <div class="flex items-center gap-3">
-            <p class="text-2xl font-bold">RoadVizor</p>
+            <img
+              src="../assets/svgs/logo-dark.svg"
+              alt="RoadVizor Logo"
+              class="w-48"
+            />
           </div>
 
           <h1 class="text-2xl xl:text-3xl font-bold font-museo">
@@ -110,12 +115,16 @@
 
           <div class="flex flex-col gap-1">
             <h1 class="title">Bem-vindo de volta</h1>
-            <p class="caption text-muted">Acesse o seu Vision Center.</p>
+            <p class="caption text-muted">
+              Acesse o Vision Center da sua Empresa inserindo suas credenciais
+              nos campos abaixo.
+            </p>
           </div>
 
           <form
             id="login-form"
             onsubmit="entrar(event)"
+            oninput="checkFormFields(this)"
             class="flex flex-col gap-4"
           >
             <div class="flex flex-col gap-1">
@@ -124,24 +133,44 @@
                 id="ipt-email"
                 name="email"
                 type="email"
-                placeholder="empresa@dominio.com"
+                placeholder="email@corporativo.com"
+                oninput="validateEmail(this)"
+                class="field-input"
               />
+              <p
+                id="ipt-email-auth-message"
+                class="hidden text-destructive-foreground text-xs mt-1"
+              ></p>
             </div>
 
             <div class="flex flex-col gap-1">
               <label for="senha" class="text-sm text-muted">Senha</label>
-              <input
-                id="ipt-senha"
-                name="senha"
-                type="password"
-                placeholder="* * * * * * * *"
-              />
+              <div class="relative">
+                <input
+                  id="ipt-senha"
+                  name="senha"
+                  type="password"
+                  placeholder="* * * * * * * *"
+                  oninput="validatePassword(this)"
+                  class="field-input"
+                />
+                <i
+                  id="ipt-senha-icon"
+                  class="ph ph-eye absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer text-disabled hover:text-accent transition-colors"
+                  onclick="togglePasswordVisibility('ipt-senha')"
+                ></i>
+              </div>
+              <p
+                id="ipt-senha-auth-message"
+                class="hidden text-destructive-foreground text-xs mt-1"
+              ></p>
             </div>
 
             <button
               id="login-submit"
               type="submit"
-              class="w-full h-12 flex items-center justify-center gap-1 hover:gap-2 bg-accent rounded-md text-background font-bold transition-all hover:bg-accent/90 cursor-pointer"
+              class="w-full h-12 flex items-center justify-center gap-1 not-disabled:hover:gap-2 bg-disabled rounded-md text-background font-bold transition-all not-disabled:hover:bg-accent/90 not-disabled:cursor-pointer"
+              disabled
             >
               <span>Entrar no Vision Center</span>
               <i class="ph ph-sign-in transition-all"></i>
@@ -167,6 +196,33 @@
     <!-- Scripts JS -->
     <script src="../js/utils/storage.js"></script>
     <script src="../js/utils/toast.js"></script>
+    <script src="../js/utils/password-toggler.js"></script>
+    <script src="../js/validations.js"></script>
     <script src="../js/auth.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", (e) => {
+        // Verifica existência do token JWT, se necessário, redireciona
+        const hasToken = document.cookie.includes("access_token");
+        if (hasToken) {
+          window.location = "./dashboard/home.html";
+          return;
+        }
+      });
+
+      function checkFormFields(form) {
+        const submitBtn = document.getElementById("login-submit");
+        const fields = form.querySelectorAll(".field-input");
+        const hasErrors = Array.from(fields).some(
+          (field) => field.dataset.hasErrors != "false",
+        );
+
+        submitBtn.disabled = hasErrors;
+        if (hasErrors) {
+          submitBtn.classList.replace("bg-accent", "bg-disabled");
+        } else {
+          submitBtn.classList.replace("bg-disabled", "bg-accent");
+        }
+      }
+    </script>
   </body>
 </html>
