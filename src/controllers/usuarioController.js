@@ -126,7 +126,17 @@ async function cadastrar(req, res) {
   }
 }
 
+async function sair(req, res) {
+  const token = req.cookies?.access_token;
+  if (token) {
+    res.clearCookie("access_token");
+  }
+
+  return res.status(200).json({ message: "Logout realizado." });
+}
+
 module.exports = {
   autenticar,
   cadastrar,
+  sair,
 };

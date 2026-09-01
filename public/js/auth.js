@@ -98,24 +98,28 @@ async function cadastrar(event) {
 
 async function sair() {
   try {
-    // limpa todo o session storage
-    // todo: lembrar de limpar os Cookies também
-    storage.clear();
+    const response = await fetch("/api/usuarios/sair", {
+      method: "POST",
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(response.message);
+    }
 
+    storage.clear();
     toast({
-      title: "Log out",
-      message: "Redirecionando...",
+      title: data.message,
+      variant: "warn",
     });
 
     // redireciona usuário após 1s
     new Promise((resolve) => {
       setTimeout(() => {
-        window.location = "../index.html";
+        window.location.href = "../login.html";
         resolve();
       }, 1000);
     });
   } catch (error) {
-    console.log(error);
     toast({
       title: "Erro ao Sair",
       message: error,
