@@ -1,5 +1,5 @@
 const express = require("express");
-const autenticar = require("../middlewares/auth");
+const middlewares = require("../middlewares/auth");
 
 const usuarioRouter = require("./usuarios");
 const empresaRouter = require("./empresa");
@@ -8,7 +8,6 @@ const servidorRouter = require("./servidor");
 const router = express.Router();
 
 router.use("/usuarios", usuarioRouter);
-router.use("/empresas", autenticar, empresaRouter);
-router.use("/servidor", servidorRouter);
+router.use("/empresas", middlewares.verificarAutenticacao, empresaRouter);
 
 module.exports = router;

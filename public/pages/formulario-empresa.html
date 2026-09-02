@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+
+    <title>RoadVizor | Login</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link href="/css/output.css" rel="stylesheet" />
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  </head>
+
+  <body>
+    <div class="w-full min-h-dvh flex flex-col lg:flex-row-reverse">
+      <!-- Formulário -->
+      <div
+        class="w-full flex flex-col justify-center items-center px-6 py-12 sm:px-8"
+      >
+        <div
+          class="w-full sm:w-3/4 md:w-1/2 lg:w-full lg:max-w-md flex flex-col gap-6"
+        >
+          <div class="flex justify-start">
+            <span
+              class="caption uppercase bg-accent/20 px-2 text-accent w-fit flex items-center gap-1"
+            >
+              <i class="ph ph-sign-in"></i>
+              Acesso à plataforma
+            </span>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <h1 class="title">Cadastro de Empresa</h1>
+          </div>
+
+          <form
+            id="register-empresa-form"
+            onsubmit="cadastrarEmpresa(event)"
+            oninput="checkFormFields(this)"
+            class="flex flex-col gap-4"
+          >
+            <div class="flex flex-col gap-1">
+              <label for="ipt-cnpj" class="text-sm text-muted">CNPJ</label>
+              <input
+                id="ipt-cnpj"
+                name="cnpj"
+                placeholder="00.000.000/0000-00"
+                oninput="validatecnpj(this)"
+                class="field-input"
+              />
+              <p
+                id="ipt-cnpj-auth-message"
+                class="hidden text-destructive-foreground text-xs mt-1"
+              ></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label for="ipt-razao" class="text-sm text-muted">Razão Social</label>
+              <input
+                id="ipt-razao"
+                name="razao"
+                oninput="validaterazao(this)"
+                class="field-input"
+              />
+              <p
+                id="ipt-razao-auth-message"
+                class="hidden text-destructive-foreground text-xs mt-1"
+              ></p>
+            </div>
+            
+
+            <div class="flex flex-col gap-1">
+              <label for="ipt-fantasia" class="text-sm text-muted">Nome Fantasia</label>
+              <input
+                id="ipt-fantasia"
+                name="fantasia"
+                oninput="validatefantasia(this)"
+                class="field-input"
+              />
+              <p
+                id="ipt-fantasia-auth-message"
+                class="hidden text-destructive-foreground text-xs mt-1"
+              ></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label for="email" class="text-sm text-muted">E-mail</label>
+              <input
+                id="ipt-email"
+                name="email"
+                placeholder="email@corporativo.com"
+                oninput="validateEmail(this)"
+                class="field-input"
+              />
+              <p
+                id="ipt-email-auth-message"
+                class="hidden text-destructive-foreground text-xs mt-1"
+              ></p>
+            </div>
+
+            
+            <div class="flex flex-col gap-1">
+              <label for="senha" class="text-sm text-muted">Senha</label>
+              <div class="relative">
+                <input
+                  id="ipt-senha"
+                  name="senha"
+                  placeholder="* * * * * * * *"
+                  oninput="validatePassword(this)"
+                  class="field-input"
+                />
+                <i
+                  id="ipt-senha-icon"
+                  class="ph ph-eye absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer text-disabled hover:text-accent transition-colors"
+                  onclick="togglePasswordVisibility('ipt-senha')"
+                ></i>
+              </div>
+              <p
+                id="ipt-senha-auth-message"
+                class="hidden text-destructive-foreground text-xs mt-1"
+              ></p>
+            </div>
+
+            <button
+              id="register-empresa-submit"
+              type="submit"
+              class="w-full h-12 flex items-center justify-center gap-1 not-disabled:hover:gap-2 bg-disabled rounded-md text-background font-bold transition-all not-disabled:hover:bg-accent/90 not-disabled:cursor-pointer"
+              disabled
+            >
+              <span>Cadastrar Empresa</span>
+              <i class="ph ph-sign-in transition-all"></i>
+            </button>
+          </form>
+
+          <div class="flex items-center gap-3">
+            <div class="w-full border-t border-border"></div>
+            <span class="text-xs uppercase text-disabled">ou</span>
+            <div class="w-full border-t border-border"></div>
+          </div>
+
+          <div class="flex justify-center text-disabled">
+            <a href="../index.html" class="hover:text-muted transition-all">
+              <i class="ph ph-arrow-u-up-left"></i>
+              <span>voltar ao site</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts JS -->
+    <script src="../js/utils/storage.js"></script>
+    <script src="../js/utils/toast.js"></script>
+    <script src="../js/utils/password-toggler.js"></script>
+    <script src="../js/validations.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", (e) => {
+        // Verifica existência do token JWT, se necessário, redireciona
+        const hasToken = document.cookie.includes("access_token");
+        if (hasToken) {
+          window.location = "./dashboard/home.html";
+          return;
+        }
+      });
+
+      function checkFormFields(form) {
+        const submitBtn = document.getElementById("register-empresa-submit");
+        const fields = form.querySelectorAll(".field-input");
+        const hasErrors = Array.from(fields).some(
+          (field) => field.dataset.hasErrors != "false",
+        );
+
+        submitBtn.disabled = hasErrors;
+        if (hasErrors) {
+          submitBtn.classList.replace("bg-accent", "bg-disabled");
+        } else {
+          submitBtn.classList.replace("bg-disabled", "bg-accent");
+        }
+      }
+    </script>
+  </body>
+</html>

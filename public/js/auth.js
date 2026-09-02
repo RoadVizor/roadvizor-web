@@ -96,27 +96,78 @@ async function cadastrar(event) {
 
 async function sair() {
   try {
-    // limpa todo o session storage
-    // todo: lembrar de limpar os Cookies também
-    storage.clear();
+    const response = await fetch("/api/usuarios/sair", {
+      method: "POST",
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(response.message);
+    }
 
+    storage.clear();
     toast({
-      title: "Log out",
-      message: "Redirecionando...",
+      title: data.message,
+      variant: "warn",
     });
 
     // redireciona usuário após 1s
     new Promise((resolve) => {
       setTimeout(() => {
-        window.location = "../index.html";
+        window.location.href = "../login.html";
         resolve();
       }, 1000);
     });
   } catch (error) {
-    console.log(error);
     toast({
       title: "Erro ao Sair",
       message: error,
+      variant: "destructive",
+    });
+  }
+}
+
+async function cadastrarEmpresa(event) {
+  event.preventDefault();
+
+  const cnpj = String(document.getElementById("ipt-cnpj").value).trim();
+  const razao = String(document.getElementById("ipt-razao").value).trim();
+  const fantasia = String(document.getElementById("ipt-fantasia").value).trim();
+  const email = String(document.getElementById("ipt-email").value).trim();
+  const senha = String(document.getElementById("ipt-senha").value).trim();
+
+
+  try {
+    const response = await fetch("/api/empresas/cadastrar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cnpj: cnpj,
+        razao_social: razao,
+        nome_fantasia: fantasia,
+        email: email,
+        senha: senha,
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    // todo: melhorar a mensagem e possívelmente atualizar a página para
+    // refletir atualização da UI
+    toast({
+      title: "Cadastro Efetuado!",
+      message: "Cadastro efetuado com sucesso.",
+      variant: "success",
+    });
+  } catch (error) {
+    console.log(error);
+    toast({
+      title: "Uh oh...",
+      message: error.message,
       variant: "destructive",
     });
   }

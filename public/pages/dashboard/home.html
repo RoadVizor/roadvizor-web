@@ -17,7 +17,7 @@
   <body class="flex flex-row space-x-4 lg:space-x-8">
     <!-- Sidebar -->
     <div
-      class="bg-red-500/20 max-w-52 h-dvh flex flex-col justify-center py-6 lg:py-12 px-2 lg:px-4"
+      class="bg-surface rounded-r-xl max-w-52 h-dvh flex flex-col justify-center py-6 lg:py-12 px-2 lg:px-4"
     >
       <!-- Sidebar | Header -->
       <div class="flex flex-col space-y-12 items-center justify-center">
@@ -38,6 +38,12 @@
         <nav class="flex flex-col">
           <ul class="flex flex-col">
             <li class="w-full">
+              <a href="./home.html" class="navitem">
+                <span>Home</span>
+                <i class="ph ph-gauge"></i>
+              </a>
+            </li>
+            <li class="w-full">
               <a href="./equipe.html" class="navitem">
                 <span>Equipe</span>
                 <i class="ph ph-users"></i>
@@ -47,15 +53,38 @@
         </nav>
       </div>
       <!-- Sidebar | Footer -->
-      <div></div>
+      <div>
+        <button
+          onclick="sair()"
+          class="cursor-pointer flex items-center justify-center py-1 rounded-md space-x-1 hover:space-x-4 w-full border border-border hover:border-destructive-foreground hover:text-destructive-foreground text-muted hover:bg-destructive transition-all"
+        >
+          <span>Sair</span><i class="ph ph-sign-out"></i>
+        </button>
+      </div>
     </div>
 
     <!-- Dashboard -->
     <div
-      class="bg-green-500/20 w-full min-h-dvh flex flex-col items-center justify-center"
+      class="w-full min-h-dvh flex flex-col items-center justify-center text-warning-foreground"
     >
+    <p>
+      <i class="ph ph-bulldozer text-9xl text-warning-foreground"></i> <i class="ph ph-align-left text-7xl text-warning-foreground"></i>
+    </p>
       <h1 class="text-4xl font-bold">RoadVizor | Home</h1>
       <p>Em construção...</p>
     </div>
+
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/toast.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Verifica se usuário está autenticado
+        if (!storage.get("usuario")) {
+          window.location.href = "../login.html";
+          return;
+        }
+      });
+    </script>
   </body>
 </html>
