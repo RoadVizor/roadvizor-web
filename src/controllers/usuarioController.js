@@ -57,7 +57,6 @@ async function autenticar(req, res) {
       usuario: {
         nome: usuario.nome,
         email: usuario.email,
-        cargo: usuario.cargo,
       },
     });
   } catch (error) {
@@ -71,7 +70,7 @@ async function autenticar(req, res) {
 }
 
 async function cadastrar(req, res) {
-  const { nome, email, senha, cargo } = req.body;
+  const { nome, email, senha } = req.body;
   const { empresa_id } = req.usuario;
 
   if (isMissing(nome)) {
@@ -103,18 +102,13 @@ async function cadastrar(req, res) {
     return;
   }
 
-  if (isMissing(cargo)) {
-    res.status(400).send({ message: "O campo 'cargo' está faltando." });
-    return;
-  }
-
   if (isMissing(empresa_id)) {
     res.status(400).send({ message: "O campo 'empresaId' está faltando." });
     return;
   }
 
   try {
-    await usuarioModel.cadastrar(nome, email, senha, cargo, empresa_id);
+    await usuarioModel.cadastrar(nome, email, senha, empresa_id);
 
     res.status(201).send({ message: "Usuário cadastrado com sucesso!" });
   } catch (error) {

@@ -56,7 +56,6 @@ async function cadastrar(event) {
   const nome = String(document.getElementById("ipt-nome").value).trim();
   const email = String(document.getElementById("ipt-email").value).trim();
   const senha = String(document.getElementById("ipt-senha").value).trim();
-  const cargo = String(document.getElementById("ipt-cargo").value).trim();
 
   try {
     const response = await fetch("/api/usuarios/cadastrar", {
@@ -65,10 +64,9 @@ async function cadastrar(event) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        nome: nome,
-        email: email,
-        senha: senha,
-        cargo: cargo,
+        nome,
+        email,
+        senha,
       }),
     });
 
@@ -134,7 +132,6 @@ async function cadastrarEmpresa(event) {
   const fantasia = String(document.getElementById("ipt-fantasia").value).trim();
   const email = String(document.getElementById("ipt-email").value).trim();
   const senha = String(document.getElementById("ipt-senha").value).trim();
-
 
   try {
     const response = await fetch("/api/empresas/cadastrar", {
