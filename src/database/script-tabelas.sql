@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS endereco(
 
 CREATE TABLE IF NOT EXISTS empresa(
 	id_empresa INT PRIMARY KEY AUTO_INCREMENT,
-    endereco_id INT NOT NULL,
+    -- endereco_id INT NOT NULL,
     
     cnpj CHAR(14) NOT NULL UNIQUE,
     razao_social VARCHAR(120) NOT NULL,
@@ -34,10 +34,10 @@ CREATE TABLE IF NOT EXISTS empresa(
     email VARCHAR(255) NOT NULL UNIQUE,		-- campo usado para contato
     
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     
-    CONSTRAINT fk_empresa_endereco FOREIGN KEY (endereco_id)
-		REFERENCES endereco(id_endereco)
+    -- CONSTRAINT fk_empresa_endereco FOREIGN KEY (endereco_id)
+	-- 	REFERENCES endereco(id_endereco)
 );
 
 CREATE TABLE IF NOT EXISTS usuario(
