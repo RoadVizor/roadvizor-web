@@ -127,3 +127,50 @@ async function sair() {
     });
   }
 }
+
+async function cadastrarEmpresa(event) {
+  event.preventDefault();
+
+  const cnpj = String(document.getElementById("ipt-cnpj").value).trim();
+  const razao = String(document.getElementById("ipt-razao").value).trim();
+  const fantasia = String(document.getElementById("ipt-fantasia").value).trim();
+  const email = String(document.getElementById("ipt-email").value).trim();
+  const senha = String(document.getElementById("ipt-senha").value).trim();
+
+
+  try {
+    const response = await fetch("/api/empresas/cadastrar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cnpj: cnpj,
+        razao_social: razao,
+        nome_fantasia: fantasia,
+        email: email,
+        senha: senha,
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    // todo: melhorar a mensagem e possívelmente atualizar a página para
+    // refletir atualização da UI
+    toast({
+      title: "Cadastro Efetuado!",
+      message: "Cadastro efetuado com sucesso.",
+      variant: "success",
+    });
+  } catch (error) {
+    console.log(error);
+    toast({
+      title: "Uh oh...",
+      message: error.message,
+      variant: "destructive",
+    });
+  }
+}

@@ -37,8 +37,8 @@
           </div>
 
           <form
-            id="login-form"
-            onsubmit="entrar(event)"
+            id="register-empresa-form"
+            onsubmit="cadastrarEmpresa(event)"
             oninput="checkFormFields(this)"
             class="flex flex-col gap-4"
           >
@@ -47,7 +47,6 @@
               <input
                 id="ipt-cnpj"
                 name="cnpj"
-                type="cnpj"
                 placeholder="00.000.000/0000-00"
                 oninput="validatecnpj(this)"
                 class="field-input"
@@ -63,7 +62,6 @@
               <input
                 id="ipt-razao"
                 name="razao"
-                type="razao"
                 oninput="validaterazao(this)"
                 class="field-input"
               />
@@ -79,7 +77,6 @@
               <input
                 id="ipt-fantasia"
                 name="fantasia"
-                type="fantasia"
                 oninput="validatefantasia(this)"
                 class="field-input"
               />
@@ -94,7 +91,6 @@
               <input
                 id="ipt-email"
                 name="email"
-                type="email"
                 placeholder="email@corporativo.com"
                 oninput="validateEmail(this)"
                 class="field-input"
@@ -112,7 +108,6 @@
                 <input
                   id="ipt-senha"
                   name="senha"
-                  type="password"
                   placeholder="* * * * * * * *"
                   oninput="validatePassword(this)"
                   class="field-input"
@@ -130,7 +125,7 @@
             </div>
 
             <button
-              id="login-submit"
+              id="register-empresa-submit"
               type="submit"
               class="w-full h-12 flex items-center justify-center gap-1 not-disabled:hover:gap-2 bg-disabled rounded-md text-background font-bold transition-all not-disabled:hover:bg-accent/90 not-disabled:cursor-pointer"
               disabled
@@ -173,7 +168,7 @@
       });
 
       function checkFormFields(form) {
-        const submitBtn = document.getElementById("login-submit");
+        const submitBtn = document.getElementById("register-empresa-submit");
         const fields = form.querySelectorAll(".field-input");
         const hasErrors = Array.from(fields).some(
           (field) => field.dataset.hasErrors != "false",
