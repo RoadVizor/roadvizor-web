@@ -8,12 +8,11 @@ const servidorRouter = require("./servidor");
 const router = express.Router();
 
 // === Rotas da Aplicação === //
+// === Rotas Públicas === //
 router.use("/usuarios", usuarioRouter);
+
+// === Rotas Protegidas (têm acesso a req.usuario) === //
 router.use("/empresas", middlewares.verificarAutenticacao, empresaRouter);
-router.use(
-  "/empresas/:empresaId",
-  middlewares.verificarAutenticacao,
-  servidorRouter,
-);
+router.use("/servidor", middlewares.verificarAutenticacao, servidorRouter);
 
 module.exports = router;

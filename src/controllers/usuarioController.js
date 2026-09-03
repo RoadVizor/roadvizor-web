@@ -1,5 +1,6 @@
 const { isMissing, isEmailValid, isPasswordValid } = require("../utils");
 const usuarioModel = require("../models/usuarioModel");
+const empresaModel = require("../models/empresaModel");
 const jwt = require("jsonwebtoken");
 
 async function autenticar(req, res) {
@@ -70,17 +71,21 @@ async function autenticar(req, res) {
 }
 
 async function cadastrar(req, res) {
-  const { nome, email, senha } = req.body;
-  const { empresa_id } = req.usuario;
+  const { empresa_id, supervisor_id } = req.usuario;
+  const { nome, email, senha, nivel_acesso } = req.body;
+
+  if (isMissing(empresa_id)) {
+    return res
+      .status(400)
+      .send({ message: "ID da empresa não foi passado na requisição." });
+  }
 
   if (isMissing(nome)) {
-    res.status(400).send({ message: "O campo 'nome' está faltando." });
-    return;
+    return res.status(400).send({ message: "O campo 'nome' está faltando." });
   }
 
   if (isMissing(email)) {
-    res.status(400).send({ message: "O campo 'email' está faltando." });
-    return;
+    return res.status(400).send({ message: "O campo 'email' está faltando." });
   }
 
   if (!isEmailValid(email)) {
@@ -91,31 +96,49 @@ async function cadastrar(req, res) {
   }
 
   if (isMissing(senha)) {
-    res.status(400).send({ message: "O campo 'senha' está faltando." });
-    return;
+    return res.status(400).send({ message: "O campo 'senha' está faltando." });
   }
 
   if (!isPasswordValid(senha)) {
-    res.status(400).send({
+    return res.status(400).send({
       message: "A senha fornecida está inválida.",
     });
-    return;
-  }
-
-  if (isMissing(empresa_id)) {
-    res.status(400).send({ message: "O campo 'empresaId' está faltando." });
-    return;
   }
 
   try {
-    await usuarioModel.cadastrar(nome, email, senha, empresa_id);
+    // 1. Verifica se Email informado está em uso
+    const emailEmUso = await usuarioModel.existePorEmail(email);
+    if (emailEmUso) {
+      return res
+        .status(409)
+        .json({ message: "Email informado já está em uso." });
+    }
+
+    // 2. Verifica se Empresa informada Existe
+    const empresaExiste = await empresaModel.existePorID(empresa_id);
+    if (!empresaExiste) {
+      return res
+        .status(409)
+        .json({ message: "Empresa informado já está em uso." });
+    }
+
+    // 3. Verifica se Supervisor informado Existe
+    // ...
+
+    await usuarioModel.cadastrar(
+      empresa_id,
+      supervisor_id,
+      nome,
+      email,
+      senha,
+      nivel_acesso,
+    );
 
     res.status(201).send({ message: "Usuário cadastrado com sucesso!" });
   } catch (error) {
     const message = error.message || error.sqlMessage;
     if (message) {
-      res.status(403).send({ message });
-      return;
+      return res.status(403).send({ message });
     }
     res.status(500).send({ message: "Erro interno no servidor." });
   }
