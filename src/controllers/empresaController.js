@@ -1,49 +1,50 @@
 const empresaModel = require("../models/empresaModel");
+const usuarioModel = require("../models/usuarioModel");
 const { isMissing, isEmailValid, isPasswordValid } = require("../utils");
 
 async function cadastrar(req, res) {
   const { cnpj, razao_social, nome_fantasia, email, senha } = req.body;
 
   if (isMissing(cnpj)) {
-    res.status(400).send({ message: "O campo 'cnpj' está faltando." });
-    return;
-  }
-
-  if (isMissing(razao_social)) {
-    res.status(400).send({ message: "O campo 'razao_social' está faltando." });
-    return;
+    return res.status(400).send({ message: "O campo 'cnpj' está faltando." });
   }
 
   if (isMissing(nome_fantasia)) {
-    res.status(400).send({ message: "O campo 'nome_fantasia' está faltando." });
-    return;
-  }
-
-  if (isMissing(email)) {
-    res.status(400).send({ message: "O campo 'email' está faltando." });
-    return;
+    return res
+      .status(400)
+      .send({ message: "O campo 'nome_fantasia' está faltando." });
   }
 
   if (!isEmailValid(email)) {
-    res
+    return res
       .status(400)
       .send({ message: "O endereço de e-mail fornecido está inválido." });
-    return;
-  }
-
-  if (isMissing(senha)) {
-    res.status(400).send({ message: "O campo 'senha' está faltando." });
-    return;
   }
 
   if (!isPasswordValid(senha)) {
-    res.status(400).send({
+    return res.status(400).send({
       message: "A senha fornecida está inválida.",
     });
-    return;
   }
 
   try {
+    // 1. Verifica se CNPJ informado está em uso
+    const cnpjEmUso = await empresaModel.existePorCNPJ(cnpj);
+    if (cnpjEmUso) {
+      return res
+        .status(409)
+        .json({ message: "CNPJ informado já está em uso." });
+    }
+
+    // 2. Verifica se Email informado está em uso
+    const emailEmUso = await usuarioModel.existePorEmail(email);
+    if (emailEmUso) {
+      return res
+        .status(409)
+        .json({ message: "Email de contato informado já está em uso." });
+    }
+
+    // 3. Inicia registro de Empresa
     await empresaModel.cadastrar(
       cnpj,
       razao_social,
@@ -64,21 +65,28 @@ async function cadastrar(req, res) {
 }
 
 async function buscarPorID(req, res) {
-  const { empresaId } = req.params;
+  const { empresa_id } = req.usuario;
 
-  if (isMissing(empresaId)) {
-    res
+  if (isMissing(empresa_id)) {
+    return res
       .status(400)
       .send({ message: "ID da empresa não foi passado na requisição." });
-    return;
   }
 
   try {
-    const result = await empresaModel.buscarPorID(id);
+    const empresaExiste = await empresaModel.existePorID(empresa_id);
+    if (!empresaExiste) {
+      return res
+        .status(404)
+        .json({ message: "Nenhuma Empresa encontrada para o ID informado." });
+    }
 
-    res
-      .status(200)
-      .json({ message: "Empresa encontrada com sucesso!", empresa: result[0] });
+    const empresaResult = await empresaModel.buscarPorID(empresa_id);
+
+    res.status(200).json({
+      message: "Empresa encontrada com sucesso!",
+      empresa: empresaResult[0],
+    });
   } catch (error) {
     const message = error.message || error.sqlMessage;
     if (message) {
