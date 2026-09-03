@@ -3,6 +3,7 @@
 @import "tailwindcss";
 @import "./components/navbar.css";
 @import "./components/toast.css";
+@import "./components/sidebar.css";
 
 :root {
   color-scheme: light dark;
