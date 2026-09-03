@@ -17,8 +17,8 @@ function cadastrar(cnpj, razao_social, nome_fantasia, email, senha) {
   return database.executar(instrucaoSql);
 }
 
-function getById(id_empresa) {
-  console.log("[empresaModel.js] function getById():", id_empresa);
+function buscarPorID(id_empresa) {
+  console.log("[empresaModel.js] function buscarPorID():", id_empresa);
 
   var instrucaoSql = `
      SELECT * FROM empresa WHERE id_empresa = ${id_empresa}
@@ -29,5 +29,5 @@ function getById(id_empresa) {
 
 module.exports = {
   cadastrar,
-  getById,
+  buscarPorID,
 };

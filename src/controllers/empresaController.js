@@ -1,48 +1,95 @@
-var empresaModel = require("../models/empresaModel");
+const empresaModel = require("../models/empresaModel");
+const { isMissing, isEmailValid, isPasswordValid } = require("../utils");
 
-function cadastrar(req, res) {
+async function cadastrar(req, res) {
   const { cnpj, razao_social, nome_fantasia, email, senha } = req.body;
 
-  empresaModel
-    .cadastrar(cnpj, razao_social, nome_fantasia, email, senha)
-    .then(function (resultado) {
-      res.json({ message: "Empresa cadastrada com sucesso!" });
-    })
-    .catch(function (erro) {
-      console.log(erro);
-      console.log("\nErro no MYSQL: ", erro.sqlMessage);
-      res.status(500).json({ message: erro.sqlMessage });
+  if (isMissing(cnpj)) {
+    res.status(400).send({ message: "O campo 'cnpj' está faltando." });
+    return;
+  }
+
+  if (isMissing(razao_social)) {
+    res.status(400).send({ message: "O campo 'razao_social' está faltando." });
+    return;
+  }
+
+  if (isMissing(nome_fantasia)) {
+    res.status(400).send({ message: "O campo 'nome_fantasia' está faltando." });
+    return;
+  }
+
+  if (isMissing(email)) {
+    res.status(400).send({ message: "O campo 'email' está faltando." });
+    return;
+  }
+
+  if (!isEmailValid(email)) {
+    res
+      .status(400)
+      .send({ message: "O endereço de e-mail fornecido está inválido." });
+    return;
+  }
+
+  if (isMissing(senha)) {
+    res.status(400).send({ message: "O campo 'senha' está faltando." });
+    return;
+  }
+
+  if (!isPasswordValid(senha)) {
+    res.status(400).send({
+      message: "A senha fornecida está inválida.",
     });
+    return;
+  }
+
+  try {
+    await empresaModel.cadastrar(
+      cnpj,
+      razao_social,
+      nome_fantasia,
+      email,
+      senha,
+    );
+
+    res.status(201).send({ message: "Empresa cadastrada com sucesso!" });
+  } catch (error) {
+    const message = error.message || error.sqlMessage;
+    if (message) {
+      res.status(403).send({ message });
+      return;
+    }
+    res.status(500).send({ message: "Erro interno no servidor." });
+  }
 }
 
-function getById(req, res) {
-  const { id } = req.params;
+async function buscarPorID(req, res) {
+  const { empresaId } = req.params;
 
-  if (id == undefined) {
-    res.status(400).send({ message: "ID de Empresa está undefined!" });
-  } else {
-    empresaModel
-      .getById(id)
-      .then(function (resultado) {
-        console.log(resultado);
+  if (isMissing(empresaId)) {
+    res
+      .status(400)
+      .send({ message: "ID da empresa não foi passado na requisição." });
+    return;
+  }
 
-        res.json({
-          message: "Empresa encontrada com sucesso!",
-          empresa: resultado[0],
-        });
-      })
-      .catch(function (erro) {
-        console.log(erro);
-        console.log(
-          "\nHouve um erro ao procurar Empresa por ID! Erro: ",
-          erro.sqlMessage,
-        );
-        res.status(500).json({ message: erro.sqlMessage });
-      });
+  try {
+    const result = await empresaModel.buscarPorID(id);
+
+    res
+      .status(200)
+      .json({ message: "Empresa encontrada com sucesso!", empresa: result[0] });
+  } catch (error) {
+    const message = error.message || error.sqlMessage;
+    if (message) {
+      res.status(403).send({ message });
+      return;
+    }
+    res.status(500).send({ message: "Erro interno no servidor." });
   }
 }
 
 module.exports = {
   cadastrar,
-  getById,
+  buscarPorID,
 };
