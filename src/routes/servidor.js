@@ -1,18 +1,26 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router({ mergeParams: true });
 
-var servidorController = require("../controllers/servidorController");
+const servidorController = require("../controllers/servidorController");
 
-router.post("/cadastrar", function (req, res) {
+router.post("/", function (req, res) {
   servidorController.cadastrar(req, res);
 });
 
-router.delete("/remover", function (req, res) {
-  servidorController.remover(req,res);
+router.get("/", function (req, res) {
+  servidorController.buscar(req, res);
 });
 
-router.put("/editar", function (req, res) {
-  servidorController.editar(req,res);
+router.get("/:servidorId", function (req, res) {
+  servidorController.buscarPorID(req, res);
+});
+
+router.put("/:servidorId", function (req, res) {
+  servidorController.editar(req, res);
+});
+
+router.delete("/:servidorId", function (req, res) {
+  servidorController.remover(req, res);
 });
 
 module.exports = router;
