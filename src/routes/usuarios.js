@@ -4,6 +4,7 @@ const usuarioController = require("../controllers/usuarioController");
 
 const router = express.Router();
 
+// === POST - CADASTRO === //
 router.post(
   "/cadastrar",
   middlewares.verificarAutenticacao,
@@ -12,10 +13,12 @@ router.post(
   },
 );
 
+// === POST - AUTENTICAÇÃO === //
 router.post("/autenticar", function (req, res) {
   usuarioController.autenticar(req, res);
 });
 
+// === POST - LOGOUT === //
 router.post("/sair", middlewares.verificarAutenticacao, function (req, res) {
   usuarioController.sair(req, res);
 });

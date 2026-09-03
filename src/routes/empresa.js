@@ -1,18 +1,16 @@
 const express = require("express");
 const empresaController = require("../controllers/empresaController");
-const servidorRouter = require("./servidor");
 
 const router = express.Router();
 
+// === POST - CRIAÇÃO === //
 router.post("/", function (req, res) {
   empresaController.cadastrar(req, res);
 });
 
+// === GET - BUSCA POR ID === //
 router.get("/:empresaId", function (req, res) {
   empresaController.buscarPorID(req, res);
 });
-
-// Rotas de Servidor dentro de Empresa
-router.use("/:empresaId/servidores", servidorRouter);
 
 module.exports = router;

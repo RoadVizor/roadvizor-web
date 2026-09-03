@@ -3,13 +3,17 @@ const middlewares = require("../middlewares/auth");
 
 const usuarioRouter = require("./usuarios");
 const empresaRouter = require("./empresa");
+const servidorRouter = require("./servidor");
 
 const router = express.Router();
 
-// Rotas de Usuário
+// === Rotas da Aplicação === //
 router.use("/usuarios", usuarioRouter);
-
-// Rotas de Empresa
 router.use("/empresas", middlewares.verificarAutenticacao, empresaRouter);
+router.use(
+  "/empresas/:empresaId",
+  middlewares.verificarAutenticacao,
+  servidorRouter,
+);
 
 module.exports = router;
