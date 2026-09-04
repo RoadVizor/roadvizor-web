@@ -54,6 +54,13 @@ async function autenticar(req, res) {
       path: "/",
     });
 
+    res.cookie("autenticado", true, {
+      httpOnly: false,
+      secure: process.env.AMBIENTE_PROCESSO !== "desenvolvimento",
+      sameSite: "lax",
+      path: "/",
+    });
+
     res.status(200).send({
       message: "Usuário logado com sucesso!",
       usuario: {
@@ -159,8 +166,16 @@ async function sair(req, res) {
   return res.status(200).json({ message: "Logout realizado." });
 }
 
+async function autenticarPagina(req, res) {
+  if (req.status == 401) {
+    return res.status(403);
+  }
+  return res.status(200);
+}
+
 module.exports = {
   autenticar,
   cadastrar,
   sair,
+  autenticarPagina,
 };

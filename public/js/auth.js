@@ -169,3 +169,19 @@ async function cadastrarEmpresa(event) {
     });
   }
 }
+
+function autenticarPagina(page) {
+  // if (page == 0) {
+  //   if (!document.cookie) {
+  //     return;
+  //   }
+  //   sessionStorage.setItem("showmsg", 2);
+  //   window.location.href = "/pages/dashboard/home.html";
+  // } else {
+  //   if (document.cookie) {
+  //     return;
+  //   }
+  //   sessionStorage.setItem("showmsg", 1);
+  //   window.location.href = "/pages/login.html";
+  // }
+}
