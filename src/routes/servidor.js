@@ -16,17 +16,17 @@ router.get("/", function (req, res) {
 });
 
 // === GET - BUSCA POR ID === //
-router.get("/:servidorId", function (req, res) {
+router.get("/:id", function (req, res) {
   servidorController.buscarPorID(req, res);
 });
 
 // === PUT - ATUALIZAÇÃO === //
-router.put("/:servidorId", function (req, res) {
+router.put("/:id", function (req, res) {
   servidorController.editar(req, res);
 });
 
 // === DELETE - REMOÇÃO === //
-router.delete("/:servidorId", function (req, res) {
+router.delete("/:id", function (req, res) {
   servidorController.remover(req, res);
 });
 

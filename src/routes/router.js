@@ -13,6 +13,6 @@ router.use("/usuarios", usuarioRouter);
 
 // === Rotas Protegidas (têm acesso a req.usuario) === //
 router.use("/empresas", middlewares.verificarAutenticacao, empresaRouter);
-router.use("/servidor", middlewares.verificarAutenticacao, servidorRouter);
+router.use("/servidores", middlewares.verificarAutenticacao, servidorRouter);
 
 module.exports = router;
