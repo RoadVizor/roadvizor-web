@@ -40,6 +40,7 @@ async function autenticar(req, res) {
     const payload = {
       ...usuario,
     };
+
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       algorithm: "HS256",
       expiresIn: "24h",
@@ -71,8 +72,15 @@ async function autenticar(req, res) {
 }
 
 async function cadastrar(req, res) {
-  const { empresa_id, supervisor_id } = req.usuario;
+  const { id_usuario, empresa_id, nivel_acesso: permissao } = req.usuario;
   const { nome, email, senha, nivel_acesso } = req.body;
+
+  // dado que: 0 - desenvolvedor | 1 - administrador | 2 em diante - usuário comum
+  if (permissao > 1) {
+    return res
+      .status(403)
+      .send({ message: "Você não tem permissão para realizar esta ação." });
+  }
 
   if (isMissing(empresa_id)) {
     return res
@@ -114,7 +122,7 @@ async function cadastrar(req, res) {
         .json({ message: "Email informado já está em uso." });
     }
 
-    // 2. Verifica se Empresa informada Existe
+    // 2. Verifica se Empresa informada existe
     const empresaExiste = await empresaModel.existePorID(empresa_id);
     if (!empresaExiste) {
       return res
@@ -122,12 +130,10 @@ async function cadastrar(req, res) {
         .json({ message: "Empresa informado já está em uso." });
     }
 
-    // 3. Verifica se Supervisor informado Existe
-    // ...
-
+    // 3. Inicia registro de usuário
     await usuarioModel.cadastrar(
       empresa_id,
-      supervisor_id,
+      id_usuario, // id_usuario sendo passado na posição de supervisor_id
       nome,
       email,
       senha,

@@ -1,17 +1,17 @@
 const database = require("../database/config");
 
+const camposPermitidos =
+  "id_usuario, empresa_id, supervisor_id, nome, email, nivel_acesso";
+
 function autenticar(email, senha) {
-  console.log("[usuarioModel.js] function entrar(): ", email, senha);
   const instrucaoSql = `
-    SELECT id_usuario, empresa_id, nome, email, nivel_acesso 
-    FROM usuario 
+    SELECT  ${camposPermitidos} FROM usuario 
     WHERE email = '${email}' AND senha = SHA2('${senha}', 256);
     `;
 
   console.log(
     "[usuarioModel.js] Executando a instrução SQL: \n" + instrucaoSql,
   );
-
   return database.executar(instrucaoSql);
 }
 
@@ -25,7 +25,7 @@ function cadastrar(
 ) {
   const instrucaoSql = `
     INSERT INTO usuario (empresa_id, supervisor_id, nome, email, senha, nivel_acesso) 
-    VALUES (${empresa_id}, ${supervisor_id ?? null}, '${nome}', '${email}', SHA2('${senha}', 256), ${nivel_acesso ?? null});
+    VALUES (${empresa_id}, ${supervisor_id}, '${nome}', '${email}', SHA2('${senha}', 256), ${nivel_acesso ?? "default"});
   `;
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
@@ -45,7 +45,7 @@ function existePorID(id_empresa) {
 
 function existePorEmail(email) {
   const instrucaoSql = `
-    SELECT COUNT(*) FROM empresa WHERE email = '${email}';
+    SELECT COUNT(*) FROM usuario WHERE email = '${email}';
   `;
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
