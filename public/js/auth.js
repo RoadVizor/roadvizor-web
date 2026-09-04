@@ -169,3 +169,25 @@ async function cadastrarEmpresa(event) {
     });
   }
 }
+
+function autenticarPagina(page) {
+  if (page == 0) {
+    if (!document.cookie) {
+      return;
+    }
+    toast({
+      title: "Usuário já autenticado!",
+      variant: "success",
+    });
+    setTimeout(() => {
+      window.location.href = "/pages/dashboard/home.html";
+      resolve();
+    }, 2000);
+  } else {
+    if (document.cookie) {
+      return;
+    }
+    window.location.href = "/pages/login.html";
+  }
+
+}

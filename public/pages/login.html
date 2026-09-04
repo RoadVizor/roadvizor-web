@@ -201,12 +201,7 @@
     <script src="../js/auth.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", (e) => {
-        // Verifica existência do token JWT, se necessário, redireciona
-        const hasToken = document.cookie.includes("access_token");
-        if (hasToken) {
-          window.location = "./dashboard/home.html";
-          return;
-        }
+        autenticarPagina(0)
       });
 
       function checkFormFields(form) {
