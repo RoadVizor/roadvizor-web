@@ -1,223 +1,180 @@
 <!doctype html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
 
-    <title>RoadVizor | Login</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link href="/css/output.css" rel="stylesheet" />
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
 
-    <!-- Phosphor Icons -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  </head>
+  <title>RoadVizor | Login</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link href="/css/output.css" rel="stylesheet" />
 
-  <body>
-    <div class="w-full min-h-dvh flex flex-col lg:flex-row-reverse">
-      <!-- Painel lateral -->
-      <div
-        class="hidden lg:flex lg:w-2/5 xl:w-1/3 min-h-screen flex-col justify-between border-l border-border bg-linear-to-b from-background to-secondary/10 from-45% p-8 xl:p-12"
-      >
-        <div class="flex flex-col gap-8">
-          <div class="flex items-center gap-3">
-            <img
-              src="../assets/svgs/logo-dark.svg"
-              alt="RoadVizor Logo"
-              class="w-48"
-            />
-          </div>
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
 
-          <h1 class="text-2xl xl:text-3xl font-bold font-museo">
-            Observabilidade total para
-            <span class="text-accent">pedágios Free Flow</span>
-          </h1>
+<body>
+  <div class="w-full min-h-dvh flex flex-col lg:flex-row-reverse">
+    <!-- Painel lateral -->
+    <div
+      class="hidden lg:flex lg:w-2/5 xl:w-1/3 min-h-screen flex-col justify-between border-l border-border bg-linear-to-b from-background to-secondary/10 from-45% p-8 xl:p-12">
+      <div class="flex flex-col gap-8">
+        <div class="flex items-center gap-3">
+          <img src="../assets/svgs/logo-dark.svg" alt="RoadVizor Logo" class="w-48" />
+        </div>
 
-          <div class="grid grid-cols-2 gap-3">
-            <div
-              class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-1"
-            >
-              <p class="text-xl xl:text-2xl font-bold text-accent font-museo">
-                99.97%
-              </p>
-              <p class="text-muted text-sm">Uptime médio</p>
-            </div>
-            <div
-              class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-1"
-            >
-              <p class="text-xl xl:text-2xl font-bold text-accent font-museo">
-                500+
-              </p>
-              <p class="text-muted text-sm">Servidores</p>
-            </div>
-            <div
-              class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-1"
-            >
-              <p class="text-xl xl:text-2xl font-bold text-accent font-museo">
-                &lt;30s
-              </p>
-              <p class="text-muted text-sm">Tempo de alerta</p>
-            </div>
-            <div
-              class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-1"
-            >
-              <p class="text-xl xl:text-2xl font-bold text-accent font-museo">
-                24/7
-              </p>
-              <p class="text-muted text-sm">Monitoramento</p>
-            </div>
-          </div>
+        <h1 class="text-2xl xl:text-3xl font-bold font-museo">
+          Observabilidade total para
+          <span class="text-accent">pedágios Free Flow</span>
+        </h1>
 
-          <div
-            class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-4"
-          >
-            <p class="text-muted text-sm text-justify">
-              "Reduzimos nosso MTTR em 68% e eliminamos praticamente todas as
-              falhas não detectadas nos servidores de pedágio."
+        <div class="grid grid-cols-2 gap-3">
+          <div class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-1">
+            <p class="text-xl xl:text-2xl font-bold text-accent font-museo">
+              99.97%
             </p>
-            <div class="flex items-center gap-3">
-              <div
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-accent/20 text-accent font-bold text-sm"
-              >
-                RF
-              </div>
-              <div class="flex flex-col">
-                <p class="font-bold text-sm">Renata Fonseca</p>
-                <span class="caption text-muted"
-                  >Diretora de TI · Via Expressa S.A.</span
-                >
-              </div>
-            </div>
+            <p class="text-muted text-sm">Uptime médio</p>
+          </div>
+          <div class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-1">
+            <p class="text-xl xl:text-2xl font-bold text-accent font-museo">
+              500+
+            </p>
+            <p class="text-muted text-sm">Servidores</p>
+          </div>
+          <div class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-1">
+            <p class="text-xl xl:text-2xl font-bold text-accent font-museo">
+              &lt;30s
+            </p>
+            <p class="text-muted text-sm">Tempo de alerta</p>
+          </div>
+          <div class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-1">
+            <p class="text-xl xl:text-2xl font-bold text-accent font-museo">
+              24/7
+            </p>
+            <p class="text-muted text-sm">Monitoramento</p>
           </div>
         </div>
 
-        <div class="flex items-center text-muted caption pt-8">
-          <span>© 2026 RoadVizor Tecnologia Ltda.</span>
+        <div class="border border-border bg-surface rounded-lg p-4 flex flex-col gap-4">
+          <p class="text-muted text-sm text-justify">
+            "Reduzimos nosso MTTR em 68% e eliminamos praticamente todas as
+            falhas não detectadas nos servidores de pedágio."
+          </p>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-accent/20 text-accent font-bold text-sm">
+              RF
+            </div>
+            <div class="flex flex-col">
+              <p class="font-bold text-sm">Renata Fonseca</p>
+              <span class="caption text-muted">Diretora de TI · Via Expressa S.A.</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Formulário -->
-      <div
-        class="w-full lg:w-3/5 xl:w-2/3 flex flex-col justify-center items-center px-6 py-12 sm:px-8"
-      >
-        <div
-          class="w-full sm:w-3/4 md:w-1/2 lg:w-full lg:max-w-md flex flex-col gap-6"
-        >
-          <div class="flex justify-start">
-            <span
-              class="caption uppercase bg-accent/20 px-2 text-accent w-fit flex items-center gap-1"
-            >
-              <i class="ph ph-sign-in"></i>
-              Acesso à plataforma
-            </span>
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <h1 class="title">Bem-vindo de volta</h1>
-            <p class="caption text-muted">
-              Acesse o Vision Center da sua Empresa inserindo suas credenciais
-              nos campos abaixo.
-            </p>
-          </div>
-
-          <form
-            id="login-form"
-            onsubmit="entrar(event)"
-            oninput="checkFormFields(this)"
-            class="flex flex-col gap-4"
-          >
-            <div class="flex flex-col gap-1">
-              <label for="email" class="text-sm text-muted">E-mail</label>
-              <input
-                id="ipt-email"
-                name="email"
-                type="email"
-                placeholder="email@corporativo.com"
-                oninput="validateEmail(this)"
-                class="field-input"
-              />
-              <p
-                id="ipt-email-auth-message"
-                class="hidden text-destructive-foreground text-xs mt-1"
-              ></p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <label for="senha" class="text-sm text-muted">Senha</label>
-              <div class="relative">
-                <input
-                  id="ipt-senha"
-                  name="senha"
-                  type="password"
-                  placeholder="* * * * * * * *"
-                  oninput="validatePassword(this)"
-                  class="field-input"
-                />
-                <i
-                  id="ipt-senha-icon"
-                  class="ph ph-eye absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer text-disabled hover:text-accent transition-colors"
-                  onclick="togglePasswordVisibility('ipt-senha')"
-                ></i>
-              </div>
-              <p
-                id="ipt-senha-auth-message"
-                class="hidden text-destructive-foreground text-xs mt-1"
-              ></p>
-            </div>
-
-            <button
-              id="login-submit"
-              type="submit"
-              class="w-full h-12 flex items-center justify-center gap-1 not-disabled:hover:gap-2 bg-disabled rounded-md text-background font-bold transition-all not-disabled:hover:bg-accent/90 not-disabled:cursor-pointer"
-              disabled
-            >
-              <span>Entrar no Vision Center</span>
-              <i class="ph ph-sign-in transition-all"></i>
-            </button>
-          </form>
-
-          <div class="flex items-center gap-3">
-            <div class="w-full border-t border-border"></div>
-            <span class="text-xs uppercase text-disabled">ou</span>
-            <div class="w-full border-t border-border"></div>
-          </div>
-
-          <div class="flex justify-center text-disabled">
-            <a href="../index.html" class="hover:text-muted transition-all">
-              <i class="ph ph-arrow-u-up-left"></i>
-              <span>voltar ao site</span>
-            </a>
-          </div>
-        </div>
+      <div class="flex items-center text-muted caption pt-8">
+        <span>© 2026 RoadVizor Tecnologia Ltda.</span>
       </div>
     </div>
 
-    <!-- Scripts JS -->
-    <script src="../js/utils/storage.js"></script>
-    <script src="../js/utils/toast.js"></script>
-    <script src="../js/utils/password-toggler.js"></script>
-    <script src="../js/validations.js"></script>
-    <script src="../js/auth.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", (e) => {
-        autenticarPagina(0)
-      });
+    <!-- Formulário -->
+    <div class="w-full lg:w-3/5 xl:w-2/3 flex flex-col justify-center items-center px-6 py-12 sm:px-8">
+      <div class="w-full sm:w-3/4 md:w-1/2 lg:w-full lg:max-w-md flex flex-col gap-6">
+        <div class="flex justify-start">
+          <span class="caption uppercase bg-accent/20 px-2 text-accent w-fit flex items-center gap-1">
+            <i class="ph ph-sign-in"></i>
+            Acesso à plataforma
+          </span>
+        </div>
 
-      function checkFormFields(form) {
-        const submitBtn = document.getElementById("login-submit");
-        const fields = form.querySelectorAll(".field-input");
-        const hasErrors = Array.from(fields).some(
-          (field) => field.dataset.hasErrors != "false",
-        );
+        <div class="flex flex-col gap-1">
+          <h1 class="title">Bem-vindo de volta</h1>
+          <p class="caption text-muted">
+            Acesse o Vision Center da sua Empresa inserindo suas credenciais
+            nos campos abaixo.
+          </p>
+        </div>
 
-        submitBtn.disabled = hasErrors;
-        if (hasErrors) {
-          submitBtn.classList.replace("bg-accent", "bg-disabled");
-        } else {
-          submitBtn.classList.replace("bg-disabled", "bg-accent");
-        }
+        <form id="login-form" onsubmit="entrar(event)" oninput="checkFormFields(this)" class="flex flex-col gap-4">
+          <div class="flex flex-col gap-1">
+            <label for="email" class="text-sm text-muted">E-mail</label>
+            <input id="ipt-email" name="email" type="email" placeholder="email@corporativo.com"
+              oninput="validateEmail(this)" class="field-input" />
+            <p id="ipt-email-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="senha" class="text-sm text-muted">Senha</label>
+            <div class="relative">
+              <input id="ipt-senha" name="senha" type="password" placeholder="* * * * * * * *"
+                oninput="validatePassword(this)" class="field-input" />
+              <i id="ipt-senha-icon"
+                class="ph ph-eye absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer text-disabled hover:text-accent transition-colors"
+                onclick="togglePasswordVisibility('ipt-senha')"></i>
+            </div>
+            <p id="ipt-senha-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
+          </div>
+
+          <button id="login-submit" type="submit"
+            class="w-full h-12 flex items-center justify-center gap-1 not-disabled:hover:gap-2 bg-disabled rounded-md text-background font-bold transition-all not-disabled:hover:bg-accent/90 not-disabled:cursor-pointer"
+            disabled>
+            <span>Entrar no Vision Center</span>
+            <i class="ph ph-sign-in transition-all"></i>
+          </button>
+        </form>
+
+        <div class="flex items-center gap-3">
+          <div class="w-full border-t border-border"></div>
+          <span class="text-xs uppercase text-disabled">ou</span>
+          <div class="w-full border-t border-border"></div>
+        </div>
+
+        <div class="flex justify-center text-disabled">
+          <a href="../index.html" class="hover:text-muted transition-all">
+            <i class="ph ph-arrow-u-up-left"></i>
+            <span>voltar ao site</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts JS -->
+  <script src="../js/utils/storage.js"></script>
+  <script src="../js/utils/toast.js"></script>
+  <script src="../js/utils/password-toggler.js"></script>
+  <script src="../js/validations.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", (e) => {
+      autenticarPagina(0)
+      if (sessionStorage.showmsg == 1) {
+        toast({
+          title: "Usuário não autenticado!",
+          variant: "destructive",
+        });
+        storage.remove("showmsg")
       }
-    </script>
-  </body>
+    });
+
+    function checkFormFields(form) {
+      const submitBtn = document.getElementById("login-submit");
+      const fields = form.querySelectorAll(".field-input");
+      const hasErrors = Array.from(fields).some(
+        (field) => field.dataset.hasErrors != "false",
+      );
+
+      submitBtn.disabled = hasErrors;
+      if (hasErrors) {
+        submitBtn.classList.replace("bg-accent", "bg-disabled");
+      } else {
+        submitBtn.classList.replace("bg-disabled", "bg-accent");
+      }
+    }
+  </script>
+</body>
+
 </html>

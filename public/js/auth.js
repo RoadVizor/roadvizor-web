@@ -175,18 +175,13 @@ function autenticarPagina(page) {
     if (!document.cookie) {
       return;
     }
-    toast({
-      title: "Usuário já autenticado!",
-      variant: "success",
-    });
-    setTimeout(() => {
-      window.location.href = "/pages/dashboard/home.html";
-      resolve();
-    }, 2000);
+    sessionStorage.setItem("showmsg", 2);
+    window.location.href = "/pages/dashboard/home.html";
   } else {
     if (document.cookie) {
       return;
     }
+    sessionStorage.setItem("showmsg", 1);
     window.location.href = "/pages/login.html";
   }
 
