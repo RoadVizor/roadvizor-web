@@ -80,10 +80,7 @@
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         // Verifica se usuário está autenticado
-        if (!storage.get("usuario")) {
-          window.location.href = "../login.html";
-          return;
-        }
+          autenticarPagina(1)
       });
     </script>
   </body>

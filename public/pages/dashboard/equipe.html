@@ -1,176 +1,123 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
-    <title>RoadVizor | Equipe</title>
 
-    <!-- CSS Styles -->
-    <link rel="stylesheet" href="../../css/output.css" />
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+  <title>RoadVizor | Equipe</title>
 
-    <!-- Phosphor Icons -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  </head>
-  <body class="flex flex-row space-x-4 lg:space-x-8">
-    <!-- Sidebar -->
-    <div
-      class="bg-red-500/20 max-w-52 h-dvh flex flex-col justify-center py-6 lg:py-12 px-2 lg:px-4"
-    >
-      <!-- Sidebar | Header -->
-      <div class="flex flex-col space-y-12 items-center justify-center">
-        <img
-          src="../../assets/svgs/logo-dark.svg"
-          alt="RoadVizor Logo"
-          class="hidden md:block"
-        />
-        <img
-          src="../../assets/svgs/icon.svg"
-          alt="RoadVizor Ícone"
-          class="w-12 h-12 md:hidden"
-        />
-      </div>
-      <!-- Sidebar | Content -->
-      <div class="flex flex-col h-full">
-        <p class="font-bold mb-2">Seções</p>
-        <nav class="flex flex-col">
-          <ul class="flex flex-col">
-            <li class="w-full">
-              <a href="./home.html" class="navitem">
-                <span>Home</span>
-                <i class="ph ph-gauge"></i>
-              </a>
-            </li>
-            <li class="w-full">
-              <a href="#" class="w-full navitem">
-                <span>Equipe</span>
-                <i class="ph-fill ph-users"></i>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      <!-- Sidebar | Footer -->
-      <div></div>
+  <!-- CSS Styles -->
+  <link rel="stylesheet" href="../../css/output.css" />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body class="flex flex-row space-x-4 lg:space-x-8">
+  <!-- Sidebar -->
+  <div class="bg-red-500/20 max-w-52 h-dvh flex flex-col justify-center py-6 lg:py-12 px-2 lg:px-4">
+    <!-- Sidebar | Header -->
+    <div class="flex flex-col space-y-12 items-center justify-center">
+      <img src="../../assets/svgs/logo-dark.svg" alt="RoadVizor Logo" class="hidden md:block" />
+      <img src="../../assets/svgs/icon.svg" alt="RoadVizor Ícone" class="w-12 h-12 md:hidden" />
     </div>
-
-    <!-- Dashboard -->
-    <div
-      class="bg-green-500/20 w-full min-h-dvh flex flex-col items-center justify-center"
-    >
-      <h1 class="text-4xl font-bold">RoadVizor | Equipe</h1>
-      <form
-        id="register-form"
-        onsubmit="cadastrar(event)"
-        oninput="checkFormFields(this)"
-        class="max-w-4xl w-full flex flex-col gap-4"
-      >
-        <div class="flex flex-col gap-1">
-          <label for="nome" class="text-sm text-muted">Nome completo</label>
-          <input
-            id="ipt-nome"
-            name="nome"
-            type="text"
-            oninput="validateName(this)"
-            class="field-input"
-          />
-          <p
-            id="ipt-nome-auth-message"
-            class="hidden text-destructive-foreground text-xs mt-1"
-          ></p>
-        </div>
-
-        <div class="flex flex-col gap-1">
-          <label for="email" class="text-sm text-muted"
-            >E-mail corporativo</label
-          >
-          <input
-            id="ipt-email"
-            name="email"
-            type="email"
-            placeholder="email@corporativo.com"
-            oninput="validateEmail(this)"
-            class="field-input"
-          />
-          <p
-            id="ipt-email-auth-message"
-            class="hidden text-destructive-foreground text-xs mt-1"
-          ></p>
-        </div>
-
-        <div class="flex flex-col gap-1">
-          <label for="senha" class="text-sm text-muted">Senha</label>
-          <div class="relative">
-            <input
-              id="ipt-senha"
-              name="senha"
-              type="password"
-              placeholder="* * * * * * * *"
-              oninput="validatePassword(this)"
-              class="field-input"
-            />
-            <i
-              id="ipt-senha-icon"
-              class="ph ph-eye absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer text-disabled hover:text-accent transition-colors"
-              onclick="togglePasswordVisibility('ipt-senha')"
-            ></i>
-          </div>
-          <p
-            id="ipt-senha-auth-message"
-            class="hidden text-destructive-foreground text-xs mt-1"
-          ></p>
-        </div>
-
-        <div class="flex flex-col gap-1">
-          <label for="senha" class="text-sm text-muted"
-            >Confirmar a Senha</label
-          >
-          <input
-            id="ipt-senha-confirmar"
-            name="senha"
-            type="password"
-            placeholder="* * * * * * * *"
-            oninput="validatePassword(this, true)"
-            class="field-input"
-          />
-          <p
-            id="ipt-senha-confirmar-auth-message"
-            class="hidden text-destructive-foreground text-xs mt-1"
-          ></p>
-        </div>
-
-        <button
-          id="register-submit"
-          type="submit"
-          class="w-full h-12 flex items-center justify-center gap-1 not-disabled:hover:gap-2 bg-disabled rounded-md text-background font-bold transition-all not-disabled:hover:bg-accent/90 not-disabled:cursor-pointer"
-          disabled
-        >
-          <span>Cadastrar Membro</span>
-          <i class="ph ph-plus transition-all"></i>
-        </button>
-      </form>
+    <!-- Sidebar | Content -->
+    <div class="flex flex-col h-full">
+      <p class="font-bold mb-2">Seções</p>
+      <nav class="flex flex-col">
+        <ul class="flex flex-col">
+          <li class="w-full">
+            <a href="./home.html" class="navitem">
+              <span>Home</span>
+              <i class="ph ph-gauge"></i>
+            </a>
+          </li>
+          <li class="w-full">
+            <a href="#" class="w-full navitem">
+              <span>Equipe</span>
+              <i class="ph-fill ph-users"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
-    <script src="../../js/utils/storage.js"></script>
-    <script src="../../js/utils/toast.js"></script>
-    <script src="../../js/utils/password-toggler.js"></script>
-    <script src="../../js/validations.js"></script>
-    <script src="../../js/auth.js"></script>
-    <script>
-      function checkFormFields(form) {
-        const submitBtn = document.getElementById("register-submit");
-        const fields = form.querySelectorAll(".field-input");
-        const hasErrors = Array.from(fields).some(
-          (field) => field.dataset.hasErrors != "false",
-        );
+    <!-- Sidebar | Footer -->
+    <div></div>
+  </div>
 
-        submitBtn.disabled = hasErrors;
-        if (hasErrors) {
-          submitBtn.classList.replace("bg-accent", "bg-disabled");
-        } else {
-          submitBtn.classList.replace("bg-disabled", "bg-accent");
-        }
+  <!-- Dashboard -->
+  <div class="bg-green-500/20 w-full min-h-dvh flex flex-col items-center justify-center">
+    <h1 class="text-4xl font-bold">RoadVizor | Equipe</h1>
+    <form id="register-form" onsubmit="cadastrar(event)" oninput="checkFormFields(this)"
+      class="max-w-4xl w-full flex flex-col gap-4">
+      <div class="flex flex-col gap-1">
+        <label for="nome" class="text-sm text-muted">Nome completo</label>
+        <input id="ipt-nome" name="nome" type="text" oninput="validateName(this)" class="field-input" />
+        <p id="ipt-nome-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="email" class="text-sm text-muted">E-mail corporativo</label>
+        <input id="ipt-email" name="email" type="email" placeholder="email@corporativo.com"
+          oninput="validateEmail(this)" class="field-input" />
+        <p id="ipt-email-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="senha" class="text-sm text-muted">Senha</label>
+        <div class="relative">
+          <input id="ipt-senha" name="senha" type="password" placeholder="* * * * * * * *"
+            oninput="validatePassword(this)" class="field-input" />
+          <i id="ipt-senha-icon"
+            class="ph ph-eye absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer text-disabled hover:text-accent transition-colors"
+            onclick="togglePasswordVisibility('ipt-senha')"></i>
+        </div>
+        <p id="ipt-senha-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="senha" class="text-sm text-muted">Confirmar a Senha</label>
+        <input id="ipt-senha-confirmar" name="senha" type="password" placeholder="* * * * * * * *"
+          oninput="validatePassword(this, true)" class="field-input" />
+        <p id="ipt-senha-confirmar-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
+      </div>
+
+      <button id="register-submit" type="submit"
+        class="w-full h-12 flex items-center justify-center gap-1 not-disabled:hover:gap-2 bg-disabled rounded-md text-background font-bold transition-all not-disabled:hover:bg-accent/90 not-disabled:cursor-pointer"
+        disabled>
+        <span>Cadastrar Membro</span>
+        <i class="ph ph-plus transition-all"></i>
+      </button>
+    </form>
+  </div>
+  <script src="../../js/utils/storage.js"></script>
+  <script src="../../js/utils/toast.js"></script>
+  <script src="../../js/utils/password-toggler.js"></script>
+  <script src="../../js/validations.js"></script>
+  <script src="../../js/auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Verifica se usuário está autenticado
+      autenticarPagina(1)
+    });
+    
+    function checkFormFields(form) {
+      const submitBtn = document.getElementById("register-submit");
+      const fields = form.querySelectorAll(".field-input");
+      const hasErrors = Array.from(fields).some(
+        (field) => field.dataset.hasErrors != "false",
+      );
+
+      submitBtn.disabled = hasErrors;
+      if (hasErrors) {
+        submitBtn.classList.replace("bg-accent", "bg-disabled");
+      } else {
+        submitBtn.classList.replace("bg-disabled", "bg-accent");
       }
-    </script>
-  </body>
+    }
+  </script>
+</body>
+
 </html>
