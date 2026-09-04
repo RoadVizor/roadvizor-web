@@ -1,176 +1,266 @@
+const { isMissing } = require("../utils");
 const servidorModel = require("../models/servidorModel");
 const empresaModel = require("../models/empresaModel");
-const { isMissing } = require("../utils");
 
 async function cadastrar(req, res) {
-  const { empresaId } = req.params;
+  const { empresa_id, nivel_acesso } = req.usuario;
   const { endereco_id, endereco_mac, apelido, modelo } = req.body;
 
-  if (isMissing(empresaId)) {
-    res
+  // dado que: 0 - desenvolvedor | 1 - administrador | 2 em diante - usuário comum
+  if (nivel_acesso > 1) {
+    return res
+      .status(403)
+      .send({ message: "Você não tem permissão para realizar esta ação." });
+  }
+
+  if (isMissing(empresa_id)) {
+    return res
       .status(400)
-      .send({ message: "ID da empresa não foi passado na requisição." });
-    return;
+      .json({ message: "ID da Empresa não foi passado na requisição." });
   }
 
   if (isMissing(endereco_id)) {
-    res.status(400).send({ message: "O campo 'endereco_id' está faltando." });
-    return;
+    return res
+      .status(400)
+      .json({ message: "O campo 'endereco_id' está faltando." });
   }
 
   if (isMissing(endereco_mac)) {
-    res.status(400).send({ message: "O campo 'endereco_mac' está faltando." });
-    return;
+    return res
+      .status(400)
+      .json({ message: "O campo 'endereco_mac' está faltando." });
   }
 
   if (isMissing(apelido)) {
-    res.status(400).send({ message: "O campo 'apelido' está faltando." });
-    return;
+    return res
+      .status(400)
+      .json({ message: "O campo 'apelido' está faltando." });
   }
 
   if (isMissing(modelo)) {
-    res.status(400).send({ message: "O campo 'modelo' está faltando." });
-    return;
+    return res.status(400).json({ message: "O campo 'modelo' está faltando." });
   }
 
   try {
+    // 1. Verifica se Empresa informada existe de fato
+    const empresaExiste = await empresaModel.existePorID(empresa_id);
+    if (!empresaExiste) {
+      return res
+        .status(404)
+        .json({ message: "Nenhuma Empresa encontrada para o ID informado." });
+    }
+
+    // 2. Verifica se Endereco MAC já está em uso
+    const enderecoMACEmUso =
+      await servidorModel.existePorEnderecoMAC(endereco_mac);
+    if (enderecoMACEmUso) {
+      return res
+        .status(409)
+        .json({ message: "Este endereço MAC já está registrado." });
+    }
+
+    // 2. Inicia registro de Servidor
     await servidorModel.cadastrar(
-      empresaId,
+      empresa_id,
       endereco_id,
       endereco_mac,
       apelido,
       modelo,
     );
 
-    res.status(201).send({ message: "Servidor cadastrado com sucesso!" });
+    res.status(201).json({ message: "Servidor cadastrado com sucesso!" });
   } catch (error) {
     const message = error.message || error.sqlMessage;
     if (message) {
-      res.status(403).send({ message });
+      res.status(403).json({ message });
       return;
     }
-    res.status(500).send({ message: "Erro interno no servidor." });
+    res.status(500).json({ message: "Erro interno no servidor." });
   }
 }
 
 async function buscar(req, res) {
-  const { empresaId } = req.params;
+  const { empresa_id } = req.usuario;
 
-  if (isMissing(empresaId)) {
-    res
+  if (isMissing(empresa_id)) {
+    return res
       .status(400)
-      .send({ message: "ID da empresa não foi passado na requisição." });
-    return;
+      .json({ message: "ID da Empresa não foi passado na requisição." });
   }
 
   try {
-    const result = await servidorModel.buscar(empresaId);
+    const empresaExiste = await empresaModel.existePorID(empresa_id);
+    if (!empresaExiste) {
+      return res
+        .status(404)
+        .json({ message: "Nenhuma Empresa encontrada para o ID informado." });
+    }
 
-    res.status(200).send({
-      message: "Servidores encontrados para a empresa solicitada.",
+    const result = await servidorModel.buscar(empresa_id);
+
+    res.status(200).json({
+      message: "Servidores encontrados para a Empresa solicitada.",
       count: result.length,
       result,
     });
   } catch (error) {
     const message = error.message || error.sqlMessage;
     if (message) {
-      res.status(403).send({ message });
+      res.status(403).json({ message });
       return;
     }
-    res.status(500).send({ message: "Erro interno no servidor." });
+    res.status(500).json({ message: "Erro interno no servidor." });
   }
 }
 
 async function buscarPorID(req, res) {
-  const { empresaId, servidorId } = req.params;
+  const { empresa_id } = req.usuario;
+  const { id } = req.params;
 
-  if (isMissing(empresaId)) {
+  if (isMissing(empresa_id)) {
     res
       .status(400)
-      .send({ message: "ID da empresa não foi passado na requisição." });
+      .json({ message: "ID da Empresa não foi passado na requisição." });
     return;
   }
 
-  if (isMissing(servidorId)) {
-    res
+  if (isMissing(id)) {
+    return res
       .status(400)
-      .send({ message: "ID do servidor não foi passado na requisição." });
-    return;
+      .json({ message: "ID do Servidor não foi passado na requisição." });
   }
 
   try {
-    const empresaResult = await empresaModel.buscarPorID(empresaId);
-    if (!empresaResult || empresaResult.length == 0) {
-      res
+    const empresaExiste = await empresaModel.existePorID(empresa_id);
+    if (!empresaExiste) {
+      return res
         .status(404)
-        .send({ message: "Nenhuma empresa com este ID foi econtrada." });
-      return;
+        .json({ message: "Nenhuma Empresa encontrada para o ID informado." });
     }
 
-    const servidorResult = await servidorModel.buscarPorID(
-      empresaId,
-      servidorId,
-    );
+    const servidorExiste = await servidorModel.existePorID(id);
+    if (!servidorExiste) {
+      return res
+        .status(404)
+        .json({ message: "Nenhum Servidor encontrado para o ID informado." });
+    }
 
-    res.status(200).send({
+    const result = await servidorModel.buscarPorID(empresa_id, id);
+
+    res.status(200).json({
       message: "Servidor encontrado com sucesso.",
-      servidorResult,
+      servidor: result[0],
     });
   } catch (error) {
     const message = error.message || error.sqlMessage;
     if (message) {
-      res.status(403).send({ message });
+      res.status(403).json({ message });
       return;
     }
-    res.status(500).send({ message: "Erro interno no servidor." });
+    res.status(500).json({ message: "Erro interno no servidor." });
   }
 }
 
 async function editar(req, res) {
-  const { empresaId, servidorId } = req.params;
+  const { empresa_id } = req.usuario;
+  const { id } = req.params;
   const { endereco_mac, apelido, modelo } = req.body;
+  const camposParaAtualizar = {};
+
+  if (isMissing(empresa_id)) {
+    return res
+      .status(400)
+      .json({ message: "ID da Empresa não foi passado na requisição." });
+  }
+
+  if (isMissing(id)) {
+    return res
+      .status(400)
+      .json({ message: "ID do Servidor não foi passado na requisição." });
+  }
 
   try {
-    const result = await servidorModel.editar(
-      empresaId,
-      servidorId,
-      endereco_mac,
-      apelido,
-      modelo,
-    );
+    const empresaExiste = await empresaModel.existePorID(empresa_id);
+    if (!empresaExiste) {
+      return res
+        .status(404)
+        .json({ message: "Nenhuma Empresa encontrada para o ID informado." });
+    }
 
-    res
-      .status(200)
-      .send({ message: "Servidor atualizado com sucesso!", updated: result });
+    const servidorExiste = await servidorModel.existePorID(id);
+    if (!servidorExiste) {
+      return res
+        .status(404)
+        .json({ message: "Nenhum Servidor encontrado para o ID informado." });
+    }
+
+    if (!isMissing(endereco_mac)) {
+      const enderecoMACEmUso =
+        await servidorModel.existePorEnderecoMAC(endereco_mac);
+      if (enderecoMACEmUso) {
+        return res.status(409).json({
+          message:
+            "Endereço MAC informado para atualização já está registrado.",
+        });
+      }
+
+      camposParaAtualizar.endereco_mac = endereco_mac;
+    }
+    if (!isMissing(apelido)) camposParaAtualizar.apelido = apelido;
+    if (!isMissing(modelo)) camposParaAtualizar.modelo = modelo;
+
+    await servidorModel.editar(empresa_id, id, camposParaAtualizar);
+
+    res.status(200).json({ message: "Servidor atualizado com sucesso!" });
   } catch (error) {
     const message = error.message || error.sqlMessage;
     if (message) {
-      res.status(403).send({ message });
+      res.status(403).json({ message });
       return;
     }
-    res.status(500).send({ message: "Erro interno no servidor." });
+    res.status(500).json({ message: "Erro interno no servidor." });
   }
 }
 
 async function remover(req, res) {
-  const { empresaId, servidorId } = req.params;
+  const { empresa_id, nivel_acesso } = req.usuario;
+  const { id } = req.params;
 
-  if (isMissing(empresaId)) {
-    res
-      .status(400)
-      .send({ message: "ID da empresa não foi passado na requisição." });
-    return;
+  // dado que: 0 - desenvolvedor | 1 - administrador | 2 em diante - usuário comum
+  if (nivel_acesso > 1) {
+    return res
+      .status(403)
+      .json({ message: "Você não tem permissão para realizar esta ação." });
   }
 
-  if (isMissing(servidorId)) {
-    res
+  if (isMissing(empresa_id)) {
+    return res
+      .status(400)
+      .json({ message: "ID da Empresa não foi passado na requisição." });
+  }
+
+  if (isMissing(id)) {
+    return res
       .status(400)
       .send({ message: "ID da empresa não foi passado na requisição." });
-    return;
   }
 
   try {
-    await servidorModel.remover(servidorId, empresaId);
+    const empresaExiste = await empresaModel.existePorID(empresa_id);
+    if (!empresaExiste) {
+      return res
+        .status(404)
+        .json({ message: "Nenhuma Empresa encontrada para o ID informado." });
+    }
+
+    const servidorExiste = await servidorModel.existePorID(id);
+    if (!servidorExiste) {
+      return res
+        .status(404)
+        .json({ message: "Nenhum Servidor encontrado para o ID informado." });
+    }
+
+    await servidorModel.remover(empresa_id, id);
 
     res.status(200).send({ message: "Servidor removido com sucesso!" });
   } catch (error) {
