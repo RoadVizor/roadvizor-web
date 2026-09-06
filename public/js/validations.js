@@ -1,7 +1,5 @@
 // EMPRESA
- 
-
-function validatecnpj(ipt){
+function validatecnpj(ipt) {
   ipt.dataset.hasErrors = true;
 
   const cnpj = String(ipt.value).trim();
@@ -13,20 +11,17 @@ function validatecnpj(ipt){
     authMessage.classList.replace("hidden", "flex");
     authMessage.innerText = "CNPJ é um campo obrigatório.";
     return;
-  }
-  else if(cnpj.length!=14){
+  } else if (cnpj.length != 14) {
     authMessage.classList.replace("hidden", "flex");
     authMessage.innerText = "CNPJ deve conter 14 caracteres.";
-    return;  
+    return;
   }
-
-
 
   ipt.dataset.hasErrors = false;
   authMessage.classList.replace("flex", "hidden");
 }
 
-function validaterazao(ipt){
+function validaterazao(ipt) {
   ipt.dataset.hasErrors = true;
 
   const razao = String(ipt.value).trim();
@@ -40,11 +35,9 @@ function validaterazao(ipt){
     return;
   }
 
-
   ipt.dataset.hasErrors = false;
   authMessage.classList.replace("flex", "hidden");
 }
-
 
 function validatefantasia(ipt) {
   ipt.dataset.hasErrors = true;
@@ -60,12 +53,9 @@ function validatefantasia(ipt) {
     return;
   }
 
-
-
   ipt.dataset.hasErrors = false;
   authMessage.classList.replace("flex", "hidden");
 }
-
 
 function validateName(ipt) {
   ipt.dataset.hasErrors = true;
@@ -81,12 +71,9 @@ function validateName(ipt) {
     return;
   }
 
-
-
   ipt.dataset.hasErrors = false;
   authMessage.classList.replace("flex", "hidden");
 }
-
 
 function validateEmail(ipt) {
   ipt.dataset.hasErrors = true;
@@ -153,59 +140,62 @@ function validatePassword(ipt, checkConfirm = false) {
   authMessage.classList.replace("flex", "hidden");
 }
 
-  function validateModel(ipt){
-    ipt.dataset.hasErrors = true;
+function validateModel(ipt) {
+  ipt.dataset.hasErrors = true;
 
-    const modelo = String(ipt.value).trim();
-    const authMessage = document.getElementById(`${ipt.id}-auth-message`);
+  const modelo = String(ipt.value).trim();
+  const authMessage = document.getElementById(`${ipt.id}-auth-message`);
 
-    authMessage.innerText = "";
+  authMessage.innerText = "";
 
-    if (modelo === "") {
-      authMessage.classList.replace("hidden", "flex");
-      authMessage.innerText = "Modelo é um campo obrigatório.";
-      return;
-    }
+  if (modelo === "") {
+    authMessage.classList.replace("hidden", "flex");
+    authMessage.innerText = "Modelo é um campo obrigatório.";
+    return;
+  }
 
-    ipt.dataset.hasErrors = false;
-    authMessage.classList.replace("flex", "hidden");
-    }
+  ipt.dataset.hasErrors = false;
+  authMessage.classList.replace("flex", "hidden");
+}
 
-    function validateNickname(ipt){
-    ipt.dataset.hasErrors = true;
+function validateNickname(ipt) {
+  ipt.dataset.hasErrors = true;
 
-    const apelido = String(ipt.value).trim();
-    const authMessage = document.getElementById(`${ipt.id}-auth-message`);
+  const apelido = String(ipt.value).trim();
+  const authMessage = document.getElementById(`${ipt.id}-auth-message`);
 
-    authMessage.innerText = "";
+  authMessage.innerText = "";
 
-    if (apelido === "") {
-      authMessage.classList.replace("hidden", "flex");
-      authMessage.innerText = "Apelido é um campo obrigatório.";
-      return;
-    }
+  if (apelido === "") {
+    authMessage.classList.replace("hidden", "flex");
+    authMessage.innerText = "Apelido é um campo obrigatório.";
+    return;
+  }
 
-    ipt.dataset.hasErrors = false;
-    authMessage.classList.replace("flex", "hidden");
-    }
+  ipt.dataset.hasErrors = false;
+  authMessage.classList.replace("flex", "hidden");
+}
 
-    function validateAdress(ipt){
-    ipt.dataset.hasErrors = true;
+function validateAdress(ipt) {
+  ipt.dataset.hasErrors = true;
 
-    const endereco_mac = String(ipt.value).trim();
-    const authMessage = document.getElementById(`${ipt.id}-auth-message`);
+  const endereco_mac = String(ipt.value).trim();
+  const authMessage = document.getElementById(`${ipt.id}-auth-message`);
 
-    authMessage.innerText = "";
+  authMessage.innerText = "";
 
-    if (endereco_mac === "") {
-      authMessage.classList.replace("hidden", "flex");
-      authMessage.innerText = "Endereço MAC é um campo obrigatório.";
-      return;
-    }
+  if (endereco_mac === "") {
+    authMessage.classList.replace("hidden", "flex");
+    authMessage.innerText = "Endereço MAC é um campo obrigatório.";
+    return;
+  }
 
+  if (endereco_mac.length < 12) {
+    authMessage.classList.replace("hidden", "flex");
+    authMessage.innerText = "Endereço MAC está incompleto.";
+    return;
+  }
 
-    ipt.dataset.hasErrors = false;
-    authMessage.classList.replace("flex", "hidden");
-    }
-
-
+  ipt.dataset.hasErrors = false;
+  authMessage.classList.replace("flex", "hidden");
+}
