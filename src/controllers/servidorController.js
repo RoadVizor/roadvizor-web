@@ -198,11 +198,17 @@ async function editar(req, res) {
       const enderecoMACEmUso =
         await servidorModel.existePorEnderecoMAC(endereco_mac);
       if (enderecoMACEmUso) {
-        return res.status(409).json({
-          message:
-            "Endereço MAC informado para atualização já está registrado.",
-        });
-      }
+  
+        const servidorAtual = await servidorModel.buscarPorID(empresa_id, id);
+  
+        if (servidorAtual[0].endereco_mac !== endereco_mac) {
+          return res.status(409).json({
+            message:
+              "Endereço MAC informado para atualização já está registrado.",
+          });
+        }
+
+        }
 
       camposParaAtualizar.endereco_mac = endereco_mac;
     }
