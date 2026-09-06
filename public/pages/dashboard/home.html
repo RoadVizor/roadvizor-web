@@ -33,13 +33,16 @@
     <script src="../../js/auth.js"></script>
     <script src="../../js/components/sidebar.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        // Verifica se usuário está autenticado
-        if (!storage.get("usuario")) {
-          window.location.href = "../login.html";
-          return;
-        }
-      });
+    document.addEventListener("DOMContentLoaded", (e) => {
+      autenticarPagina(1)
+      if (sessionStorage.showmsg == 2) {
+        toast({
+          title: "Usuário já autenticado!",
+          variant: "success",
+        });
+        storage.remove("showmsg")
+      }
+    });
     </script>
   </body>
 </html>
