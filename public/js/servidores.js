@@ -184,5 +184,36 @@ async function excluirServidor(id) {
     });
   }
 }
+async function sair() {
+  try {
+    const response = await fetch("/api/usuarios/sair", {
+      method: "POST",
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(response.message);
+    }
+
+    storage.clear();
+    toast({
+      title: data.message,
+      variant: "warn",
+    });
+
+    // redireciona usuário após 1s
+    new Promise((resolve) => {
+      setTimeout(() => {
+        window.location.href = "../login.html";
+        resolve();
+      }, 1000);
+    });
+  } catch (error) {
+    toast({
+      title: "Erro ao Sair",
+      message: error,
+      variant: "destructive",
+    });
+  }
+}
 
 document.addEventListener("DOMContentLoaded", listarServidores);
