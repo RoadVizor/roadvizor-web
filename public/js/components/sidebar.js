@@ -23,7 +23,7 @@ function sidebar(){
         <nav class="flex flex-col">
           <ul class="flex flex-col gap-4">
             <li id="RoadVizor | Home" class="w-full">
-              <a href="./home.html" class="sideitem">
+              <a href="./home.html" class="sideitem text-center">
                 <span>Home</span>
                 <i class="ph ph-gauge text-2xl"></i>
               </a>
@@ -34,6 +34,12 @@ function sidebar(){
                 <i class="ph ph-users text-2xl"></i>
               </a>
             </li>
+            <li id="RoadVizor | Servidores" class="w-full">
+            <a href="./servidores.html" class="sideitem text-center">
+              <span>Servidores</span>
+              <i class="ph ph-hard-drives text-2xl"></i>
+            </a>
+          </li>
           </ul>
         </nav>
       </div>

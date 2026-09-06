@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RoadVizor | Servidores</title>
+
+  <!-- CSS Styles -->
+  <link rel="stylesheet" href="../../css/output.css" />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <script src="../../js/components/sidebar.js"></script>
+      
+</head>
+<body class="flex flex-row space-x-4 lg:space-x-8">
+    <!-- Sidebar -->
+     <div id="sidebar_container"></div> 
+    <!-- Sidebar | Footer -->
+
+  <!-- Área Principal (Direita) -->
+<main class="w-full min-h-dvh flex flex-col items-start justify-start pt-6 gap-6" id="nome_servidor">    
+  <h2 class="text-3xl font-bold text-center w-full">Servidores</h2>
+
+  <div class="flex flex-col lg:flex-row gap-6 items-start w-full">
+
+      <div class="bg-green-500/20 w-full lg:w-1/3 h-fit flex flex-col items-start justify-start gap-4 p-5 lg:p-9 border-2 border-green-600 rounded-xl">
+        <h1 class="text-2xl font-bold">Cadastrar servidores</h1>
+        
+        <form
+          id="cadastro-servidor"
+          onsubmit="cadastrar(event)"
+          oninput="checkFormFields(this)"
+          class="w-full flex flex-col gap-2"
+        >
+          <div class="flex flex-col gap-1">
+          <label for="ipt-modelo" class="text-sm text-muted flex items-center gap-1.5">
+            <i class="ph ph-cpu text-base"></i>
+            <span>Modelo</span>
+          </label>
+          <input
+            id="ipt-modelo"
+            name="modelo"
+            type="text"
+            placeholder="Ex: PADR-S501-I980"
+            oninput="validateModel(this)"
+            data-hasErrors="true"
+            class="field-input"
+          />
+          <p id="ipt-modelo-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="ipt-apelido" class="text-sm text-muted flex items-center gap-1.5">
+            <i class="ph ph-tag text-base"></i>
+            <span>Apelido</span>
+          </label>
+          <input
+            id="ipt-apelido"
+            name="apelido"
+            type="text"
+            placeholder="Ex: Hostname"
+            oninput="validateNickname(this)"
+            data-hasErrors="true"
+            class="field-input"
+          />
+          <p id="ipt-apelido-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="ipt-endereco" class="text-sm text-muted flex items-center gap-1.5">
+            <i class="ph ph-network text-base"></i>
+            <span>Endereço MAC</span>
+          </label>
+          <input
+            id="ipt-endereco"
+            name="adress"
+            type="text"
+            placeholder="Ex: 11:22:33:44:55"
+            oninput="validateAdress(this)"
+            data-hasErrors="true"
+            class="field-input"
+          />
+          <p id="ipt-endereco-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
+        </div>
+
+        <button
+          id="register-submit"
+          type="submit"
+          class="w-full h-10 flex items-center justify-center gap-1 not-disabled:hover:gap-2 bg-disabled rounded-md text-background font-bold transition-all not-disabled:hover:bg-accent/90 not-disabled:cursor-pointer mt-2"
+          disabled
+        >
+          <span>Cadastrar Servidor</span>
+          <i class="ph ph-plus transition-all"></i>
+        </button>
+        </form>
+      </div>
+
+      <div class="w-full lg:w-2/3 flex flex-col gap-4" id="lista-servidores">
+        
+            </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+      <script src="../../js/utils/storage.js"></script>
+      <script src="../../js/utils/toast.js"></script>
+      <script src="../../js/servidores.js"></script>
+      <script src="../../js/utils/password-toggler.js"></script>
+      <script src="../../js/validations.js"></script>
+      <script src="../../js/auth.js"></script>      
+</body>
+
+</html>
+<script>
+  //  document.addEventListener("DOMContentLoaded", () => {
+  //       const resultado = fetch("/api/servidor/").then(res => res.json())
+  //       .then((data) => {
+  //         const elemento = document.getElementById("nome_servidor")
+  //         console.log(data.empresa.nome_fantasia)
+  //         elemento.innerHTML = data.empresa.nome_fantasia
+
+  //       })
+  //     })
+  function checkFormFields(form) {
+        const submitBtn = document.getElementById("register-submit");
+        const fields = form.querySelectorAll(".field-input");
+        const hasErrors = Array.from(fields).some(
+          (field) => field.dataset.hasErrors != "false",
+        );
+
+        submitBtn.disabled = hasErrors;
+        if (hasErrors) {
+          submitBtn.classList.replace("bg-accent", "bg-disabled");
+        } else {
+          submitBtn.classList.replace("bg-disabled", "bg-accent");
+        }
+      }
+</script>

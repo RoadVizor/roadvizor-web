@@ -5,6 +5,14 @@ USE roadvizor;
 -- OBS: muitas das decisões tomadas ao criar esta tabela foram motivadas com base na API viaCEP
 -- disponível em: https://viacep.com.br.
 -- e no entendimento de que ambos os endereços de CCOs e Pedágios poderão ser guardados nesta tabela.
+CREATE DATABASE IF NOT EXISTS roadvizor;
+USE roadvizor;
+-- DROP DATABASE roadvizor;
+
+-- OBS: muitas das decisões tomadas ao criar esta tabela foram motivadas com base na API viaCEP
+-- disponível em: https://viacep.com.br.
+-- e no entendimento de que ambos os endereços de CCOs e Pedágios poderão ser guardados nesta tabela.
+
 CREATE TABLE IF NOT EXISTS endereco(
 	id_endereco INT PRIMARY KEY AUTO_INCREMENT,
     
@@ -22,6 +30,18 @@ CREATE TABLE IF NOT EXISTS endereco(
     -- campos úteis no contexto Pórtico/Servidor
     km VARCHAR(20) NULL,
     sentido VARCHAR(30) NULL 
+);
+
+INSERT INTO endereco (cep, logradouro, bairro, localidade, uf, numero, km, sentido
+) VALUES (
+    '01001000', 
+    'Praça da Sé', 
+    'Sé', 
+    'São Paulo', 
+    'SP', 
+    '100', 
+    'KM 15', 
+    'Norte'
 );
 
 CREATE TABLE IF NOT EXISTS empresa(
@@ -62,7 +82,7 @@ CREATE TABLE IF NOT EXISTS usuario(
 CREATE TABLE IF NOT EXISTS servidor(
 	id_servidor INT NOT NULL AUTO_INCREMENT,
     empresa_id INT NOT NULL,
-    endereco_id INT NOT NULL UNIQUE,
+    endereco_id INT NOT NULL,
     
     endereco_mac CHAR(12) NOT NULL UNIQUE,	-- ex: 11:22:33:44:55
     apelido VARCHAR(60) NOT NULL,			-- ex: hostname ou outro definido pelo usuario

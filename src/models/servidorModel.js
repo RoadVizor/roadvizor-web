@@ -20,9 +20,11 @@ function buscarPorID(empresa_id, id_servidor) {
 }
 
 function cadastrar(empresa_id, endereco_id, endereco_mac, apelido, modelo) {
+  const idEndereco = endereco_id || 1;
+
   const instrucaoSql = `
     INSERT INTO servidor(empresa_id, endereco_id, endereco_mac, apelido, modelo) 
-    VALUES (${empresa_id}, ${endereco_id}, '${endereco_mac}', '${apelido}', '${modelo}');
+    VALUES (${empresa_id}, '${idEndereco}', '${endereco_mac}', '${apelido}', '${modelo}');
   `;
 
   console.log("[servidorModel] Executando a instrução SQL: \n" + instrucaoSql);
@@ -79,7 +81,7 @@ function existePorID(id_servidor) {
 
 function existePorEnderecoMAC(endereco_mac) {
   const instrucaoSql = `
-    SELECT COUNT(*) FROM servidor WHERE endereco_mac = ${endereco_mac};
+    SELECT COUNT(*) FROM servidor WHERE endereco_mac = '${endereco_mac}';
   `;
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql);

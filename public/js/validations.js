@@ -136,14 +136,76 @@ function validatePassword(ipt, checkConfirm = false) {
   }
 
   if (checkConfirm) {
-    const confirmPassword = document.getElementById("ipt-senha");
-    if (confirmPassword.value !== password) {
+    const mainPasswordInput = document.getElementById("ipt-senha");
+    if (mainPasswordInput && mainPasswordInput.value !== password) {
       authMessage.classList.replace("hidden", "flex");
       authMessage.innerText = "As senhas não coincidem.";
       return;
+    }
+  } else {
+    const confirmPasswordInput = document.getElementById("ipt-senha-confirmar");
+    if (confirmPasswordInput && confirmPasswordInput.value !== "") {
+      validatePassword(confirmPasswordInput, true);
     }
   }
 
   ipt.dataset.hasErrors = false;
   authMessage.classList.replace("flex", "hidden");
 }
+
+  function validateModel(ipt){
+    ipt.dataset.hasErrors = true;
+
+    const modelo = String(ipt.value).trim();
+    const authMessage = document.getElementById(`${ipt.id}-auth-message`);
+
+    authMessage.innerText = "";
+
+    if (modelo === "") {
+      authMessage.classList.replace("hidden", "flex");
+      authMessage.innerText = "Modelo é um campo obrigatório.";
+      return;
+    }
+
+    ipt.dataset.hasErrors = false;
+    authMessage.classList.replace("flex", "hidden");
+    }
+
+    function validateNickname(ipt){
+    ipt.dataset.hasErrors = true;
+
+    const apelido = String(ipt.value).trim();
+    const authMessage = document.getElementById(`${ipt.id}-auth-message`);
+
+    authMessage.innerText = "";
+
+    if (apelido === "") {
+      authMessage.classList.replace("hidden", "flex");
+      authMessage.innerText = "Apelido é um campo obrigatório.";
+      return;
+    }
+
+    ipt.dataset.hasErrors = false;
+    authMessage.classList.replace("flex", "hidden");
+    }
+
+    function validateAdress(ipt){
+    ipt.dataset.hasErrors = true;
+
+    const endereco_mac = String(ipt.value).trim();
+    const authMessage = document.getElementById(`${ipt.id}-auth-message`);
+
+    authMessage.innerText = "";
+
+    if (endereco_mac === "") {
+      authMessage.classList.replace("hidden", "flex");
+      authMessage.innerText = "Endereço MAC é um campo obrigatório.";
+      return;
+    }
+
+
+    ipt.dataset.hasErrors = false;
+    authMessage.classList.replace("flex", "hidden");
+    }
+
+

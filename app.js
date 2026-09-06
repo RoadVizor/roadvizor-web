@@ -14,6 +14,7 @@ const HOST_APP = process.env.APP_HOST;
 const app = express();
 const router = require("./src/routes/router");
 const indexRouter = require("./src/routes/index");
+const servidorRouter = require("./src/routes/servidor");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 app.use("/", indexRouter);
 app.use("/api", router);
+app.use("/api/servidor", servidorRouter);
 
 app.listen(PORTA_APP, function () {
   console.log(
