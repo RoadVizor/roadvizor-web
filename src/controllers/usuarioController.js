@@ -161,6 +161,7 @@ async function sair(req, res) {
   const token = req.cookies?.access_token;
   if (token) {
     res.clearCookie("access_token");
+    res.clearCookie("autenticado");
   }
 
   return res.status(200).json({ message: "Logout realizado." });
