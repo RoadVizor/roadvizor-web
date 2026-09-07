@@ -134,7 +134,7 @@ async function cadastrarEmpresa(event) {
   const senha = String(document.getElementById("ipt-senha").value).trim();
 
   try {
-    const response = await fetch("/api/empresas/cadastrar", {
+    const response = await fetch("/api/empresas/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

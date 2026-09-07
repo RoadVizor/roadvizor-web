@@ -5,13 +5,6 @@ USE roadvizor;
 -- OBS: muitas das decisões tomadas ao criar esta tabela foram motivadas com base na API viaCEP
 -- disponível em: https://viacep.com.br.
 -- e no entendimento de que ambos os endereços de CCOs e Pedágios poderão ser guardados nesta tabela.
-CREATE DATABASE IF NOT EXISTS roadvizor;
-USE roadvizor;
--- DROP DATABASE roadvizor;
-
--- OBS: muitas das decisões tomadas ao criar esta tabela foram motivadas com base na API viaCEP
--- disponível em: https://viacep.com.br.
--- e no entendimento de que ambos os endereços de CCOs e Pedágios poderão ser guardados nesta tabela.
 
 CREATE TABLE IF NOT EXISTS endereco(
 	id_endereco INT PRIMARY KEY AUTO_INCREMENT,
