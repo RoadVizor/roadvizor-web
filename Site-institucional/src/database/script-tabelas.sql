@@ -169,6 +169,8 @@ INSERT INTO componente(nome, unidade_medida, depende_de)
     ('disco', 'GiB', 'psutil.disk_usage("/")'),
     ('placa_rede', 'Mbps', 'psutil.net_if_stats()');
     
+CALL roadvizor.sp_cadastrar_empresa("00000000/000-2", "Roadvizor", "Roadvizor", "admin@admin.com", "Dado1807#");
+UPDATE roadvizor.usuario SET nivel_acesso = 0 WHERE id_usuario = LAST_INSERT_ID();
 
 -- [!] Rodar scripts abaixo APENAS com o root do BD.
 -- CREATE USER 'roadvizor_user' IDENTIFIED BY 'sptech';
