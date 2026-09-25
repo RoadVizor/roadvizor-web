@@ -23,4 +23,8 @@ router.post("/sair", middlewares.verificarAutenticacao, function (req, res) {
   usuarioController.sair(req, res);
 });
 
+router.get("/", middlewares.verificarAutenticacao, function (req, res) {
+  usuarioController.buscar(req, res)
+})
+
 module.exports = router;

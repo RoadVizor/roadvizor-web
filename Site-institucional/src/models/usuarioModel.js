@@ -43,6 +43,15 @@ function existePorID(id_empresa) {
     .then((result) => (result[0]["COUNT(*)"] !== 0 ? true : false));
 }
 
+function buscar(empresa_id) {
+  const instrucaoSql = `
+    SELECT ${camposPermitidos} FROM usuario WHERE empresa_id = ${empresa_id};
+  `;
+
+  console.log("[usuarioModel] Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
 function existePorEmail(email) {
   const instrucaoSql = `
     SELECT COUNT(*) FROM usuario WHERE email = '${email}';
@@ -58,5 +67,6 @@ module.exports = {
   autenticar,
   cadastrar,
   existePorID,
+  buscar,
   existePorEmail,
 };

@@ -167,6 +167,40 @@ async function sair(req, res) {
   return res.status(200).json({ message: "Logout realizado." });
 }
 
+async function buscar(req, res) {
+   const { empresa_id } = req.usuario;
+  
+    if (isMissing(empresa_id)) {
+      return res
+        .status(400)
+        .json({ message: "ID da Empresa não foi passado na requisição." });
+    }
+  
+    try {
+      const empresaExiste = await empresaModel.existePorID(empresa_id);
+      if (!empresaExiste) {
+        return res
+          .status(404)
+          .json({ message: "Nenhuma Empresa encontrada para o ID informado." });
+      }
+  
+      const result = await usuarioModel.buscar(empresa_id);
+  
+      res.status(200).json({
+        message: "Membros encontrados para a Empresa solicitada.",
+        count: result.length,
+        result,
+      });
+    } catch (error) {
+      const message = error.message || error.sqlMessage;
+      if (message) {
+        res.status(403).json({ message });
+        return;
+      }
+      res.status(500).json({ message: "Erro interno no servidor." });
+    }
+}
+
 async function autenticarPagina(req, res) {
   if (req.status == 401) {
     return res.status(403);
@@ -178,5 +212,6 @@ module.exports = {
   autenticar,
   cadastrar,
   sair,
+  buscar,
   autenticarPagina,
 };
