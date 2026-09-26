@@ -60,7 +60,7 @@ function remover(empresa_id, id_usuario) {
   );
 
   const instrucaoSql = `
-    DELETE FROM servidor 
+    DELETE FROM usuario 
     WHERE empresa_id = ${empresa_id} AND id_usuario = ${id_usuario};
   `;
 
