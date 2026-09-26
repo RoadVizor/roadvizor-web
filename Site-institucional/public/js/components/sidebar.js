@@ -57,6 +57,8 @@ function sidebar(){
 
     const nome = document.title
     let elemento = document.getElementById(nome)
+
+    
     
     elemento.classList.add("atual");
     }

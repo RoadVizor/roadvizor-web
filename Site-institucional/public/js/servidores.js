@@ -184,6 +184,7 @@ async function excluirServidor(id) {
     });
   }
 }
+
 async function sair() {
   try {
     const response = await fetch("/api/usuarios/sair", {

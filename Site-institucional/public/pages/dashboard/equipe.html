@@ -18,74 +18,85 @@
   <div id="sidebar_container"></div>
 
   <!-- Dashboard -->
-  <main class="w-full min-h-dvh flex flex-col items-center justify-center">
-    <div class="bg-green-500/20 max-w-md w-full flex flex-col gap-6 p-8 lg:p-9 border-2 border-green-600 rounded-xl">
-      <h1 class="text-2xl font-bold text-foreground">
-        Cadastrar Membro
-      </h1>
+  <main class="w-full min-h-dvh flex flex-col items-start justify-start pt-6 gap-6">
 
-      <form id="register-form" onsubmit="cadastrar(event)" oninput="checkFormFields(this)"
-        class="w-full flex flex-col gap-4">
-        <div class="flex flex-col gap-1">
-          <label for="ipt-nome" class="flex items-center gap-2 text-sm text-muted">
-            <i class="ph ph-user"></i>
-            Nome completo
-          </label>
-          <input id="ipt-nome" name="nome" type="text" placeholder="Ex: João da Silva" oninput="validateName(this)"
-            class="field-input" />
-          <p id="ipt-nome-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
-        </div>
 
-        <div class="flex flex-col gap-1">
-          <label for="ipt-email" class="flex items-center gap-2 text-sm text-muted">
-            <i class="ph ph-envelope-simple"></i>
-            E-mail corporativo
-          </label>
-          <input id="ipt-email" name="email" type="email" placeholder="Ex: email@corporativo.com"
-            oninput="validateEmail(this)" class="field-input" />
-          <p id="ipt-email-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
-        </div>
+    <h2 class="text-3xl font-bold text-center w-full">Membros</h2>
 
-        <div class="flex flex-col gap-1">
-          <label for="ipt-senha" class="flex items-center gap-2 text-sm text-muted">
-            <i class="ph ph-lock"></i>
-            Senha
-          </label>
-          <div class="relative">
-            <input id="ipt-senha" name="senha" type="password" placeholder="* * * * * * * *"
-              oninput="validatePassword(this)" class="field-input" />
-            <i id="ipt-senha-icon"
-              class="ph ph-eye absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer text-disabled hover:text-accent transition-colors"
-              onclick="togglePasswordVisibility('ipt-senha')"></i>
+    <div class="flex flex-col lg:flex-row gap-6 items-start w-full">
+      <div class="bg-green-500/20 max-w-md w-full flex flex-col gap-6 p-8 lg:p-9 border-2 border-green-600 rounded-xl">
+        <h1 class="text-2xl font-bold text-foreground">
+          Cadastrar Membro
+        </h1>
+
+        <form id="register-form" onsubmit="cadastrar(event)" oninput="checkFormFields(this)"
+          class="w-full flex flex-col gap-4">
+          <div class="flex flex-col gap-1">
+            <label for="ipt-nome" class="flex items-center gap-2 text-sm text-muted">
+              <i class="ph ph-user"></i>
+              Nome completo
+            </label>
+            <input id="ipt-nome" name="nome" type="text" placeholder="Ex: João da Silva" oninput="validateName(this)"
+              class="field-input" />
+            <p id="ipt-nome-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
           </div>
-          <p id="ipt-senha-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
-        </div>
 
-        <div class="flex flex-col gap-1">
-          <label for="ipt-senha-confirmar" class="flex items-center gap-2 text-sm text-muted">
-            <i class="ph ph-lock-simple"></i>
-            Confirmar a Senha
-          </label>
-          <input id="ipt-senha-confirmar" name="senha" type="password" placeholder="* * * * * * * *"
-            oninput="validatePassword(this, true)" class="field-input" />
-          <p id="ipt-senha-confirmar-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
-        </div>
+          <div class="flex flex-col gap-1">
+            <label for="ipt-email" class="flex items-center gap-2 text-sm text-muted">
+              <i class="ph ph-envelope-simple"></i>
+              E-mail corporativo
+            </label>
+            <input id="ipt-email" name="email" type="email" placeholder="Ex: email@corporativo.com"
+              oninput="validateEmail(this)" class="field-input" />
+            <p id="ipt-email-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
+          </div>
 
-        <button id="register-submit" type="submit"
-          class="w-full h-12 flex items-center justify-center gap-1 not-disabled:hover:gap-2 bg-disabled rounded-md text-background font-bold transition-all not-disabled:hover:bg-accent/90 not-disabled:cursor-pointer"
-          disabled>
-          <span>Cadastrar Membro</span>
-          <i class="ph ph-plus transition-all"></i>
-        </button>
-      </form>
+          <div class="flex flex-col gap-1">
+            <label for="ipt-senha" class="flex items-center gap-2 text-sm text-muted">
+              <i class="ph ph-lock"></i>
+              Senha
+            </label>
+            <div class="relative">
+              <input id="ipt-senha" name="senha" type="password" placeholder="* * * * * * * *"
+                oninput="validatePassword(this)" class="field-input" />
+              <i id="ipt-senha-icon"
+                class="ph ph-eye absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer text-disabled hover:text-accent transition-colors"
+                onclick="togglePasswordVisibility('ipt-senha')"></i>
+            </div>
+            <p id="ipt-senha-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="ipt-senha-confirmar" class="flex items-center gap-2 text-sm text-muted">
+              <i class="ph ph-lock-simple"></i>
+              Confirmar a Senha
+            </label>
+            <input id="ipt-senha-confirmar" name="senha" type="password" placeholder="* * * * * * * *"
+              oninput="validatePassword(this, true)" class="field-input" />
+            <p id="ipt-senha-confirmar-auth-message" class="hidden text-destructive-foreground text-xs mt-1"></p>
+          </div>
+
+          <button id="register-submit" type="submit"
+            class="w-full h-12 flex items-center justify-center gap-1 not-disabled:hover:gap-2 bg-disabled rounded-md text-background font-bold transition-all not-disabled:hover:bg-accent/90 not-disabled:cursor-pointer"
+            disabled>
+            <span>Cadastrar Membro</span>
+            <i class="ph ph-plus transition-all"></i>
+          </button>
+        </form>
+      </div>
+
+      <div
+        class="w-full lg:w-2/3 flex flex-col gap-4 max-h-200 overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent"
+        id="lista-membros"></div>
     </div>
+
   </main>
 
   <script src="../../js/utils/storage.js"></script>
   <script src="../../js/utils/toast.js"></script>
   <script src="../../js/utils/password-toggler.js"></script>
   <script src="../../js/validations.js"></script>
-  <script src="../../js/auth.js"></script>
+  <script src="../../js/membros.js"></script>
   <script src="../../js/components/sidebar.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", (e) => {
@@ -98,6 +109,7 @@
         storage.remove("showmsg")
       }
     });
+
     document.addEventListener("DOMContentLoaded", () => {
       const resultado = fetch("/api/empresas/")
         .then((res) => res.json())
