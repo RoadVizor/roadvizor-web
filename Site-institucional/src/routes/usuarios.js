@@ -1,5 +1,5 @@
 const express = require("express");
-const middlewares = require("../middlewares/auth");
+const { verificarAutenticacao } = require("../middlewares/auth");
 const usuarioController = require("../controllers/usuarioController");
 
 const router = express.Router();
@@ -7,7 +7,7 @@ const router = express.Router();
 // === POST - CADASTRO === //
 router.post(
   "/cadastrar",
-  middlewares.verificarAutenticacao,
+  verificarAutenticacao,
   function (req, res) {
     usuarioController.cadastrar(req, res);
   },
@@ -19,12 +19,16 @@ router.post("/autenticar", function (req, res) {
 });
 
 // === POST - LOGOUT === //
-router.post("/sair", middlewares.verificarAutenticacao, function (req, res) {
+router.post("/sair", verificarAutenticacao, function (req, res) {
   usuarioController.sair(req, res);
 });
 
-router.get("/", middlewares.verificarAutenticacao, function (req, res) {
+router.get("/", verificarAutenticacao, function (req, res) {
   usuarioController.buscar(req, res)
 })
+
+router.delete("/:id", verificarAutenticacao, function (req, res) {
+  usuarioController.remover(req, res);
+});
 
 module.exports = router;

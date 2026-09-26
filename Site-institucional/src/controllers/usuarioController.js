@@ -201,6 +201,57 @@ async function buscar(req, res) {
     }
 }
 
+async function remover(req, res) {
+  const { empresa_id, nivel_acesso } = req.usuario;
+  const { id } = req.params;
+
+  // dado que: 0 - desenvolvedor | 1 - administrador | 2 em diante - usuário comum
+  if (nivel_acesso > 1) {
+    return res
+      .status(403)
+      .json({ message: "Você não tem permissão para realizar esta ação." });
+  }
+
+  if (isMissing(empresa_id)) {
+    return res
+      .status(400)
+      .json({ message: "ID da Empresa não foi passado na requisição." });
+  }
+
+  if (isMissing(id)) {
+    return res
+      .status(400)
+      .send({ message: "ID do membro não foi passado na requisição." });
+  }
+
+  try {
+    const empresaExiste = await empresaModel.existePorID(empresa_id);
+    if (!empresaExiste) {
+      return res
+        .status(404)
+        .json({ message: "Nenhuma Empresa encontrada para o ID informado." });
+    }
+
+    const membroExiste = await usuarioModel.existePorID(id);
+    if (!membroExiste) {
+      return res
+        .status(404)
+        .json({ message: "Nenhum Membro encontrado para o ID informado." });
+    }
+
+    await usuarioModel.remover(empresa_id, id);
+
+    res.status(200).send({ message: "Membro removido com sucesso!" });
+  } catch (error) {
+    const message = error.message || error.sqlMessage;
+    if (message) {
+      res.status(403).send({ message });
+      return;
+    }
+    res.status(500).send({ message: "Erro interno no servidor." });
+  }
+}
+
 async function autenticarPagina(req, res) {
   if (req.status == 401) {
     return res.status(403);
@@ -213,5 +264,6 @@ module.exports = {
   cadastrar,
   sair,
   buscar,
+  remover,
   autenticarPagina,
 };
