@@ -1,5 +1,5 @@
-window.onload = sidebar
-function sidebar(){
+window.onload = sidebarLinks
+function sidebar(content){
     console.log(document.title)
     sidebar_container.innerHTML = `    <div
       class="bg-surface rounded-r-xl max-w-52 h-dvh flex flex-col justify-center py-6 lg:py-12 px-2 lg:px-4"
@@ -22,24 +22,7 @@ function sidebar(){
         <p class="font-bold mb-2">Seções</p>
         <nav class="flex flex-col">
           <ul class="flex flex-col gap-4">
-            <li id="RoadVizor | Home" class="w-full">
-              <a href="./home.html" class="sideitem text-center">
-                <span>Home</span>
-                <i class="ph ph-gauge text-2xl"></i>
-              </a>
-            </li>
-            <li id="RoadVizor | Equipe" class="w-full">
-              <a href="./equipe.html" class="sideitem text-center">
-                <span>Equipe</span>
-                <i class="ph ph-users text-2xl"></i>
-              </a>
-            </li>
-            <li id="RoadVizor | Servidores" class="w-full">
-            <a href="./servidores.html" class="sideitem text-center">
-              <span>Servidores</span>
-              <i class="ph ph-hard-drives text-2xl"></i>
-            </a>
-          </li>
+            ${content}
           </ul>
         </nav>
       </div>
@@ -61,4 +44,24 @@ function sidebar(){
     
     
     elemento.classList.add("atual");
-    }
+}
+
+function sidebarLinks(){
+  let user = JSON.parse(sessionStorage.getItem("usuario"));
+  let html = '';
+
+  for(let i = 0; i < niveis[user.nivel_acesso]["dash"].length; i++){
+    let item = niveis[user.nivel_acesso]["dash"][i];
+    
+    html += `
+        <li id="${item.id}" class="w-full">
+          <a href="${item.url}" class="sideitem text-center">
+            <span>${item.title}</span>
+            <i class="${item.icon}"></i>
+          </a>
+        </li>
+    `
+  }
+
+  sidebar(html);
+}
