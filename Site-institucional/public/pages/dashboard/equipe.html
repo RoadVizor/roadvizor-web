@@ -110,16 +110,6 @@
       }
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const resultado = fetch("/api/empresas/")
-        .then((res) => res.json())
-        .then((data) => {
-          const elemento = document.getElementById("nome_empresa_equipe");
-          console.log(data.empresa.nome_fantasia);
-          elemento.innerHTML = data.empresa.nome_fantasia;
-        });
-    });
-
     function checkFormFields(form) {
       const submitBtn = document.getElementById("register-submit");
       const fields = form.querySelectorAll(".field-input");

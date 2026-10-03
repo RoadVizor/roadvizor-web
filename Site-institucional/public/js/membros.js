@@ -10,39 +10,46 @@ async function cadastrar(event) {
   const email = String(document.getElementById("ipt-email").value).trim();
   const senha = String(document.getElementById("ipt-senha").value).trim();
 
+  const url = idEmEdicao
+    ? `http://localhost:3333/api/usuarios/${idEmEdicao}`
+    : "http://localhost:3333/api/usuarios/cadastrar";
+  const method = idEmEdicao ? "PUT" : "POST";
+
   try {
-    const response = await fetch("/api/usuarios/cadastrar", {
-      method: "POST",
+    const response = await fetch(url, {
+      method,
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${getToken()}`
       },
       body: JSON.stringify({
         nome,
         email,
-        senha,
-      }),
+        senha
+      })
     });
 
     const data = await response.json();
+
     if (!response.ok) {
-      throw new Error(data.message);
+      throw new Error(data.message || `Erro na requisição (${response.status})`);
     }
 
+    toast({
+      title: "Sucesso!",
+      message: idEmEdicao ? "Membro atualizado com sucesso." : "Membro cadastrado com sucesso.",
+      variant: "success"
+    });
+
+    cancelarEdicao();
     listarMembros();
 
-    // todo: melhorar a mensagem e possívelmente atualizar a página para
-    // refletir atualização da UI
-    toast({
-      title: "Cadastro Efetuado!",
-      message: "O usuário %USER% foi adicionado à equipe.",
-      variant: "success",
-    });
   } catch (error) {
-    console.log(error);
+    console.error("Erro:", error);
     toast({
-      title: "Uh oh...",
-      message: error.message,
-      variant: "destructive",
+      title: idEmEdicao ? "Falha ao Editar" : "Falha no Cadastro",
+      message: error.message || "Ocorreu um erro.",
+      variant: "destructive"
     });
   }
 }
@@ -120,6 +127,8 @@ function renderizarMembros(membros) {
 }
 
 let idEmEdicao = null;
+const frm = document.getElementById("register-form")
+const submitBtn = document.getElementById("register-submit");
 
 function iniciarEdicao(membro) {
   idEmEdicao = membro.id_usuario;
@@ -127,18 +136,20 @@ function iniciarEdicao(membro) {
   document.getElementById("ipt-nome").value = membro.nome;
   document.getElementById("ipt-email").value = membro.email;
 
-  const submitBtn = document.getElementById("register-submit");
+  frm.oninput = null;
   submitBtn.querySelector("span").textContent = "Salvar Alterações";
   submitBtn.disabled = false;
   submitBtn.classList.replace("bg-disabled", "bg-accent");
 
-  document.getElementById("register-form").scrollIntoView({ behavior: "smooth" });
+  frm.scrollIntoView({ behavior: "smooth" });
 }
 
 function cancelarEdicao() {
   idEmEdicao = null;
+  
+  submitBtn.querySelector("span").textContent = "Cadastrar Membro";
+  frm.oninput = () => {checkFormFields(frm)};
   document.getElementById("register-form").reset();
-  document.getElementById("register-submit").querySelector("span").textContent = "Cadastrar Membro";
 }
 
 async function excluirMembro(id) {

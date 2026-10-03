@@ -1,4 +1,12 @@
-const database = require("../database/config");
+function buscarPorID(empresa_id, id) {
+  const instrucaoSql = `
+    SELECT * FROM usuario 
+    WHERE empresa_id = ${empresa_id} AND id_usuario = ${id};
+  `;
+
+  console.log("[servidorModel] Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}const database = require("../database/config");
 
 const camposPermitidos =
   "id_usuario, empresa_id, supervisor_id, nome, email, nivel_acesso";
@@ -32,17 +40,6 @@ function cadastrar(
   return database.executar(instrucaoSql);
 }
 
-function existePorID(id_empresa) {
-  const instrucaoSql = `
-    SELECT COUNT(*) FROM empresa WHERE id_empresa = ${id_empresa};
-  `;
-
-  console.log("Executando a instrução SQL: \n" + instrucaoSql);
-  return database
-    .executar(instrucaoSql)
-    .then((result) => (result[0]["COUNT(*)"] !== 0 ? true : false));
-}
-
 function buscar(empresa_id) {
   const instrucaoSql = `
     SELECT ${camposPermitidos} FROM usuario WHERE empresa_id = ${empresa_id};
@@ -65,6 +62,26 @@ function remover(empresa_id, id_usuario) {
   `;
 
   console.log("[usuarioModel] Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
+function editar(empresa_id, id_usuario, campos = {}) {
+  const chaveCampos = Object.keys(campos);
+  if (chaveCampos.length <= 0) return; //pois nenhum campo está sendo alterado.
+
+  // Obs: converte campos enviados para atualização para um formato que o SQL aceita.
+  // de: { campoA: "valorA", campoB: "valorB" }
+  // para: campoA="valorA", campoB ="valorB"
+  const camposTratados = chaveCampos
+    .map((chave) => [chave, `"${campos[chave]}"`].join("="))
+    .join(", ");
+
+  const instrucaoSql = `
+    UPDATE usuario SET ${camposTratados} 
+    WHERE empresa_id = ${empresa_id} AND id_usuario = ${id_usuario};
+  `;
+
+  console.log("[servidorModel] Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
 }
 
@@ -94,9 +111,10 @@ function existePorEmail(email) {
 module.exports = {
   autenticar,
   cadastrar,
-  existePorID,
   buscar,
+  buscarPorID,
   remover,
+  editar,
   existePorID,
   existePorEmail,
 };

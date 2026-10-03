@@ -145,6 +145,7 @@ function iniciarEdicao(servidor) {
 
 function cancelarEdicao() {
   idEmEdicao = null;
+  
   document.getElementById("cadastro-servidor").reset();
   document.getElementById("register-submit").querySelector("span").textContent = "Cadastrar Servidor";
 }

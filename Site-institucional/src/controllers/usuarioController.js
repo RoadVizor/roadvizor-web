@@ -167,6 +167,121 @@ async function sair(req, res) {
   return res.status(200).json({ message: "Logout realizado." });
 }
 
+async function buscarPorID(req, res) {
+  const { empresa_id } = req.usuario;
+  const { id } = req.params;
+
+  if (isMissing(empresa_id)) {
+    res
+      .status(400)
+      .json({ message: "ID da Empresa não foi passado na requisição." });
+    return;
+  }
+
+  if (isMissing(id)) {
+    return res
+      .status(400)
+      .json({ message: "ID do Servidor não foi passado na requisição." });
+  }
+
+  try {
+    const empresaExiste = await empresaModel.existePorID(empresa_id);
+    if (!empresaExiste) {
+      return res
+        .status(404)
+        .json({ message: "Nenhuma Empresa encontrada para o ID informado." });
+    }
+
+    const membroExiste = await usuarioModel.existePorID(id);
+    if (!membroExiste) {
+      return res
+        .status(404)
+        .json({ message: "Nenhum Membro encontrado para o ID informado." });
+    }
+
+    const result = await usuarioModel.buscarPorID(empresa_id, id);
+
+    res.status(200).json({
+      message: "Membro encontrado com sucesso.",
+      membro: result[0],
+    });
+  } catch (error) {
+    const message = error.message || error.sqlMessage;
+    if (message) {
+      res.status(403).json({ message });
+      return;
+    }
+    res.status(500).json({ message: "Erro interno no servidor." });
+  }
+}
+
+async function editar(req, res) {
+  const { empresa_id } = req.usuario;
+  const { id } = req.params;
+  const { nome, email, senha } = req.body;
+  const camposParaAtualizar = {};
+
+  if (isMissing(empresa_id)) {
+    return res
+      .status(400)
+      .json({ message: "ID da Empresa não foi passado na requisição." });
+  }
+
+  if (isMissing(id)) {
+    return res
+      .status(400)
+      .json({ message: "ID do Membro não foi passado na requisição." });
+  }
+
+  try {
+    const empresaExiste = await empresaModel.existePorID(empresa_id);
+    if (!empresaExiste) {
+      return res
+        .status(404)
+        .json({ message: "Nenhuma Empresa encontrada para o ID informado." });
+    }
+
+    const membroExiste = await usuarioModel.existePorID(id);
+    if (!membroExiste) {
+      return res
+        .status(404)
+        .json({ message: "Nenhum Membro encontrado para o ID informado." });
+    }
+
+    if (!isMissing(email)) {
+      const emailEmUso =
+        await usuarioModel.existePorEmail(email);
+      if (emailEmUso) {
+  
+        const membroAtual = await usuarioModel.buscarPorID(empresa_id, id);
+  
+        if (membroAtual[0].email !== email) {
+          return res.status(409).json({
+            message:
+              "Email informado para atualização já está registrado.",
+          });
+        }
+
+        }
+
+      camposParaAtualizar.email = email;
+    }
+    if (!isMissing(nome)) camposParaAtualizar.nome = nome;
+    if (!isMissing(senha)) camposParaAtualizar.senha = senha;
+
+    await usuarioModel.editar(empresa_id, id, camposParaAtualizar);
+
+    res.status(200).json({ message: "Membro atualizado com sucesso!" });
+  } catch (error) {
+    const message = error.message || error.sqlMessage;
+    if (message) {
+      res.status(403).json({ message });
+      return;
+    }
+    res.status(500).json({ message: "Erro interno no servidor." });
+  }
+}
+
 async function buscar(req, res) {
    const { empresa_id } = req.usuario;
   
@@ -265,5 +380,6 @@ module.exports = {
   sair,
   buscar,
   remover,
+  editar,
   autenticarPagina,
 };
