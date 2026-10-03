@@ -2,7 +2,6 @@
 AVISO: certifique-se que a página que importar este arquivo (auth.js), também
 está importando os arquivos "storage.js" e "toast.js", presentes em: /public/js/utils/
 */
-
 async function entrar(event) {
   event.preventDefault();
 
@@ -39,48 +38,6 @@ async function entrar(event) {
         window.location = "../pages/dashboard/home.html";
         resolve();
       }, 1000);
-    });
-  } catch (error) {
-    console.log(error);
-    toast({
-      title: "Uh oh...",
-      message: error.message,
-      variant: "destructive",
-    });
-  }
-}
-
-async function cadastrar(event) {
-  event.preventDefault();
-
-  const nome = String(document.getElementById("ipt-nome").value).trim();
-  const email = String(document.getElementById("ipt-email").value).trim();
-  const senha = String(document.getElementById("ipt-senha").value).trim();
-
-  try {
-    const response = await fetch("/api/usuarios/cadastrar", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nome,
-        email,
-        senha,
-      }),
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message);
-    }
-
-    // todo: melhorar a mensagem e possívelmente atualizar a página para
-    // refletir atualização da UI
-    toast({
-      title: "Cadastro Efetuado!",
-      message: "O usuário %USER% foi adicionado à equipe.",
-      variant: "success",
     });
   } catch (error) {
     console.log(error);
@@ -185,3 +142,4 @@ function autenticarPagina(page) {
     window.location.href = "/pages/login.html";
   }
 }
+

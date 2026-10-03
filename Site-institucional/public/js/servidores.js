@@ -145,6 +145,7 @@ function iniciarEdicao(servidor) {
 
 function cancelarEdicao() {
   idEmEdicao = null;
+  
   document.getElementById("cadastro-servidor").reset();
   document.getElementById("register-submit").querySelector("span").textContent = "Cadastrar Servidor";
 }
@@ -184,6 +185,7 @@ async function excluirServidor(id) {
     });
   }
 }
+
 async function sair() {
   try {
     const response = await fetch("/api/usuarios/sair", {
