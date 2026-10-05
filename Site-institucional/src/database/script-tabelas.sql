@@ -45,6 +45,10 @@ CREATE TABLE IF NOT EXISTS empresa(
     razao_social VARCHAR(120) NOT NULL,
     nome_fantasia VARCHAR(120) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,		-- campo usado para contato
+    domain_jira VARCHAR(255) NOT NULL UNIQUE,
+    email_jira VARCHAR(255) NOT NULL UNIQUE,
+	api_token_jira VARCHAR(255) NOT NULL UNIQUE,
+    project_key VARCHAR(255) NOT NULL UNIQUE,
     
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -131,14 +135,31 @@ CREATE TABLE IF NOT EXISTS servidor_componente(
 		REFERENCES componente(id_componente)
 );
 
+ CREATE TABLE `log`(
+	log_id INT NOT NULL AUTO_INCREMENT,
+	servidor_id INT NOT NULL,
+    titulo VARCHAR(255),
+    descricao VARCHAR(255),
+	`status` VARCHAR(45),
+    
+    PRIMARY KEY(log_id, servidor_id),
+    CONSTRAINT fk_log_servidor FOREIGN KEY (servidor_id)
+		REFERENCES servidor(id_servidor)
+);
+
 -- | Stored Procedure(s) | --
+
 DELIMITER $$
 CREATE PROCEDURE sp_cadastrar_empresa(
 	IN in_cnpj CHAR(14),
     IN in_razao_social VARCHAR(120),
     IN in_nome_fantasia VARCHAR(120),
     IN in_email VARCHAR(255),
-    IN in_senha VARCHAR(255)
+    IN in_senha VARCHAR(255),    
+    IN in_domain_jira VARCHAR(255),
+    IN in_email_jira VARCHAR(255),
+    IN in_api_token_jira VARCHAR(255),
+    In in_project_key VARCHAR(255)
 ) BEGIN
 
 	-- Tratamento de Erro na Procedure
@@ -151,8 +172,8 @@ CREATE PROCEDURE sp_cadastrar_empresa(
 	-- Corpo da Procedure
 	START TRANSACTION;
 		-- 1. Criar Empresa
-		INSERT INTO empresa(cnpj, razao_social, nome_fantasia, email)
-			VALUES (in_cnpj, in_razao_social, in_nome_fantasia, in_email);
+		INSERT INTO empresa(cnpj, razao_social, nome_fantasia, email, domain_jira, email_jira, api_token_jira, project_key)
+			VALUES (in_cnpj, in_razao_social, in_nome_fantasia, in_email, in_domain_jira, in_email_jira, in_api_token_jira, in_project_key);
 			
 		-- 2. Criar Usuário ADM da Empresa criada
 		INSERT INTO usuario(empresa_id, nome, email, senha, nivel_acesso)
@@ -169,8 +190,8 @@ INSERT INTO componente(nome, unidade_medida, depende_de)
     ('disco', 'GiB', 'psutil.disk_usage("/")'),
     ('placa_rede', 'Mbps', 'psutil.net_if_stats()');
     
-CALL roadvizor.sp_cadastrar_empresa("00000000/000-2", "Roadvizor", "Roadvizor", "admin@admin.com", "Dado1807#");
-UPDATE roadvizor.usuario SET nivel_acesso = 0 WHERE id_usuario = LAST_INSERT_ID();
+CALL roadvizor.sp_cadastrar_empresa("0000000/200-1", "Roadvizor", "Roadvizor", "admin@adm.com", "Dado1807#", "b", "b", "b", "b");
+UPDATE roadvizor.usuario SET nivel_acesso = 0, email = "adm@adm.com", senha = SHA2("Dado1807#", 256) WHERE id_usuario = 1;
 
 -- [!] Rodar scripts abaixo APENAS com o root do BD.
 -- CREATE USER 'roadvizor_user' IDENTIFIED BY 'sptech';
