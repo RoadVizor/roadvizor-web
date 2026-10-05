@@ -15,6 +15,7 @@ const app = express();
 const router = require("./src/routes/router");
 const indexRouter = require("./src/routes/index");
 const servidorRouter = require("./src/routes/servidor");
+const dashboardRouter = require("./src/routes/dashboard")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -26,6 +27,7 @@ app.use(cookieParser());
 app.use("/", indexRouter);
 app.use("/api", router);
 app.use("/api/servidor", servidorRouter);
+app.use("/api/dashboard", dashboardRouter);
 
 app.listen(PORTA_APP, function () {
   console.log(
