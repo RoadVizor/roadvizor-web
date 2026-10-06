@@ -279,10 +279,59 @@ async function remover(req, res) {
   }
 }
 
+async function listarDetalhesServidor(req, res) {
+
+    const empresa_id = req.usuario.empresa_id
+    const id_servidor  = req.params.id_servidor;
+    
+    if (!empresa_id || !id_servidor) {
+        return res.status(400).json({ mensagem: "id_empresa e id_servidor são obrigatórios." });
+    }
+    try {
+        const response = await servidorModel.listarDetalhesServidor(empresa_id, id_servidor);
+        res.status(200).json(response);
+    } catch (erro) {
+        console.log("Erro ao buscar detalhes do servidor:", erro.sqlMessage || erro);
+        res.status(500).json({ mensagem: "Erro ao buscar detalhes." });
+    }
+}
+
+async function listarStatusServidor(req, res) {
+     const empresa_id = req.usuario.empresa_id;
+    if (!empresa_id) {
+        return res.status(400).json({ mensagem: "id_empresa é obrigatório." });
+    }
+    try {
+        const response = await servidorModel.listarStatusServidor(empresa_id);
+        res.status(200).json(response);          
+    } catch (erro) {
+        console.log("Não foi possível consultar o status:", erro.sqlMessage || erro);
+        res.status(500).json({ mensagem: "Erro ao consultar status." });
+    }
+}
+
+async function listarServidores(req, res) {
+    const empresa_id = req.usuario.empresa_id
+    if (!empresa_id) {
+        return res.status(400).json({ mensagem: "id_empresa é obrigatório." });
+    }
+    try {
+        const response = await servidorModel.listarServidores(empresa_id);
+        res.status(200).json(response);          
+    } catch (erro) {
+        console.log("Não foi possível listar os servidores:", erro.sqlMessage || erro);
+        res.status(500).json({ mensagem: "Erro ao listar servidores." });
+    }
+}
+
+
 module.exports = {
   cadastrar,
   buscar,
   buscarPorID,
   remover,
   editar,
+  listarDetalhesServidor,
+  listarStatusServidor,
+  listarServidores,
 };

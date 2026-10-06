@@ -29,4 +29,14 @@ router.delete("/:id", verificarAutenticacao, function (req, res) {
   servidorController.remover(req, res);
 });
 
+// === DASHBOARD === \\
+
+router.get("/kpi/alertas/", verificarAutenticacao, servidorController.listarStatusServidor);
+
+router.get("/status/", verificarAutenticacao, servidorController.listarStatusServidor);
+
+router.get("/lista/", verificarAutenticacao, servidorController.listarServidores);
+
+router.get("/detalhes/:empresa_id/:id_servidor", verificarAutenticacao, servidorController.listarDetalhesServidor);
+
 module.exports = router;

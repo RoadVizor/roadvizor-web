@@ -91,6 +91,36 @@ function existePorEnderecoMAC(endereco_mac) {
     .then((result) => (result[0]["COUNT(*)"] !== 0 ? true : false));
 }
 
+// =============================================================//
+
+
+function listarServidores(id_empresa){
+    const instrucaoSql = `select s.apelido, s.endereco_mac, s.modelo from servidor s
+                          join empresa e on e.id_empresa = s.empresa_id
+                          where s.empresa_id = ${id_empresa}`
+    return database.executar(instrucaoSql)
+}
+
+function listarStatusServidor(id_empresa){
+    const instrucaoSql = `select count(*) as total
+                          from servidor s
+                          join log l on l.servidor_id = s.id_servidor
+                          where empresa_id = ${id_empresa}
+                          GROUP BY l.status;`
+    return database.executar(instrucaoSql)
+}
+
+function listarDetalhesServidor(id_empresa, id_servidor) {
+    const instrucaoSql = `select c.nome, c.unidade_medida,
+                          sc.limite_max, sc.limite_min,
+                          sc.capacidade_total, sc.monitorado
+                          from servidor_componente sc
+                          join componente c on c.id_componente = sc.componente_id
+                          where sc.empresa_id = ${id_empresa}
+                          and sc.servidor_id = ${id_servidor};`
+    return database.executar(instrucaoSql)
+}
+
 module.exports = {
   buscar,
   buscarPorID,
@@ -99,4 +129,7 @@ module.exports = {
   remover,
   existePorID,
   existePorEnderecoMAC,
+  listarServidores,
+  listarDetalhesServidor,
+  listarStatusServidor
 };
