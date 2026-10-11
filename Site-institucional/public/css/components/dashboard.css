@@ -1,0 +1,39 @@
+.itemServidores{
+    @apply
+    w-410 
+    h-10 
+    flex
+    gap-1
+    font-bold
+    items-center
+    gap-15 p-5
+    rounded-md
+    hover:bg-secondary/10 
+    duration-100
+};  
+
+.itemServidoresSelected{
+    @apply
+    border-1 
+    border-primary 
+    bg-secondary/10
+};
+
+.itemComponente{
+    @apply
+    border-2 
+    border-disabled 
+    rounded-md 
+    flex 
+    flex-col 
+    items-center 
+    justify-center
+    hover:bg-disabled/20
+    duration-100
+};
+
+.itemComponenteSelected{
+    @apply
+    bg-disabled/20
+    border-none
+}
