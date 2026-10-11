@@ -66,6 +66,7 @@ async function autenticar(req, res) {
       usuario: {
         nome: usuario.nome,
         email: usuario.email,
+        nivel_acesso: usuario.nivel_acesso
       },
     });
   } catch (error) {
