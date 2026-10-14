@@ -95,44 +95,70 @@ CREATE TABLE IF NOT EXISTS servidor(
 		REFERENCES endereco(id_endereco)
 );
 
-CREATE TABLE IF NOT EXISTS componente(
-	id_componente INT PRIMARY KEY AUTO_INCREMENT,
-    
-    nome VARCHAR(60) NOT NULL,
+CREATE TABLE componente (
+    id_componente INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(60) NOT NULL UNIQUE,
     unidade_medida VARCHAR(20) NOT NULL,
-    depende_de VARCHAR(60) NOT NULL,		-- informa a biblioteca e o método cuja captura depende; ex: <lib>.<metodo>(<argumentos...>)
-    
+    depende_de VARCHAR(120) NOT NULL,
+
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    CONSTRAINT chk_componente_nome CHECK(nome IN('cpu', 'ram', 'disco', 'placa_rede')),
-    CONSTRAINT chk_componente_unidade_medida CHECK(unidade_medida IN(
-		'pct',					-- percentual (%) | CPU
-        'MiB', 'GiB', 'TiB',	-- armazenamento  | RAM, Disco
-        'bps', 'Mbps', 'Gbps'	-- velocidade de transferência | I/O de Rede
-    ))
+    atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT chk_componente_nome
+        CHECK (
+            nome IN ('cpu', 'ram', 'disco', 'placa_rede')
+        ),
+
+    CONSTRAINT chk_componente_unidade
+        CHECK (
+            (nome = 'cpu' AND unidade_medida = 'pct')
+            OR
+            (nome = 'ram' AND unidade_medida IN ('MiB', 'GiB', 'TiB'))
+            OR
+            (nome = 'disco' AND unidade_medida IN ('MiB', 'GiB', 'TiB'))
+            OR
+            (nome = 'placa_rede' AND unidade_medida IN ('Mbps', 'Gbps'))
+        )
 );
 
-CREATE TABLE IF NOT EXISTS servidor_componente(
-	servidor_id INT NOT NULL,
+CREATE TABLE servidor_componente (
+    servidor_id INT NOT NULL,
     empresa_id INT NOT NULL,
     componente_id INT NOT NULL,
-    
-    -- assumindo que 'limite_max', 'limite_min' e 'capacidade_total'
-    -- serão medidos com a mesma unidade de medida definida no componente.
-    limite_max DECIMAL(10, 3) NOT NULL,
-    limite_min DECIMAL(10, 3) NULL,
-    capacidade_total DECIMAL(10, 3) NOT NULL,
-    monitorado TINYINT NOT NULL DEFAULT 1,	-- 0 deixou de ser monitorado | 1 está sendo monitorado
-    
+
+    limite_max DECIMAL(12, 3) NOT NULL,
+    limite_min DECIMAL(12, 3) NULL,
+    capacidade_total DECIMAL(12, 3) NOT NULL,
+
+    monitorado TINYINT NOT NULL DEFAULT 1,
+
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    CONSTRAINT pk_servidor_componente PRIMARY KEY(servidor_id, empresa_id, componente_id),
-    CONSTRAINT fk_servidor_componente_servidor FOREIGN KEY (servidor_id, empresa_id)
-		REFERENCES servidor(id_servidor, empresa_id),
-	CONSTRAINT fk_servidor_componente_componente FOREIGN KEY (componente_id)
-		REFERENCES componente(id_componente)
+    atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT pk_servidor_componente
+        PRIMARY KEY (servidor_id, empresa_id, componente_id),
+
+    CONSTRAINT fk_servidor_componente_servidor
+        FOREIGN KEY (servidor_id, empresa_id)
+        REFERENCES servidor (id_servidor, empresa_id),
+
+    CONSTRAINT fk_servidor_componente_componente
+        FOREIGN KEY (componente_id)
+        REFERENCES componente (id_componente),
+
+    CONSTRAINT chk_servidor_componente_monitorado
+        CHECK (monitorado IN (0, 1)),
+
+    CONSTRAINT chk_servidor_componente_limites
+        CHECK (
+            limite_max >= 0
+            AND capacidade_total >= 0
+            AND (limite_min IS NULL OR limite_min >= 0)
+            AND (limite_min IS NULL OR limite_min <= limite_max)
+            AND limite_max <= capacidade_total
+        )
 );
 
  CREATE TABLE `log`(
@@ -184,11 +210,12 @@ END$$
 DELIMITER ;
 
 -- | Inserts-padrão | --
-INSERT INTO componente(nome, unidade_medida, depende_de)
-	VALUES ('cpu', 'pct', 'psutil.cpu_percent()'),
-    ('ram', 'MiB', 'psutil.virtual_memory()'),
+INSERT INTO componente (nome, unidade_medida, depende_de)
+VALUES
+    ('cpu', 'pct', 'psutil.cpu_percent(interval=1)'),
+    ('ram', 'GiB', 'psutil.virtual_memory()'),
     ('disco', 'GiB', 'psutil.disk_usage("/")'),
-    ('placa_rede', 'Mbps', 'psutil.net_if_stats()');
+    ('placa_rede', 'Mbps', 'psutil.net_io_counters()');
     
 CALL roadvizor.sp_cadastrar_empresa("0000000/200-1", "Roadvizor", "Roadvizor", "admin@adm.com", "Dado1807#", "b", "b", "b", "b");
 UPDATE roadvizor.usuario SET nivel_acesso = 0, email = "adm@adm.com", senha = SHA2("Dado1807#", 256) WHERE id_usuario = 1;
