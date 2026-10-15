@@ -37,3 +37,17 @@
     bg-disabled/20
     border-none
 }
+
+.itemNavDetalhes{
+    @apply
+    text-disabled 
+    hover:font-bold 
+    hover:text-foreground 
+    duration-100
+}
+
+.itemNavDetalhesSelected{
+    @apply
+    font-bold
+    text-foreground
+}

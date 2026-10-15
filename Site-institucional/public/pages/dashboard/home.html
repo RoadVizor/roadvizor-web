@@ -21,7 +21,7 @@
   <!-- Dashboard -->
   <div class="w-full min-h-dvh flex flex-col items-start justify-center text-foreground gap-10">
     
-    <div class="w-full flex flex-col items-start justify-center">Alertas
+    <div class="w-full flex flex-col items-start justify-center">
         <h1 id="empresaTitle" class="text-2xl font-bold">Recursos</h1>
 
         <div class="w-full flex items-center justify-center gap-10">
@@ -79,13 +79,13 @@
           <p>Modelo </p>
         </div>
         <div  id="listaServidores" class="w-full h-50 max-h-full overflow-y-auto flex flex-col gap-2">
-          <div class="itemServidores">
+          <div class="itemServidores" onclick="select(this, 'itemServidores', 'itemServidoresSelected')">
             <div>SRV-Anch</div>
             <div>112233445566</div>
             <div>PADR-SR1980</div>
           </div>
 
-          <div class="itemServidores itemServidoresSelected">
+          <div class="itemServidores itemServidoresSelected" onclick="select(this, 'itemServidores', 'itemServidoresSelected')">
             <div>SRV-Anch</div>
             <div>112233445566</div>
             <div>PADR-SR1980</div>
@@ -102,27 +102,27 @@
 
           <div class="w-full flex flex-col">
             <div class="w-full flex gap-2 border-b-1 border-b-disabled">
-              <p class="font-bold">Detalhes</p>
-              <p class="text-disabled hover:font-bold hover:text-foreground duration-100">Alertas</p>
+              <p class="itemNavDetalhes itemNavDetalhesSelected" onclick="select(this, 'itemNavDetalhes', 'itemNavDetalhesSelected')">Detalhes</p>
+              <p class="itemNavDetalhes" onclick="select(this, 'itemNavDetalhes', 'itemNavDetalhesSelected')">Alertas</p>
             </div>
             <div class="w-full grid grid-cols-3 divide-x-1 divide-disabled">
               <div class="col-span-2 grid grid-cols-3 grid-rows-2 gap-3 p-4 h-65">
-                <div class="itemComponente itemComponenteSelected">
+                <div class="itemComponente itemComponenteSelected" onclick="select(this, 'itemComponente', 'itemComponenteSelected')">
                   <p class="font-bold text-xl">RAM(%)</p>
                   <p>Uso geral</p>
                 </div>
 
-                <div class="itemComponente">
+                <div class="itemComponente" onclick="select(this, 'itemComponente', 'itemComponenteSelected')">
                   <p class="font-bold text-xl">CPU(%)</p>
                   <p>Uso geral</p>
                 </div>
 
-                <div class="itemComponente">
+                <div class="itemComponente" onclick="select(this, 'itemComponente', 'itemComponenteSelected')">
                   <p class="font-bold text-xl">I/O Rede(MPbs)</p>
                   <p></p>
                 </div>
 
-                <div class="itemComponente">
+                <div class="itemComponente" onclick="select(this, 'itemComponente', 'itemComponenteSelected')">
                   <p class="font-bold text-xl">Volume(%)</p>
                   <p>Uso geral</p>
                 </div>
@@ -135,6 +135,7 @@
   </div>
 
     <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/selectDiv.js"></script>
     <script src="../../js/utils/toast.js"></script>
     <script src="../../js/auth.js"></script>
     <script src="../../js/components/nivel_acesso.js"></script>
