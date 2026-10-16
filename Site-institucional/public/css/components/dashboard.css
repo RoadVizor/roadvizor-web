@@ -15,7 +15,7 @@
 .itemServidoresSelected{
     @apply
     border-1 
-    border-primary 
+    border-primary
     bg-secondary/10
 };
 
@@ -51,3 +51,24 @@
     font-bold
     text-foreground
 }
+
+.itemAlertas{
+    @apply
+    w-full 
+    h-10 
+    flex
+    gap-1
+    font-bold
+    items-center
+    gap-15 p-5
+    rounded-md
+    hover:bg-secondary/10 
+    duration-100
+};  
+
+.itemAlertasSelected{
+    @apply
+    border-1 
+    border-primary
+    bg-secondary/10
+};

@@ -40,7 +40,7 @@
             </div>
             <div class="w-full h-25 rounded-xl bg-surface flex items-center justify-between p-10">
               <h2 class="font-bold text-xl">Alertas Críticos</h2>
-              <p class="text-xl">0</p>
+              <p class="text-xl">1</p>
             </div>
           </div>
 
@@ -57,7 +57,7 @@
                 <p class="font-bold text-xl">Alerta</p>
               </div>
               <div class="w-full flex items-center justify-evenly">
-                <p class="font-bold text-2xl">0</p>
+                <p class="font-bold text-2xl">1</p>
                 <i class="ph-fill ph-circle text-[var(--destructive-text)] text-lg"></i>
                 <p class="font-bold text-xl">Crítico</p>
               </div>
@@ -79,17 +79,7 @@
           <p>Modelo </p>
         </div>
         <div  id="listaServidores" class="w-full h-50 max-h-full overflow-y-auto flex flex-col gap-2">
-          <div class="itemServidores" onclick="select(this, 'itemServidores', 'itemServidoresSelected')">
-            <div>SRV-Anch</div>
-            <div>112233445566</div>
-            <div>PADR-SR1980</div>
-          </div>
-
-          <div class="itemServidores itemServidoresSelected" onclick="select(this, 'itemServidores', 'itemServidoresSelected')">
-            <div>SRV-Anch</div>
-            <div>112233445566</div>
-            <div>PADR-SR1980</div>
-          </div>
+          
         </div>
       </div>
     </div>
@@ -97,38 +87,9 @@
     <div class="w-full flex flex-col items-start justify-center">
       <h1 class="font-bold text-2xl">Especificações</h1>
 
-      <div class="w-full flex flex-col bg-surface p-5 rounded-xl gap-5">
-          <p id="nomeServidor" class="font-bold text-xl">SRV-Anch</p>
-
-          <div class="w-full flex flex-col">
-            <div class="w-full flex gap-2 border-b-1 border-b-disabled">
-              <p class="itemNavDetalhes itemNavDetalhesSelected" onclick="select(this, 'itemNavDetalhes', 'itemNavDetalhesSelected')">Detalhes</p>
-              <p class="itemNavDetalhes" onclick="select(this, 'itemNavDetalhes', 'itemNavDetalhesSelected')">Alertas</p>
-            </div>
-            <div class="w-full grid grid-cols-3 divide-x-1 divide-disabled">
-              <div class="col-span-2 grid grid-cols-3 grid-rows-2 gap-3 p-4 h-65">
-                <div class="itemComponente itemComponenteSelected" onclick="select(this, 'itemComponente', 'itemComponenteSelected')">
-                  <p class="font-bold text-xl">RAM(%)</p>
-                  <p>Uso geral</p>
-                </div>
-
-                <div class="itemComponente" onclick="select(this, 'itemComponente', 'itemComponenteSelected')">
-                  <p class="font-bold text-xl">CPU(%)</p>
-                  <p>Uso geral</p>
-                </div>
-
-                <div class="itemComponente" onclick="select(this, 'itemComponente', 'itemComponenteSelected')">
-                  <p class="font-bold text-xl">I/O Rede(MPbs)</p>
-                  <p></p>
-                </div>
-
-                <div class="itemComponente" onclick="select(this, 'itemComponente', 'itemComponenteSelected')">
-                  <p class="font-bold text-xl">Volume(%)</p>
-                  <p>Uso geral</p>
-                </div>
-              </div>
-              <div class="col-span-1"></div>
-            </div>
+      <div class="w-full flex flex-col bg-surface p-5 rounded-xl gap-5 min-h-80" id="detalhes">
+          <div class="w-full h-full flex justify-center items-center">
+            <p class="font-bold text-xl">Selecione um Servidor para Ver detalhes!</p>
           </div>
       </div>
     </div>
@@ -138,19 +99,31 @@
     <script src="../../js/utils/selectDiv.js"></script>
     <script src="../../js/utils/toast.js"></script>
     <script src="../../js/auth.js"></script>
+    <script src="../../js/components/listaServidores.js"></script>
+    <script src="../../js/components/detalhes.js"></script>
     <script src="../../js/components/nivel_acesso.js"></script>
     <script src="../../js/components/sidebar.js"></script>
     <script>
-    document.addEventListener("DOMContentLoaded", (e) => {
-      autenticarPagina(1)
-      if (sessionStorage.showmsg == 2) {
-        toast({
-          title: "Usuário já autenticado!",
-          variant: "success",
-        });
-        storage.remove("showmsg")
+      let dados;
+
+      async function lerDados() {
+        let response = await fetch('../../js/dados.json');
+        dados = await response.json();
       }
-    });
+
+
+      document.addEventListener("DOMContentLoaded", (e) => {
+        autenticarPagina(1)
+        if (sessionStorage.showmsg == 2) {
+          toast({
+            title: "Usuário já autenticado!",
+            variant: "success",
+          });
+          storage.remove("showmsg")
+        }
+
+        listarServidores();
+      });
     </script>
   </body>
 </html>
