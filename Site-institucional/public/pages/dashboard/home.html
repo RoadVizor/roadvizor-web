@@ -19,31 +19,112 @@
    <div id="sidebar_container"></div>
 
   <!-- Dashboard -->
-  <div class="w-full min-h-dvh flex flex-col items-center justify-center text-warning-foreground">
-    <p>
-      <i class="ph ph-bulldozer text-9xl text-warning-foreground"></i> <i
-        class="ph ph-align-left text-7xl text-warning-foreground"></i>
-    </p>
-    <h1 class="text-4xl font-bold">RoadVizor | Home</h1>
-    <p>Em construção...</p>
+  <div class="w-full min-h-dvh flex flex-col items-start justify-center text-foreground gap-10">
+    
+    <div class="w-full flex flex-col items-start justify-center">
+        <h1 id="empresaTitle" class="text-2xl font-bold">Recursos</h1>
+
+        <div class="w-full flex items-center justify-center gap-10">
+          <div class="w-full grid grid-rows-2 grid-cols-2 gap-3">
+            <div class="w-full h-25 rounded-xl bg-surface flex items-center justify-between p-10">
+              <h2 class="font-bold text-xl">Servidores</h2>
+              <p class="text-xl">2</p>
+            </div>
+            <div class="w-full h-25 rounded-xl bg-surface flex items-center justify-between p-10">
+              <h2 class="font-bold text-xl">Usuários</h2>
+              <p class="text-xl">2</p>
+            </div>
+            <div class="w-full h-25 rounded-xl bg-surface flex items-center justify-between p-10">
+              <h2 class="font-bold text-xl">Alertas</h2>
+              <p class="text-xl">1</p>
+            </div>
+            <div class="w-full h-25 rounded-xl bg-surface flex items-center justify-between p-10">
+              <h2 class="font-bold text-xl">Alertas Críticos</h2>
+              <p class="text-xl">1</p>
+            </div>
+          </div>
+
+          <div class="w-100 h-full">
+            <div class="w-full h-full rounded-xl bg-surface flex flex-col items-center justify-center gap-8">
+              <div class="w-full flex items-center justify-evenly">
+                <p class="font-bold text-2xl">2</p>
+                <i class="ph-fill ph-circle text-[var(--success-text)] text-lg"></i>
+                <p class="font-bold text-xl">Normal</p>
+              </div>
+              <div class="w-full flex items-center justify-evenly">
+                <p class="font-bold text-2xl">1</p>
+                <i class="ph-fill ph-circle text-[var(--warning-text)] text-lg"></i>
+                <p class="font-bold text-xl">Alerta</p>
+              </div>
+              <div class="w-full flex items-center justify-evenly">
+                <p class="font-bold text-2xl">1</p>
+                <i class="ph-fill ph-circle text-[var(--destructive-text)] text-lg"></i>
+                <p class="font-bold text-xl">Crítico</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+    <div class="w-full flex flex-col items-start justify-center">
+      <h1 class="text-2xl font-bold">Servidores</h1>
+
+      <div class="w-full bg-surface rounded-xl p-2 gap-2">
+        <div class="w-full flex gap-1 p-2 font-bold items-center gap-10 text-disabled">
+          <p>Apelido</p>
+          <p>|</p>
+          <p>MAC</p>
+          <p>|</p>
+          <p>Modelo </p>
+        </div>
+        <div  id="listaServidores" class="w-full h-50 max-h-full overflow-y-auto flex flex-col gap-2">
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="w-full flex flex-col items-start justify-center">
+      <h1 class="font-bold text-2xl">Especificações</h1>
+
+      <div class="w-full flex flex-col bg-surface p-5 rounded-xl gap-5 min-h-80" id="detalhes">
+          <div class="w-full h-full flex justify-center items-center">
+            <p class="font-bold text-xl">Selecione um Servidor para Ver detalhes!</p>
+          </div>
+      </div>
+    </div>
   </div>
 
     <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/selectDiv.js"></script>
     <script src="../../js/utils/toast.js"></script>
     <script src="../../js/auth.js"></script>
+    <script src="/libs/chart.js/chart.umd.js"></script>
+    <script src="../../js/components/listaServidores.js"></script>
+    <script src="../../js/components/detalhes.js"></script>
     <script src="../../js/components/nivel_acesso.js"></script>
     <script src="../../js/components/sidebar.js"></script>
     <script>
-    document.addEventListener("DOMContentLoaded", (e) => {
-      autenticarPagina(1)
-      if (sessionStorage.showmsg == 2) {
-        toast({
-          title: "Usuário já autenticado!",
-          variant: "success",
-        });
-        storage.remove("showmsg")
+      let dados;
+
+      async function lerDados() {
+        let response = await fetch('../../js/dados.json');
+        dados = await response.json();
       }
-    });
+
+
+      document.addEventListener("DOMContentLoaded", (e) => {
+        autenticarPagina(1)
+        if (sessionStorage.showmsg == 2) {
+          toast({
+            title: "Usuário já autenticado!",
+            variant: "success",
+          });
+          storage.remove("showmsg")
+        }
+
+        listarServidores();
+      });
     </script>
   </body>
 </html>

@@ -23,6 +23,11 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 app.use(cookieParser());
 
+app.use(
+    '/libs/chart.js',
+    express.static('node_modules/chart.js/dist')
+);
+
 app.use("/", indexRouter);
 app.use("/api", router);
 app.use("/api/servidor", servidorRouter);
