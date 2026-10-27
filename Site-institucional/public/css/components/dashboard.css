@@ -1,74 +1,107 @@
-.itemServidores{
-    @apply
-    w-410 
-    h-10 
-    flex
-    gap-1
-    font-bold
-    items-center
-    gap-15 p-5
-    rounded-md
-    hover:bg-secondary/10 
-    duration-100
-};  
-
-.itemServidoresSelected{
-    @apply
-    border-1 
-    border-primary
-    bg-secondary/10
-};
-
-.itemComponente{
-    @apply
-    border-2 
-    border-disabled 
-    rounded-md 
-    flex 
-    flex-col 
-    items-center 
-    justify-center
-    hover:bg-disabled/20
-    duration-100
-};
-
-.itemComponenteSelected{
-    @apply
-    bg-disabled/20
-    border-none
+/* ===== Servidores ===== */
+.itemServidores {
+  @apply w-full h-10 grid grid-cols-[1.2fr_1.2fr_1fr] gap-4 items-center px-5 font-bold rounded-md border border-transparent hover:bg-secondary/10 duration-100;
+}
+.itemServidoresSelected {
+  @apply border-primary bg-secondary/10;
 }
 
-.itemNavDetalhes{
-    @apply
-    text-disabled 
-    hover:font-bold 
-    hover:text-foreground 
-    duration-100
+/* ===== Abas Detalhes / Alertas ===== */
+.itemNavDetalhes {
+  @apply text-disabled hover:font-bold hover:text-foreground duration-100;
+}
+.itemNavDetalhesSelected {
+  @apply font-bold text-foreground;
 }
 
-.itemNavDetalhesSelected{
-    @apply
-    font-bold
-    text-foreground
+/* ===== Componentes (CPU, RAM, Disco, Rede) ===== */
+.itemComponente {
+  @apply flex flex-col gap-3 p-4 rounded-xl border-2 border-disabled/30 bg-background/30 cursor-pointer hover:bg-disabled/10 hover:-translate-y-0.5 duration-150;
+  --cor: var(--success-text);
+}
+.itemComponente[data-nivel="alerta"]  { --cor: var(--warning-text); }
+.itemComponente[data-nivel="critico"] { --cor: var(--destructive-text); }
+
+.itemComponenteSelected {
+  @apply bg-disabled/15 border-primary;
 }
 
-.itemAlertas{
-    @apply
-    w-full 
-    h-13
-    flex
-    gap-1
-    font-bold
-    items-center
-    gap-15 p-5
-    rounded-md
-    hover:bg-secondary/10 
-    duration-1001
-};  
+.componenteTopo {
+  @apply flex items-center justify-between text-sm font-bold text-disabled;
+}
+.componenteIcone {
+  color: var(--cor);
+}
+.componenteValor {
+  @apply text-2xl font-bold text-foreground;
+}
+.componenteValor small {
+  @apply text-xs font-normal text-disabled ml-1;
+}
+.componenteBarra {
+  @apply w-full h-1.5 rounded-full bg-disabled/20 overflow-hidden;
+}
+.componenteBarra > div {
+  @apply h-full rounded-full duration-500;
+  background: var(--cor);
+}
 
-.itemAlertasSelected{
-    @apply
-    border-1 
-    border-primary
-    bg-secondary/10
-};
+/* ===== Alertas (acordeão) ===== */
+.listaAlertas {
+  @apply flex flex-col gap-2 w-full;
+}
+
+.itemAlertas {
+  @apply w-full rounded-xl border border-disabled/20 bg-background/30 overflow-hidden duration-150;
+  --cor: var(--warning-text);
+}
+.itemAlertas[data-nivel="critico"] { --cor: var(--destructive-text); }
+.itemAlertas:hover {
+  border-color: color-mix(in srgb, var(--cor) 45%, transparent);
+}
+.itemAlertas.itemAlertasSelected {
+  border-color: var(--cor);
+  background: color-mix(in srgb, var(--cor) 6%, transparent);
+}
+
+.alertaCabecalho {
+  @apply w-full flex items-center gap-3 px-4 py-3 text-left cursor-pointer;
+}
+.alertaIcone {
+  @apply size-9 shrink-0 rounded-lg flex items-center justify-center text-lg;
+  color: var(--cor);
+  background: color-mix(in srgb, var(--cor) 12%, transparent);
+}
+.alertaTitulo {
+  @apply font-bold text-sm sm:text-base truncate;
+}
+.alertaBadge {
+  @apply inline-block text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full;
+  color: var(--cor);
+  background: color-mix(in srgb, var(--cor) 12%, transparent);
+}
+.alertaSeta {
+  @apply text-disabled duration-200;
+}
+.itemAlertasSelected .alertaSeta {
+  @apply rotate-180;
+}
+
+/* descrição escondida: anima de 0fr para 1fr */
+.alertaCorpo {
+  @apply grid grid-rows-[0fr] duration-200;
+}
+.itemAlertasSelected .alertaCorpo {
+  @apply grid-rows-[1fr];
+}
+.alertaCorpo > div {
+  @apply overflow-hidden min-h-0;
+}
+.alertaDescricao {
+  @apply mx-4 mb-4 pt-3 border-t border-disabled/20 text-sm text-foreground/90;
+}
+
+/* ===== Sidebar ===== */
+#sidebar_container > * {
+  @apply h-full w-16 lg:w-52 overflow-hidden duration-150;
+}

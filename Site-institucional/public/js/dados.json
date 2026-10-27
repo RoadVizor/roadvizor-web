@@ -1,9 +1,9 @@
 [
     {
         "id":1,
-        "apelido":"SRV-ANCH-1",
-        "modelo":"PADR-SR1980",
-        "MAC_Adress":"112233344556",
+        "apelido":"Servidor FreeFlow Edge Km 15",
+        "modelo":"PADR-S501-I980",
+        "MAC_Adress":"6C946647CDD1",
         "componentes":[
             {
                 "id":1,
@@ -16,12 +16,6 @@
                 "nome":"RAM",
                 "metrica":"%",
                 "ultimasLeituras":[28, 30, 38, 42, 37, 26, 53, 56, 50, 59]
-            },
-            {
-                "id":3,
-                "nome":"Disco",
-                "metrica":"%",
-                "ultimasLeituras":[70, 71, 71, 71, 71, 72, 72, 72, 72, 72]
             },
             {
                 "id":4,
@@ -45,9 +39,9 @@
     },
     {
         "id":2,
-        "apelido":"SRV-ANCH-2",
+        "apelido":"Servidor FreeFlow Lunax Km 36",
         "modelo":"PADR-SR1980",
-        "MAC_Adress":"112223344556",
+        "MAC_Adress":"81237A8CB481",
         "componentes":[
             {
                 "id":1,

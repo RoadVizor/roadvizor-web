@@ -14,86 +14,117 @@
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
   </head>
-  <body class="flex flex-row space-x-4 lg:space-x-8">
-    <!-- Sidebar -->
-   <div id="sidebar_container"></div>
+ <body class="flex flex-row items-start gap-4 lg:gap-8">
+  <!-- Sidebar -->
+  <div id="sidebar_container" class="shrink-0 sticky top-0 h-dvh"></div>
 
   <!-- Dashboard -->
-  <div class="w-full min-h-dvh flex flex-col items-start justify-center text-foreground gap-10">
-    
-    <div class="w-full flex flex-col items-start justify-center">
-        <h1 id="empresaTitle" class="text-2xl font-bold">Recursos</h1>
+  <main class="flex-1 min-w-0 min-h-dvh flex flex-col items-start justify-start text-foreground gap-6 lg:gap-8 py-4 pr-4 lg:py-6 lg:pr-6">
 
-        <div class="w-full flex items-center justify-center gap-10">
-          <div class="w-full grid grid-rows-2 grid-cols-2 gap-3">
-            <div class="w-full h-25 rounded-xl bg-surface flex items-center justify-between p-10">
-              <h2 class="font-bold text-xl">Servidores</h2>
-              <p class="text-xl">2</p>
+    <!-- Recursos -->
+    <section class="w-full flex flex-col gap-3">
+      <h1 id="empresaTitle" class="text-lg sm:text-xl font-bold flex items-center gap-2">
+        <span class="w-1 h-5 rounded-full bg-accent"></span>Recursos
+      </h1>
+
+      <div class="w-full flex flex-col xl:flex-row items-stretch gap-3 lg:gap-4">
+        <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+          <div class="min-h-25 rounded-xl bg-surface border border-disabled/20 hover:border-accent/40 duration-150 flex items-center justify-between px-4 sm:px-6 py-4">
+            <div class="flex items-center gap-3">
+              <span class="size-10 rounded-lg bg-accent/10 text-accent flex items-center justify-center">
+                <i class="ph ph-hard-drives text-xl"></i>
+              </span>
+              <h2 class="font-bold text-base sm:text-lg">Servidores</h2>
             </div>
-            <div class="w-full h-25 rounded-xl bg-surface flex items-center justify-between p-10">
-              <h2 class="font-bold text-xl">Usuários</h2>
-              <p class="text-xl">2</p>
-            </div>
-            <div class="w-full h-25 rounded-xl bg-surface flex items-center justify-between p-10">
-              <h2 class="font-bold text-xl">Alertas</h2>
-              <p class="text-xl">1</p>
-            </div>
-            <div class="w-full h-25 rounded-xl bg-surface flex items-center justify-between p-10">
-              <h2 class="font-bold text-xl">Alertas Críticos</h2>
-              <p class="text-xl">1</p>
-            </div>
+            <p class="text-2xl sm:text-3xl font-bold">2</p>
           </div>
 
-          <div class="w-100 h-full">
-            <div class="w-full h-full rounded-xl bg-surface flex flex-col items-center justify-center gap-8">
-              <div class="w-full flex items-center justify-evenly">
-                <p class="font-bold text-2xl">2</p>
-                <i class="ph-fill ph-circle text-[var(--success-text)] text-lg"></i>
-                <p class="font-bold text-xl">Normal</p>
-              </div>
-              <div class="w-full flex items-center justify-evenly">
-                <p class="font-bold text-2xl">1</p>
-                <i class="ph-fill ph-circle text-[var(--warning-text)] text-lg"></i>
-                <p class="font-bold text-xl">Alerta</p>
-              </div>
-              <div class="w-full flex items-center justify-evenly">
-                <p class="font-bold text-2xl">1</p>
-                <i class="ph-fill ph-circle text-[var(--destructive-text)] text-lg"></i>
-                <p class="font-bold text-xl">Crítico</p>
-              </div>
+          <div class="min-h-25 rounded-xl bg-surface border border-disabled/20 hover:border-accent/40 duration-150 flex items-center justify-between px-4 sm:px-6 py-4">
+            <div class="flex items-center gap-3">
+              <span class="size-10 rounded-lg bg-accent/10 text-accent flex items-center justify-center">
+                <i class="ph ph-users text-xl"></i>
+              </span>
+              <h2 class="font-bold text-base sm:text-lg">Usuários</h2>
             </div>
+            <p class="text-2xl sm:text-3xl font-bold">2</p>
+          </div>
+
+          <div class="min-h-25 rounded-xl bg-surface border border-disabled/20 hover:border-[var(--warning-text)]/40 duration-150 flex items-center justify-between px-4 sm:px-6 py-4">
+            <div class="flex items-center gap-3">
+              <span class="size-10 rounded-lg bg-[var(--warning-text)]/10 text-[var(--warning-text)] flex items-center justify-center">
+                <i class="ph ph-bell text-xl"></i>
+              </span>
+              <h2 class="font-bold text-base sm:text-lg">Alertas</h2>
+            </div>
+            <p class="text-2xl sm:text-3xl font-bold">1</p>
+          </div>
+
+          <div class="min-h-25 rounded-xl bg-surface border border-disabled/20 hover:border-[var(--destructive-text)]/40 duration-150 flex items-center justify-between px-4 sm:px-6 py-4">
+            <div class="flex items-center gap-3">
+              <span class="size-10 rounded-lg bg-[var(--destructive-text)]/10 text-[var(--destructive-text)] flex items-center justify-center">
+                <i class="ph ph-warning-octagon text-xl"></i>
+              </span>
+              <h2 class="font-bold text-base sm:text-lg">Alertas Críticos</h2>
+            </div>
+            <p class="text-2xl sm:text-3xl font-bold">1</p>
           </div>
         </div>
 
-    </div>
-
-    <div class="w-full flex flex-col items-start justify-center">
-      <h1 class="text-2xl font-bold">Servidores</h1>
-
-      <div class="w-full bg-surface rounded-xl p-2 gap-2">
-        <div class="w-full flex gap-1 p-2 font-bold items-center gap-10 text-disabled">
-          <p>Apelido</p>
-          <p>|</p>
-          <p>MAC</p>
-          <p>|</p>
-          <p>Modelo </p>
-        </div>
-        <div  id="listaServidores" class="w-full h-50 max-h-full overflow-y-auto flex flex-col gap-2">
-          
+        <!-- Status -->
+        <div class="w-full xl:w-72 xl:shrink-0 rounded-xl bg-surface border border-disabled/20 flex flex-col justify-center divide-y divide-disabled/15">
+          <div class="flex items-center gap-4 px-6 py-3">
+            <p class="font-bold text-2xl w-8">2</p>
+            <span class="size-3 rounded-full bg-[var(--success-text)] shadow-[0_0_10px_var(--success-text)]"></span>
+            <p class="font-bold text-lg">Normal</p>
+          </div>
+          <div class="flex items-center gap-4 px-6 py-3">
+            <p class="font-bold text-2xl w-8">1</p>
+            <span class="size-3 rounded-full bg-[var(--warning-text)] shadow-[0_0_10px_var(--warning-text)]"></span>
+            <p class="font-bold text-lg">Alerta</p>
+          </div>
+          <div class="flex items-center gap-4 px-6 py-3">
+            <p class="font-bold text-2xl w-8">1</p>
+            <span class="size-3 rounded-full bg-[var(--destructive-text)] shadow-[0_0_10px_var(--destructive-text)]"></span>
+            <p class="font-bold text-lg">Crítico</p>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <div class="w-full flex flex-col items-start justify-center">
-      <h1 class="font-bold text-2xl">Especificações</h1>
+    <!-- Servidores -->
+    <section class="w-full flex flex-col gap-3">
+      <h1 class="text-lg sm:text-xl font-bold flex items-center gap-2">
+        <span class="w-1 h-5 rounded-full bg-accent"></span>Servidores
+      </h1>
 
-      <div class="w-full flex flex-col bg-surface p-5 rounded-xl gap-5 min-h-80" id="detalhes">
-          <div class="w-full h-full flex justify-center items-center">
-            <p class="font-bold text-xl">Selecione um Servidor para Ver detalhes!</p>
+      <div class="w-full bg-surface border border-disabled/20 rounded-xl p-2 overflow-x-auto">
+        <div class="min-w-[30rem]">
+          <div class="grid grid-cols-[1.2fr_1.2fr_1fr] gap-4 px-5 py-2 text-xs font-bold uppercase tracking-wider text-disabled">
+            <p>Apelido</p>
+            <p>MAC</p>
+            <p>Modelo</p>
           </div>
+          <div id="listaServidores" class="w-full h-50 overflow-y-auto flex flex-col gap-1"></div>
+        </div>
       </div>
-    </div>
-  </div>
+    </section>
+
+    <!-- Especificações -->
+    <section class="w-full flex flex-col gap-3">
+      <h1 class="text-lg sm:text-xl font-bold flex items-center gap-2">
+        <span class="w-1 h-5 rounded-full bg-accent"></span>Especificações
+      </h1>
+
+      <div id="detalhes" class="w-full flex flex-col bg-surface border border-disabled/20 p-4 sm:p-5 rounded-xl gap-5 min-h-80">
+        <div class="w-full h-full flex flex-col gap-2 justify-center items-center text-center text-disabled">
+          <i class="ph ph-cursor-click text-3xl"></i>
+          <p class="font-bold text-lg sm:text-xl">Selecione um Servidor para Ver detalhes!</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- scripts continuam iguais -->
 
     <script src="../../js/utils/storage.js"></script>
     <script src="../../js/utils/selectDiv.js"></script>
