@@ -52,6 +52,12 @@ let niveis = {
                 "title":"Home",
                 "url":"./home.html",
                 "icon":"ph ph-gauge text-2xl"
+            },
+            {
+                "id":"RoadVizor | FlowPredict",
+                "title":"FlowPredict",
+                "url":"./flowPredict.html",
+                "icon":"ph ph-arrow-elbow-right"
             }
         ],
     },
