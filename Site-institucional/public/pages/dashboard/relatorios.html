@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+    <title>RoadVizor | Relatórios</title>
+            
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="../../css/output.css" />
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/report.css">
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  </head>
+ <body class="flex flex-row items-start gap-4 lg:gap-8">
+  <!-- Sidebar -->
+  <div id="sidebar_container" class="shrink-0 sticky top-0 h-dvh"></div>
+
+  <!-- Dashboard -->
+  <main class="flex-1 min-w-0 min-h-dvh flex flex-col items-start justify-start text-foreground gap-6 lg:gap-8 py-4 pl-4 pr-4 lg:py-6 lg:pl-6 lg:pr-6">
+<div class="src-bar">
+  <div class="src-search">
+    <i class="ph ph-magnifying-glass"></i>
+    <input type="text" placeholder="Pesquisar por nome do servidor..." />
+  </div>
+
+  <span class="src-divider"></span>
+
+  <div class="src-filters">
+    <div class="src-select">
+      <i class="ph ph-cpu"></i>
+      <select id="filtro-componente">
+        <option value="">Todos os componentes</option>
+        <option value="cpu">CPU</option>
+        <option value="ram">RAM</option>
+        <option value="disco">Disco</option>
+        <option value="rede">Rede</option>
+      </select>
+    </div>
+
+    <div class="src-select">
+      <span class="src-dot"></span>
+      <select id="filtro-status">
+        <option value="">Todos os status</option>
+        <option value="normal">Normal</option>
+        <option value="atencao">Atenção</option>
+        <option value="critico">Crítico</option>
+        <option value="inativo">Inativo</option>
+      </select>
+    </div>
+
+    <div class="src-select">
+      <i class="ph ph-calendar-blank"></i>
+      <select id="filtro-periodo">
+        <option value="7">Últimos 7 dias</option>
+        <option value="15">Últimos 15 dias</option>
+        <option value="30">Últimos 30 dias</option>
+      </select>
+    </div>
+
+    <button type="button" class="src-reset" title="Limpar filtros" onclick="limparFiltros()">
+      <i class="ph ph-arrow-counter-clockwise"></i>
+    </button>
+  </div>
+</div>
+
+<div class="rel-panel">
+  <h2 class="rel-title">Relatórios de <span>SPTech Free Flow</span></h2>
+
+  <div class="rel-kpis">
+    <!-- Logs hoje -->
+    <div class="rel-card rel-logs">
+      <div class="rel-card-head">
+        <strong>Logs registrados hoje</strong>
+        <small>12/03/2023</small>
+      </div>
+      <span class="rel-big">4</span>
+    </div>
+
+    <!-- Status dos servidores -->
+ <div class="rel-card rel-status">
+  <strong>Status dos servidores</strong>
+  <div class="rel-status-body">
+    <div class="rel-donut">
+      <canvas id="chart-status"></canvas>
+      <span id="status-total">5</span>
+    </div>
+
+    <ul class="rel-legend">
+      <li><i class="dot normal"></i>Normal<b id="leg-normal">2</b></li>
+      <li><i class="dot atencao"></i>Atenção<b id="leg-atencao">1</b></li>
+      <li><i class="dot critico"></i>Crítico<b id="leg-critico">1</b></li>
+      <li><i class="dot inativo"></i>Inativo<b id="leg-inativo">1</b></li>
+    </ul>
+  </div>
+</div>
+
+    <!-- Maior uso -->
+    <div class="rel-card rel-uso">
+      <strong>Maior uso agora</strong>
+      <div class="rel-uso-top">
+        <span class="rel-percent">87%</span>
+        <div><b>CPU</b><small>SRV-BR33</small></div>
+      </div>
+      <div class="rel-bar"><div class="rel-bar-fill" style="width: 87%"></div><span class="rel-bar-limit" style="left: 80%"></span></div>
+      <small>limite 80%</small>
+    </div>
+
+    <!-- Logs por componente -->
+    <div class="rel-card rel-comp">
+      <strong>Logs por componente</strong>
+      <ul>
+        <li><span>CPU</span><div class="rel-bar thin"><div class="rel-bar-fill" style="width:100%"></div></div><b>9</b></li>
+        <li><span>RAM</span><div class="rel-bar thin"><div class="rel-bar-fill" style="width:45%"></div></div><b>4</b></li>
+        <li><span>Disco</span><div class="rel-bar thin"><div class="rel-bar-fill" style="width:22%"></div></div><b>2</b></li>
+        <li><span>Rede</span><div class="rel-bar thin"><div class="rel-bar-fill" style="width:0%"></div></div><b>0</b></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Cards de servidores -->
+  <div class="rel-carousel">
+    <div class="rel-track" id="rel-track">
+
+      <div class="srv-card critico destaque">
+        <header>
+          <i class="srv-line"></i><h3>SRV-BR10</h3>
+          <span class="badge">Crítico</span>
+        </header>
+        <p class="srv-comp">COMPONENTE: DISCO</p>
+        <p>6 dias p/ atingir o limite (80%).</p>
+        <p class="srv-rec">Recomenda-se aumento no tamanho do disco</p>
+        <button class="srv-btn primary"><i class="ph ph-books"></i> Abrir Relatório</button>
+  </div>
+
+      <div class="srv-card alerta">
+        <header>
+          <i class="srv-line"></i><h3>SRV-BR33</h3>
+          <span class="badge">Alerta</span>
+        </header>
+        <p class="srv-comp">COMPONENTE: CPU</p>
+        <p>18% do tempo em alerta, limite estipulado em 80% de uso.</p>
+        <p class="srv-rec">Recomenda-se avaliar mais processamento</p>
+        <button class="srv-btn"><i class="ph ph-books"></i> Abrir Relatório</button>
+      </div>
+
+      <div class="srv-card normal">
+        <header>
+          <i class="srv-line"></i><h3>SRV-BR1914</h3>
+          <span class="badge">Normal</span>
+        </header>
+        <p class="srv-comp">COMPONENTE: RAM</p>
+        <p>Folga de 25%, valores registrados em picos 55%, abaixo do limite estabelecido.</p>
+        <p class="srv-rec">Nenhuma ação necessária.</p>
+        <button class="srv-btn"><i class="ph ph-books"></i> Abrir Relatório</button>
+      </div>
+
+      <div class="srv-card normal">
+        <header>
+          <i class="srv-line"></i><h3>SRV-BR12</h3>
+          <span class="badge">Normal</span>
+        </header>
+        <p class="srv-comp">COMPONENTE: DISCO</p>
+        <p>Armazenamento em 55%, abaixo do limite estabelecido.</p>
+        <p class="srv-rec">Nenhuma ação necessária.</p>
+        <button class="srv-btn"><i class="ph ph-books"></i> Abrir Relatório</button>
+      </div>
+
+    </div>
+
+    <button class="rel-next" onclick="rolarCards(1)" aria-label="Próximo">
+      <i class="ph ph-caret-right"></i>
+    </button>
+  </div>
+</div>
+</main>
+  <!-- scripts continuam iguais -->
+
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/selectDiv.js"></script>
+    <script src="../../js/utils/toast.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="/libs/chart.js/chart.umd.js"></script>
+    <script src="../../js/components/listaServidores.js"></script>
+    <script src="../../js/components/detalhes.js"></script>
+    <script src="../../js/components/nivel_acesso.js"></script>
+    <script src="../../js/components/sidebar.js"></script>
+    <script>
+      let dados;
+
+      async function lerDados() {
+        let response = await fetch('../../js/dados.json');
+        dados = await response.json();
+      }
+
+
+      document.addEventListener("DOMContentLoaded", (e) => {
+        autenticarPagina(1)
+        if (sessionStorage.showmsg == 2) {
+          toast({
+            title: "Usuário já autenticado!",
+            variant: "success",
+          });
+          storage.remove("showmsg")
+        }
+
+        listarServidores();
+      });
+
+      function rolarCards(direcao) {
+          const track = document.getElementById("rel-track");
+          const card = track.querySelector(".srv-card");
+          track.scrollBy({ left: direcao * (card.offsetWidth + 16) });
+     }
+
+function criarDonutStatus(contagem) {
+  const total = Object.values(contagem).reduce((a, b) => a + b, 0);
+  document.getElementById("status-total").textContent = total;
+
+  new Chart(document.getElementById("chart-status"), {
+    type: "doughnut",
+    data: {
+      labels: ["Normal", "Atenção", "Crítico", "Inativo"],
+      datasets: [{
+        data: [contagem.normal, contagem.atencao, contagem.critico, contagem.inativo],
+        backgroundColor: ["#28c76f", "#e4af44", "#ff4d6d", "#6b7785"],
+        borderWidth: 3,
+        borderColor: "#0a192b", 
+        borderRadius: 4
+      }]
+    },
+    options: {
+      cutout: "60%",
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+//atribuir com o que vem no json da resposta
+criarDonutStatus({ normal: 2, atencao: 1, critico: 1, inativo: 1 });
+
+    </script>
+  </body>
+</html>
