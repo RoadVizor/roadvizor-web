@@ -439,8 +439,16 @@ select[data-has-errors="true"] {
   cursor: pointer;
   transition: filter 0.2s;
 }
-.srv-btn:hover { filter: brightness(1.25); }
-.srv-btn.primary { background: var(--accent); border-color: var(--accent); color: #04210f; }
+.srv-btn:hover { 
+filter: brightness(1.25); 
+background-color: #28c76f;
+  transition:
+  transform 0.25s ease,
+  border-color 0.25s ease,
+  box-shadow 0.25s ease;
+  color: #040d18;
+}
+
 
 .rel-next {
   position: absolute; right: -14px; top: 50%;
