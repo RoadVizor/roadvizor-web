@@ -32,10 +32,12 @@ async function entrar(event) {
       variant: "success",
     });
 
+    let page = niveis[data.usuario.nivel_acesso].dash[0].url;
+
     // redireciona usuário após 1s
     new Promise((resolve) => {
       setTimeout(() => {
-        window.location = "../pages/dashboard/home.html";
+        window.location = `../pages/dashboard/${page}`;
         resolve();
       }, 1000);
     });

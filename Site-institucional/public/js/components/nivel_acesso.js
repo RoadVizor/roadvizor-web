@@ -41,18 +41,19 @@ let niveis = {
                 "title":"Servidores",
                 "url":"./servidores.html",
                 "icon":"ph ph-hard-drives text-2xl"
-            }
+            },
         ],
     },
 
     2: {
         "dash": [
+
             {
-                "id":"RoadVizor | Home",
-                "title":"Home",
-                "url":"./home.html",
-                "icon":"ph ph-gauge text-2xl"
-            }
+                "id":"RoadVizor | Relatórios",
+                "title":"Relatórios",
+                "url":"./saude.html",
+                "icon":"ph ph-files text-2xl"
+            },
         ],
     },
 }

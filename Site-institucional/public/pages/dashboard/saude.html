@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+    <title>RoadVizor | Relatórios</title>
+            
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="../../css/output.css" />
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  </head>
+  <body class="flex flex-row space-x-4 lg:space-x-8">
+    <!-- Sidebar -->
+    <div id="sidebar_container"></div>
+
+    <!-- Dashboard -->
+     <main class="w-full min-h-dvh flex flex-col items-start justify-start text-foreground">
+
+        <!-- Topbar + Titulos -->
+
+        <section class="w-full h-fit p-8 flex items-center justify-between">
+          <div>
+            <h1 class="font-bold text-2xl">Mapa de <span class="text-accent">saúde</span> da infraestrutura</h1>
+            <p class="text-disabled text-xl">Visão geral da condição dos serviços e componentes monitorados</p>
+          </div>
+          
+          <div class="w-70 flex justify-between items-center">
+            <div class="w-45">
+              <select id="filtro">
+                <option value="dias">Últimos 7 dias</option>
+                <option value="mes">Último mês</option>
+                <option value="meses">Últimos 3 meses</option>
+              </select>
+            </div>
+
+            <div class="w-8 h-8 flex items-center justify-center bg-surface border-1 border-disabled rounded-lg cursor-pointer">
+              <i class="ph ph-repeat"></i>
+            </div>
+          </div>
+        </section>
+
+        <!-- KPI's -->
+
+        <section class="w-full h-40 flex gap-5">
+          <div class="flex-1 bg-surface rounded-lg flex"></div>
+          <div class="flex-1 bg-surface rounded-lg flex"></div>
+          <div class="flex-1 bg-surface rounded-lg flex"></div>
+          <div class="flex-1 bg-surface rounded-lg flex"></div>
+        </section>
+     </main>
+
+
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/toast.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="/libs/chart.js/chart.umd.js"></script>
+    <script src="../../js/components/nivel_acesso.js"></script>
+    <script src="../../js/components/sidebar.js"></script> 
+  </body>
+</html>
