@@ -467,3 +467,98 @@ background-color: #28c76f;
   .rel-kpis { grid-template-columns: 1fr 1fr; }
   .srv-card { flex-basis: 260px; }
 }
+
+/* o atributo hidden perde para display:grid, então força */
+.rel-detalhe[hidden] { display: none; }
+
+.rel-detalhe { animation: detalhe-in 0.35s ease; }
+@keyframes detalhe-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+#det-texto { display: flex; flex-direction: column; gap: 16px; }
+
+/* card selecionado */
+.srv-card.ativo {
+  border-color: var(--accent);
+}
+.srv-card.ativo::before { opacity: 1; }
+
+/* ---------- Relatório detalhado ---------- */
+.rel-detalhe[hidden] { display: none; }
+
+.rel-detalhe {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 32px;
+  width: 100%;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  scroll-margin-top: 24px;
+  animation: detalhe-in 0.35s ease;
+}
+
+@keyframes detalhe-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.rel-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+#det-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#det-texto p { font-size: 0.8rem; margin: 0; }
+
+.rel-pdf { width: 164px; margin-top: auto; }
+
+.rel-grafico {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  min-width: 0; /* deixa o canvas encolher dentro da grid */
+}
+
+.rel-grafico-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rel-grafico-head h3 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.rel-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  font-size: 0.65rem;
+  background: color-mix(in srgb, var(--primary) 20%, transparent);
+  border-radius: 999px;
+}
+
+.rel-grafico-canvas {
+  position: relative;
+  height: 260px;
+  margin-top: 12px;
+}
+
+@media (max-width: 1100px) {
+  .rel-detalhe { grid-template-columns: 1fr; }
+}

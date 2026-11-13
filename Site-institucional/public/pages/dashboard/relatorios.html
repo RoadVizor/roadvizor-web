@@ -5,9 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
-    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
     <title>RoadVizor | Relatórios</title>
-            
+
     <!-- CSS Styles -->
     <link rel="stylesheet" href="../../css/output.css" />
     <link rel="stylesheet" href="../../css/style.css">
@@ -16,170 +15,193 @@
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
   </head>
- <body class="flex flex-row items-start gap-4 lg:gap-8">
-  <!-- Sidebar -->
-  <div id="sidebar_container" class="shrink-0 sticky top-0 h-dvh"></div>
+  <body class="flex flex-row items-start gap-4 lg:gap-8">
+    <!-- Sidebar -->
+    <div id="sidebar_container" class="shrink-0 sticky top-0 h-dvh"></div>
 
-  <!-- Dashboard -->
-  <main class="flex-1 min-w-0 min-h-dvh flex flex-col items-start justify-start text-foreground gap-6 lg:gap-8 py-4 pl-4 pr-4 lg:py-6 lg:pl-6 lg:pr-6">
-<div class="src-bar">
-  <div class="src-search">
-    <i class="ph ph-magnifying-glass"></i>
-    <input type="text" placeholder="Pesquisar por nome do servidor..." />
-  </div>
+    <!-- Dashboard -->
+    <main class="flex-1 min-w-0 min-h-dvh flex flex-col items-start justify-start text-foreground gap-6 lg:gap-8 py-4 pl-4 pr-4 lg:py-6 lg:pl-6 lg:pr-6">
 
-  <span class="src-divider"></span>
+      <!-- Barra de filtros -->
+      <div class="src-bar">
+        <div class="src-search">
+          <i class="ph ph-magnifying-glass"></i>
+          <input type="text" placeholder="Pesquisar por nome do servidor..." />
+        </div>
 
-  <div class="src-filters">
-    <div class="src-select">
-      <i class="ph ph-cpu"></i>
-      <select id="filtro-componente">
-        <option value="">Todos os componentes</option>
-        <option value="cpu">CPU</option>
-        <option value="ram">RAM</option>
-        <option value="disco">Disco</option>
-        <option value="rede">Rede</option>
-      </select>
-    </div>
+        <span class="src-divider"></span>
 
-    <div class="src-select">
-      <span class="src-dot"></span>
-      <select id="filtro-status">
-        <option value="">Todos os status</option>
-        <option value="normal">Normal</option>
-        <option value="atencao">Atenção</option>
-        <option value="critico">Crítico</option>
-        <option value="inativo">Inativo</option>
-      </select>
-    </div>
+        <div class="src-filters">
+          <div class="src-select">
+            <i class="ph ph-cpu"></i>
+            <select id="filtro-componente">
+              <option value="">Todos os componentes</option>
+              <option value="cpu">CPU</option>
+              <option value="ram">RAM</option>
+              <option value="disco">Disco</option>
+              <option value="rede">Rede</option>
+            </select>
+          </div>
 
-    <div class="src-select">
-      <i class="ph ph-calendar-blank"></i>
-      <select id="filtro-periodo">
-        <option value="now">Hoje</option>
-        <option value="7">Últimos 7 dias</option>
-        <option value="15">Últimos 15 dias</option>
-      </select>
-    </div>
+          <div class="src-select">
+            <span class="src-dot"></span>
+            <select id="filtro-status">
+              <option value="">Todos os status</option>
+              <option value="normal">Normal</option>
+              <option value="atencao">Atenção</option>
+              <option value="critico">Crítico</option>
+              <option value="inativo">Inativo</option>
+            </select>
+          </div>
 
-    <button type="button" class="src-reset" title="Limpar filtros" onclick="limparFiltros()">
-      <i class="ph ph-arrow-counter-clockwise"></i>
-    </button>
-  </div>
-</div>
+          <div class="src-select">
+            <i class="ph ph-calendar-blank"></i>
+            <select id="filtro-periodo">
+              <option value="now">Hoje</option>
+              <option value="7">Últimos 7 dias</option>
+              <option value="15">Últimos 15 dias</option>
+            </select>
+          </div>
 
-<div class="rel-panel">
-  <h2 class="rel-title">Relatórios de <span>SPTech Free Flow</span></h2>
-
-  <div class="rel-kpis">
-    <!-- Logs hoje -->
-    <div class="rel-card rel-logs">
-      <div class="rel-card-head">
-        <strong>Logs registrados hoje</strong>
-        <small>12/03/2023</small>
-      </div>
-      <span class="rel-big">4</span>
-    </div>
-
-    <!-- Status dos servidores -->
- <div class="rel-card rel-status">
-  <strong>Status dos servidores</strong>
-  <div class="rel-status-body">
-    <div class="rel-donut">
-      <canvas id="chart-status"></canvas>
-      <span id="status-total">5</span>
-    </div>
-
-    <ul class="rel-legend">
-      <li><i class="dot normal"></i>Normal<b id="leg-normal">2</b></li>
-      <li><i class="dot atencao"></i>Atenção<b id="leg-atencao">1</b></li>
-      <li><i class="dot critico"></i>Crítico<b id="leg-critico">1</b></li>
-      <li><i class="dot inativo"></i>Inativo<b id="leg-inativo">1</b></li>
-    </ul>
-  </div>
-</div>
-
-    <!-- Maior uso -->
-    <div class="rel-card rel-uso">
-      <strong>Maior uso agora</strong>
-      <div class="rel-uso-top">
-        <span class="rel-percent">87%</span>
-        <div><b>CPU</b><small>SRV-BR33</small></div>
-      </div>
-      <div class="rel-bar"><div class="rel-bar-fill" style="width: 87%"></div><span class="rel-bar-limit" style="left: 80%"></span></div>
-      <small>limite 80%</small>
-    </div>
-
-    <!-- Logs por componente -->
-    <div class="rel-card rel-comp">
-      <strong>Logs por componente</strong>
-      <ul>
-        <li><span>CPU</span><div class="rel-bar thin"><div class="rel-bar-fill" style="width:100%"></div></div><b>9</b></li>
-        <li><span>RAM</span><div class="rel-bar thin"><div class="rel-bar-fill" style="width:45%"></div></div><b>4</b></li>
-        <li><span>Disco</span><div class="rel-bar thin"><div class="rel-bar-fill" style="width:22%"></div></div><b>2</b></li>
-        <li><span>Rede</span><div class="rel-bar thin"><div class="rel-bar-fill" style="width:0%"></div></div><b>0</b></li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Cards de servidores -->
-  <div class="rel-carousel">
-    <div class="rel-track" id="rel-track">
-
-      <div class="srv-card critico destaque">
-        <header>
-          <i class="srv-line"></i><h3>SRV-BR10</h3>
-          <span class="badge">Crítico</span>
-        </header>
-        <p class="srv-comp">COMPONENTE: DISCO</p>
-        <p>6 dias p/ atingir o limite (80%).</p>
-        <p class="srv-rec">Recomenda-se aumento no tamanho do disco</p>
-        <button class="srv-btn primary"><i class="ph ph-books"></i> Abrir Relatório</button>
-  </div>
-
-      <div class="srv-card alerta">
-        <header>
-          <i class="srv-line"></i><h3>SRV-BR33</h3>
-          <span class="badge">Alerta</span>
-        </header>
-        <p class="srv-comp">COMPONENTE: CPU</p>
-        <p>18% do tempo em alerta, limite estipulado em 80% de uso.</p>
-        <p class="srv-rec">Recomenda-se avaliar mais processamento</p>
-        <button class="srv-btn"><i class="ph ph-books"></i> Abrir Relatório</button>
+          <button type="button" class="src-reset" title="Limpar filtros" onclick="limparFiltros()">
+            <i class="ph ph-arrow-counter-clockwise"></i>
+          </button>
+        </div>
       </div>
 
-      <div class="srv-card normal">
-        <header>
-          <i class="srv-line"></i><h3>SRV-BR1914</h3>
-          <span class="badge">Normal</span>
-        </header>
-        <p class="srv-comp">COMPONENTE: RAM</p>
-        <p>Folga de 25%, valores registrados em picos 55%, abaixo do limite estabelecido.</p>
-        <p class="srv-rec">Nenhuma ação necessária.</p>
-        <button class="srv-btn"><i class="ph ph-books"></i> Abrir Relatório</button>
+      <!-- Painel de relatórios -->
+      <div class="rel-panel">
+        <h2 class="rel-title">Relatórios de <span>SPTech Free Flow</span></h2>
+
+        <div class="rel-kpis">
+          <!-- Logs hoje -->
+          <div class="rel-card rel-logs">
+            <div class="rel-card-head">
+              <strong>Logs registrados hoje</strong>
+              <small>12/03/2023</small>
+            </div>
+            <span class="rel-big">4</span>
+          </div>
+
+          <!-- Status dos servidores -->
+          <div class="rel-card rel-status">
+            <strong>Status dos servidores</strong>
+            <div class="rel-status-body">
+              <div class="rel-donut">
+                <canvas id="chart-status"></canvas>
+                <span id="status-total"></span>
+              </div>
+
+              <ul class="rel-legend">
+                <li><i class="dot normal"></i>Normal<b id="leg-normal">2</b></li>
+                <li><i class="dot atencao"></i>Atenção<b id="leg-atencao">1</b></li>
+                <li><i class="dot critico"></i>Crítico<b id="leg-critico">1</b></li>
+                <li><i class="dot inativo"></i>Inativo<b id="leg-inativo">1</b></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Maior uso -->
+          <div class="rel-card rel-uso">
+            <strong>Maior uso agora</strong>
+            <div class="rel-uso-top">
+              <span class="rel-percent">87%</span>
+              <div><b>CPU</b><small>SRV-BR33</small></div>
+            </div>
+            <div class="rel-bar"><div class="rel-bar-fill" style="width: 87%"></div><span class="rel-bar-limit" style="left: 80%"></span></div>
+            <small>limite 80%</small>
+          </div>
+
+          <!-- Logs por componente -->
+          <div class="rel-card rel-comp">
+            <strong>Logs por componente</strong>
+            <ul>
+              <li><span>CPU</span><div class="rel-bar thin"><div class="rel-bar-fill" style="width:100%"></div></div><b>9</b></li>
+              <li><span>RAM</span><div class="rel-bar thin"><div class="rel-bar-fill" style="width:45%"></div></div><b>4</b></li>
+              <li><span>Disco</span><div class="rel-bar thin"><div class="rel-bar-fill" style="width:22%"></div></div><b>2</b></li>
+              <li><span>Rede</span><div class="rel-bar thin"><div class="rel-bar-fill" style="width:0%"></div></div><b>0</b></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Cards de servidores -->
+        <div class="rel-carousel">
+          <div class="rel-track" id="rel-track">
+
+            <div class="srv-card critico" data-id="SRV-BR10">
+              <header>
+                <i class="srv-line"></i><h3>SRV-BR10</h3>
+                <span class="badge">Crítico</span>
+              </header>
+              <p class="srv-comp">COMPONENTE: DISCO</p>
+              <p>6 dias p/ atingir o limite (80%).</p>
+              <p class="srv-rec">Recomenda-se aumento no tamanho do disco</p>
+              <button class="srv-btn primary" data-abrir><i class="ph ph-books"></i> Abrir Relatório</button>
+            </div>
+
+            <div class="srv-card alerta" data-id="SRV-BR33">
+              <header>
+                <i class="srv-line"></i><h3>SRV-BR33</h3>
+                <span class="badge">Alerta</span>
+              </header>
+              <p class="srv-comp">COMPONENTE: CPU</p>
+              <p>18% do tempo em alerta, limite estipulado em 80% de uso.</p>
+              <p class="srv-rec">Recomenda-se avaliar mais processamento</p>
+              <button class="srv-btn" data-abrir><i class="ph ph-books"></i> Abrir Relatório</button>
+            </div>
+
+            <div class="srv-card normal" data-id="SRV-BR1914">
+              <header>
+                <i class="srv-line"></i><h3>SRV-BR1914</h3>
+                <span class="badge">Normal</span>
+              </header>
+              <p class="srv-comp">COMPONENTE: RAM</p>
+              <p>Folga de 25%, valores registrados em picos 55%, abaixo do limite estabelecido.</p>
+              <p class="srv-rec">Nenhuma ação necessária.</p>
+              <button class="srv-btn" data-abrir><i class="ph ph-books"></i> Abrir Relatório</button>
+            </div>
+
+            <div class="srv-card normal" data-id="SRV-BR12">
+              <header>
+                <i class="srv-line"></i><h3>SRV-BR12</h3>
+                <span class="badge">Normal</span>
+              </header>
+              <p class="srv-comp">COMPONENTE: DISCO</p>
+              <p>Armazenamento em 55%, abaixo do limite estabelecido.</p>
+              <p class="srv-rec">Nenhuma ação necessária.</p>
+              <button class="srv-btn" data-abrir><i class="ph ph-books"></i> Abrir Relatório</button>
+            </div>
+
+          </div>
+
+          <button class="rel-next" onclick="rolarCards(1)" aria-label="Próximo">
+            <i class="ph ph-caret-right"></i>
+          </button>
+        </div>
       </div>
 
-      <div class="srv-card normal">
-        <header>
-          <i class="srv-line"></i><h3>SRV-BR12</h3>
-          <span class="badge">Normal</span>
-        </header>
-        <p class="srv-comp">COMPONENTE: DISCO</p>
-        <p>Armazenamento em 55%, abaixo do limite estabelecido.</p>
-        <p class="srv-rec">Nenhuma ação necessária.</p>
-        <button class="srv-btn"><i class="ph ph-books"></i> Abrir Relatório</button>
-      </div>
+      <!-- Relatório detalhado (fora do .rel-panel) -->
+      <section class="rel-detalhe" id="rel-detalhe" hidden>
+        <div class="rel-texto">
+          <h2 class="rel-title"><i class="ph ph-books"></i> RELATÓRIO - <span id="det-servidor"></span></h2>
+          <div id="det-texto"></div>
+          <button class="srv-btn primary rel-pdf"><span>Exportar PDF</span> <i class="ph ph-file-pdf"></i></button>
+        </div>
 
-    </div>
+        <div class="rel-grafico">
+          <div class="rel-grafico-head">
+            <h3 id="det-grafico-titulo"></h3>
+            <span class="rel-chip"><i class="dot normal"></i> Uso atual</span>
+          </div>
+          <div class="rel-grafico-canvas">
+            <canvas id="chart-detalhe"></canvas>
+          </div>
+        </div>
+      </section>
 
-    <button class="rel-next" onclick="rolarCards(1)" aria-label="Próximo">
-      <i class="ph ph-caret-right"></i>
-    </button>
-  </div>
-</div>
-</main>
-  <!-- scripts continuam iguais -->
+    </main>
 
+    <!-- Scripts -->
     <script src="../../js/utils/storage.js"></script>
     <script src="../../js/utils/selectDiv.js"></script>
     <script src="../../js/utils/toast.js"></script>
@@ -197,7 +219,6 @@
         dados = await response.json();
       }
 
-
       document.addEventListener("DOMContentLoaded", (e) => {
         autenticarPagina(1)
         if (sessionStorage.showmsg == 2) {
@@ -212,36 +233,191 @@
       });
 
       function rolarCards(direcao) {
-          const track = document.getElementById("rel-track");
-          const card = track.querySelector(".srv-card");
-          track.scrollBy({ left: direcao * (card.offsetWidth + 16) });
-     }
+        const track = document.getElementById("rel-track");
+        const card = track.querySelector(".srv-card");
+        track.scrollBy({ left: direcao * (card.offsetWidth + 16) });
+      }
 
-function criarDonutStatus(contagem) {
-  const total = Object.values(contagem).reduce((a, b) => a + b, 0);
-  document.getElementById("status-total").textContent = total;
+      function limparFiltros() {
+        document.querySelector(".src-search input").value = "";
+        document.getElementById("filtro-componente").value = "";
+        document.getElementById("filtro-status").value = "";
+        document.getElementById("filtro-periodo").value = "now";
+      }
 
-  new Chart(document.getElementById("chart-status"), {
-    type: "doughnut",
-    data: {
-      labels: ["Normal", "Atenção", "Crítico", "Inativo"],
-      datasets: [{
-        data: [contagem.normal, contagem.atencao, contagem.critico, contagem.inativo],
-        backgroundColor: ["#28c76f", "#e4af44", "#ff4d6d", "#6b7785"],
-        borderWidth: 3,
-        borderColor: "#0a192b", 
-        borderRadius: 4
-      }]
-    },
-    options: {
-      cutout: "60%",
-      plugins: { legend: { display: false } }
-    }
-  });
-}
+      /* ---------- Donut de status ---------- */
+      function criarDonutStatus(contagem) {
+        const total = Object.values(contagem).reduce((a, b) => a + b, 0);
+        document.getElementById("status-total").textContent = total;
 
-//atribuir com o que vem no json da resposta
-criarDonutStatus({ normal: 2, atencao: 1, critico: 1, inativo: 1 });
+        for (const chave of ["normal", "atencao", "critico", "inativo"]) {
+          document.getElementById("leg-" + chave).textContent = contagem[chave];
+        }
+
+        new Chart(document.getElementById("chart-status"), {
+          type: "doughnut",
+          data: {
+            labels: ["Normal", "Atenção", "Crítico", "Inativo"],
+            datasets: [{
+              data: [contagem.normal, contagem.atencao, contagem.critico, contagem.inativo],
+              backgroundColor: ["#28c76f", "#e4af44", "#ff4d6d", "#6b7785"],
+              borderWidth: 3,
+              borderColor: "#0a192b",
+              borderRadius: 4
+            }]
+          },
+          options: {
+            cutout: "60%",
+            plugins: { legend: { display: false } }
+          }
+        });
+      }
+
+      // atribuir com o que vem no json da resposta
+      criarDonutStatus({ normal: 2, atencao: 1, critico: 1, inativo: 1 });
+
+      /* ---------- Relatórios por servidor ---------- */
+      // Troque por dados do dados.json quando for ligar ao back
+      const relatorios = {
+        "SRV-BR10": {
+          componente: "Disco",
+          texto: [
+            "O disco deve atingir o limite de 80% em cerca de 6 dias (12/11), mantido o ritmo de crescimento dos últimos 7 dias.",
+            "Ao cruzar o limite, o servidor passa a operar sem margem de espaço, e o risco de falha na gravaçãorelatorios de dados do pórtico aumenta. Um servidor parado significa passagens sem registro e perda de arrecadação, além de impacto nos SLAs da concessão."
+          ],
+          labels: ["06/11", "07/11", "08/11", "09/11", "10/11", "11/11"],
+          uso: [25, 37, 45, 55, 69],
+          projecao: 95,
+          limite: 80
+        },
+        "SRV-BR33": {
+          componente: "CPU",
+          texto: [
+            "A CPU ficou acima do limite de 80% em 18% do tempo nos últimos 7 dias, com picos concentrados no horário de maior fluxo no pórtico.",
+            "Recomenda-se avaliar mais capacidade de processamento antes que os picos passem a causar lentidão no registro das passagens."
+          ],
+          labels: ["06/11", "07/11", "08/11", "09/11", "10/11", "11/11"],
+          uso: [52, 61, 70, 66, 78, 87],
+          projecao: null,
+          limite: 80
+        },
+        "SRV-BR1914": {
+          componente: "RAM",
+          texto: [
+            "A memória RAM tem folga de 25%, com picos de 55% de uso, sempre abaixo do limite estabelecido.",
+            "Nenhuma ação necessária no momento."
+          ],
+          labels: ["06/11", "07/11", "08/11", "09/11", "10/11", "11/11"],
+          uso: [40, 44, 52, 48, 55, 50],
+          projecao: null,
+          limite: 80
+        },
+        "SRV-BR12": {
+          componente: "Disco",
+          texto: [
+            "O armazenamento está em 55%, abaixo do limite estabelecido, com crescimento estável.",
+            "Nenhuma ação necessária no momento."
+          ],
+          labels: ["06/11", "07/11", "08/11", "09/11", "10/11", "11/11"],
+          uso: [48, 49, 51, 52, 54, 55],
+          projecao: null,
+          limite: 80
+        }
+      };
+
+      let chartDetalhe = null;
+
+      function criarGraficoDetalhe(rel) {
+        const canvas = document.getElementById("chart-detalhe");
+        const ctx = canvas.getContext("2d");
+
+        if (chartDetalhe) chartDetalhe.destroy();
+
+        const grad = ctx.createLinearGradient(0, 0, 0, 260);
+        grad.addColorStop(0, "rgba(40,199,111,0.35)");
+        grad.addColorStop(1, "rgba(40,199,111,0)");
+
+        const temProjecao = rel.projecao != null;
+        const pontos = temProjecao ? [...rel.uso, rel.projecao] : [...rel.uso];
+        const idxProj = temProjecao ? pontos.length - 1 : 0;
+
+        chartDetalhe = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: rel.labels,
+            datasets: [
+              {
+                label: "Uso atual",
+                data: pontos,
+                borderColor: "#28c76f",
+                backgroundColor: grad,
+                fill: true,
+                tension: 0.35,
+                borderWidth: 2,
+                pointRadius: pontos.map((i) => (i === idxProj ? 0 : 4)),
+                pointBackgroundColor: "#28c76f",
+                segment: {
+                  borderDash: (c) => (c.p1DataIndex === idxProj ? [6, 6] : undefined)
+                }
+              },
+              {
+                label: `Limite ${rel.limite}%`,
+                data: rel.labels.map(() => rel.limite),
+                borderColor: "#ff6b81",
+                borderDash: [6, 6],
+                borderWidth: 1.5,
+                pointRadius: 0,
+                fill: false
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: { label: (c) => ` ${c.parsed.y}%` } }
+            },
+            scales: {
+              x: { grid: { color: "rgba(14,90,167,0.2)" }, ticks: { color: "#9dafbe", font: { size: 10 } } },
+              y: {
+                min: 0, max: 100,
+                grid: { color: "rgba(14,90,167,0.2)" },
+                ticks: { color: "#9dafbe", font: { size: 10 }, stepSize: 20, callback: (v) => v + "%" }
+              }
+            }
+          }
+        });
+      }
+
+      function abrirRelatorio(id) {
+        const rel = relatorios[id];
+        if (!rel) return;
+
+        // textos
+        document.getElementById("det-servidor").textContent = id;
+        document.getElementById("det-grafico-titulo").textContent = `Uso de ${rel.componente}`;
+        document.getElementById("det-texto").innerHTML = rel.texto.map((t) => `<p>${t}</p>`).join("");
+
+        // card selecionado
+        document.querySelectorAll(".srv-card").forEach((c) =>
+          c.classList.toggle("ativo", c.dataset.id === id)
+        );
+
+        // mostra a seção e desenha o gráfico (depois de visível, para o canvas ter tamanho)
+        const secao = document.getElementById("rel-detalhe");
+        secao.hidden = false;
+        criarGraficoDetalhe(rel);
+
+        secao.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      // um listener só para todos os botões
+      document.getElementById("rel-track").addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-abrir]");
+        if (!btn) return;
+        abrirRelatorio(btn.closest(".srv-card").dataset.id);
+      });
 
     </script>
   </body>
