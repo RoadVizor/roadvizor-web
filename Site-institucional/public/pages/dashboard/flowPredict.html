@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
-    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
     <title>RoadVizor | FlowPredict</title>
 
     <!-- CSS Styles -->
@@ -17,76 +16,122 @@
 
     <!-- ChartJS para o gráfico -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!--
+        Estilos dos elementos novos desta página. Ficam em CSS puro (e não em classes
+        Tailwind) para funcionar mesmo sem recompilar o output.css.
+    -->
+    <style>
+        .btn-comp {
+            padding: .4rem .5rem;
+            border-radius: .5rem;
+            font-size: .8rem;
+            cursor: pointer;
+            border: 1px solid rgba(148, 163, 184, .25);
+            color: #94a3b8;
+            transition: .15s;
+        }
+
+        .btn-comp:hover {
+            border-color: rgba(74, 222, 128, .4);
+        }
+
+        .btn-comp.comp-ativo {
+            border-color: rgba(16, 185, 129, .6);
+            color: #34d399;
+            background: rgba(16, 185, 129, .1);
+        }
+
+        .rank-item {
+            border: 1px solid rgba(148, 163, 184, .2);
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .rank-item:hover {
+            border-color: rgba(74, 222, 128, .4);
+        }
+
+        .rank-item.rank-ativo {
+            border-color: rgba(16, 185, 129, .6);
+        }
+
+        .badge {
+            flex-shrink: 0;
+            font-size: .75rem;
+            font-weight: 500;
+            padding: .25rem .625rem;
+            border-radius: 9999px;
+            border: 1px solid;
+        }
+
+        .badge-critico {
+            border-color: rgba(239, 68, 68, .5);
+            color: #f87171;
+            background: rgba(239, 68, 68, .1);
+        }
+
+        .badge-alto {
+            border-color: rgba(245, 158, 11, .5);
+            color: #fbbf24;
+            background: rgba(245, 158, 11, .1);
+        }
+
+        .badge-medio {
+            border-color: rgba(234, 179, 8, .5);
+            color: #facc15;
+            background: rgba(234, 179, 8, .1);
+        }
+
+        .badge-baixo {
+            border-color: rgba(16, 185, 129, .5);
+            color: #34d399;
+            background: rgba(16, 185, 129, .1);
+        }
+
+        /* Aviso de erro/carregamento no topo da página */
+        .aviso-pagina {
+            margin-top: .75rem;
+            padding: .75rem 1rem;
+            border-radius: .5rem;
+            font-size: .875rem;
+            border: 1px solid rgba(245, 158, 11, .5);
+            color: #fbbf24;
+            background: rgba(245, 158, 11, .1);
+        }
+
+        /* Mensagem exibida sobre o gráfico quando não há previsão para mostrar */
+        .aviso-grafico {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1rem;
+            font-size: .875rem;
+            color: #94a3b8;
+        }
+
+        .aviso-grafico[hidden],
+        .aviso-pagina[hidden] {
+            display: none;
+        }
+
+        /* Linha de métricas do modelo abaixo do gráfico */
+        .detalhe-modelo {
+            margin-top: .75rem;
+            font-size: .75rem;
+            color: #cbd5e1;
+        }
+
+        .nota-modelo {
+            margin-top: .25rem;
+            font-size: .7rem;
+            color: #64748b;
+        }
+    </style>
 </head>
-
-<style>
-    .btn-comp {
-        padding: .4rem .5rem;
-        border-radius: .5rem;
-        font-size: .8rem;
-        cursor: pointer;
-        border: 1px solid rgba(148, 163, 184, .25);
-        color: #94a3b8;
-        transition: .15s;
-    }
-
-    .btn-comp:hover {
-        border-color: rgba(74, 222, 128, .4);
-    }
-
-    .btn-comp.comp-ativo {
-        border-color: rgba(16, 185, 129, .6);
-        color: #34d399;
-        background: rgba(16, 185, 129, .1);
-    }
-
-    .rank-item {
-        border: 1px solid rgba(148, 163, 184, .2);
-        cursor: pointer;
-        transition: .15s;
-    }
-
-    .rank-item:hover {
-        border-color: rgba(74, 222, 128, .4);
-    }
-
-    .rank-item.rank-ativo {
-        border-color: rgba(16, 185, 129, .6);
-    }
-
-    .badge {
-        flex-shrink: 0;
-        font-size: .75rem;
-        font-weight: 500;
-        padding: .25rem .625rem;
-        border-radius: 9999px;
-        border: 1px solid;
-    }
-
-    .badge-critico {
-        border-color: rgba(239, 68, 68, .5);
-        color: #f87171;
-        background: rgba(239, 68, 68, .1);
-    }
-
-    .badge-alto {
-        border-color: rgba(245, 158, 11, .5);
-        color: #fbbf24;
-        background: rgba(245, 158, 11, .1);
-    }
-
-    .badge-medio {
-        border-color: rgba(234, 179, 8, .5);
-        color: #facc15;
-        background: rgba(234, 179, 8, .1);
-    }
-
-    .badge-baixo {
-        border-color: rgba(16, 185, 129, .5);
-        color: #34d399;
-        background: rgba(16, 185, 129, .1);
-    }
-</style>
 
 <body class="flex flex-row items-start min-h-dvh">
 
@@ -97,40 +142,42 @@
     <main class="flex-1 min-w-0 p-6 pt-16 md:pt-6 lg:p-8">
         <!-- Titulo -->
         <div class="w-full h-auto p-2 rounded-lg shadow-md">
-            <h2 class="text-2xl font-bold text-shadow-white">FlowPredict Preditivo de Capacidade</h1>
-                <p>Quais servidores vão estourar o limite, em qual componente e em quanto tempo.</p>
+            <h2 class="text-2xl font-bold text-shadow-white">FlowPredict Preditivo de Capacidade</h2>
+            <p>Quais servidores vão estourar o limite, em qual componente e em quanto tempo.</p>
+            <p class="text-xs text-disabled mt-1">Última análise: <span id="atualizado_em">—</span></p>
+            <!-- Mensagens de erro de carregamento (preenchida pelo JS) -->
+            <div id="aviso_pagina" class="aviso-pagina" role="alert" hidden></div>
         </div>
 
-        <!-- KPIS -->
+        <!-- KPIS: todos preenchidos pelo JS a partir de resumo{} do JSON -->
         <div class="w-full h-auto rounded-lg shadow-md flex flex-wrap md:flex-row gap-8 justify-center items-center">
             <div
                 class="rounded-xl bg-surface border border-disabled/20 hover:border-accent/40 duration-150 flex flex-col justify-between gap-2 px-4 sm:px-6 py-4 w-65 h-37 shadow-md">
                 <h1 class="text-sm text-shadow-disabled">Servidores em risco</h1>
-                <h1 id="kpi_em_risco" class="text-3xl font-bold text-white">3 de 12</h1>
-                <p class="text-xs text-shadow-disabled"><span id="quantidade_criticos">2</span> críticos · <span
-                        id="quantidade_alto">1</span> alto</p>
+                <h1 id="kpi_em_risco" class="text-3xl font-bold text-white">—</h1>
+                <p class="text-xs text-shadow-disabled"><span id="quantidade_criticos">0</span> críticos · <span
+                        id="quantidade_alto">0</span> alto</p>
             </div>
             <div
                 class="rounded-xl bg-surface border border-disabled/20 hover:border-accent/40 duration-150 flex flex-col justify-between gap-2 px-4 sm:px-6 py-4 w-65 h-37 shadow-md">
                 <h1 class="text-sm text-shadow-disabled">Menor tempo até estourar</h1>
-                <h1 id="kpi_menor_tempo" class="text-3xl font-bold text-white">~3h15</h1>
-                <p class="text-xs text-shadow-disabled"><span id="nome_servidor">Edge Km 32</span> · <span
-                        id="nome_componente">CPU</span> alto</p>
+                <h1 id="kpi_menor_tempo" class="text-3xl font-bold text-white">—</h1>
+                <!-- Texto completo definido pelo JS (antes terminava com "alto" fixo) -->
+                <p id="detalhe_menor_tempo" class="text-xs text-shadow-disabled">—</p>
             </div>
             <div
                 class="rounded-xl bg-surface border border-disabled/20 hover:border-accent/40 duration-150 flex flex-col justify-between gap-2 px-4 sm:px-6 py-4 w-65 h-37 shadow-md">
                 <h1 class="text-sm text-shadow-disabled">Anomalias detectadas hoje</h1>
                 <div class="w-full items-center h-auto">
-                    <h1 id="kpi_anomalias" class="text-3xl font-bold text-white">5</h1>
+                    <h1 id="kpi_anomalias" class="text-3xl font-bold text-white">—</h1>
                 </div>
-                <p class="text-xs text-shadow-disabled">fora do padrão histórico</p>
+                <p id="detalhe_anomalias" class="text-xs text-shadow-disabled">indisponível nesta versão</p>
             </div>
             <div
                 class="rounded-xl bg-surface border border-disabled/20 hover:border-accent/40 duration-150 flex flex-col justify-between gap-2 px-4 sm:px-6 py-4 w-65 h-37 shadow-md">
-                <h1 class="text-sm text-shadow-disabled">Confiança do modelo</h1>
-                <h1 id="kpi_confianca" class="text-3xl font-bold text-white">87%</h1>
-                <p class="text-xs text-shadow-disabled">últimas <span id="tempo_utilizado_prever">72</span>h de
-                    previsões</p>
+                <h1 class="text-sm text-shadow-disabled">Qualidade do ajuste</h1>
+                <h1 id="kpi_confianca" class="text-3xl font-bold text-white">—</h1>
+                <p id="detalhe_confianca" class="text-xs text-shadow-disabled">—</p>
             </div>
         </div>
 
@@ -141,29 +188,27 @@
             <!-- Lado Esquerdo: Gráfico -->
             <div
                 class="rounded-xl bg-surface border border-disabled/25 hover:border-accent/40 duration-150 shadow-md p-4 sm:p-5 flex-1 min-w-0 flex flex-col">
-                <h2 class="text-sm text-disabled font-medium break-words"> <span id="componente_gráfico">CPU</span>
-                    · <span id="nome_servidor_grafico">Edge Km 32</span> — real vs previsto</h2>
-                <p class="text-xs text-disabled mb-4">A área verde é a faixa de confiança da previsão.</p>
+                <h2 class="text-sm text-disabled font-medium break-words"> <span id="componente_grafico">—</span>
+                    · <span id="nome_servidor_grafico">—</span> — real vs previsto</h2>
+                <p class="text-xs text-disabled mb-4">A área verde é a faixa de previsão de 95%.</p>
 
                 <div class="flex flex-col lg:flex-row gap-4 flex-1 min-h-0">
                     <div class="relative w-full min-w-0 h-64 sm:h-72 lg:h-auto lg:min-h-72 lg:flex-1">
                         <canvas id="graficoRegressao"></canvas>
+                        <div id="aviso_grafico" class="aviso-grafico" hidden></div>
                     </div>
 
-                    <!-- Caixa: escolher o componente analisado -->
+                    <!-- Caixa: escolher o componente analisado (botões criados pelo JS) -->
                     <div class="shrink-0 lg:w-28">
                         <p class="text-xs text-disabled font-medium mb-2">Componente</p>
-                        <div id="seletor_componente" class="grid grid-cols-4 lg:grid-cols-1 gap-2">
-                            <button class="btn-comp comp-ativo" data-comp="CPU"
-                                onclick="selecionarComponente('CPU')">CPU</button>
-                            <button class="btn-comp" data-comp="RAM" onclick="selecionarComponente('RAM')">RAM</button>
-                            <button class="btn-comp" data-comp="Disco"
-                                onclick="selecionarComponente('Disco')">Disco</button>
-                            <button class="btn-comp" data-comp="Rede"
-                                onclick="selecionarComponente('Rede')">Rede</button>
-                        </div>
+                        <div id="seletor_componente" class="grid grid-cols-4 lg:grid-cols-1 gap-2"></div>
                     </div>
                 </div>
+
+                <!-- Métricas do modelo da análise selecionada (calculadas pela Gold) -->
+                <p id="detalhe_modelo" class="detalhe-modelo"></p>
+                <p class="nota-modelo">O R² mede o ajuste da reta ao histórico; não garante que a previsão se confirme.
+                </p>
             </div>
 
             <!-- Lado Direito: Ranking de Risco -->
@@ -181,7 +226,7 @@
 
         </div>
 
-        <!-- Resumo gerado por IA  -->
+        <!-- Resumo gerado por IA (fora do escopo desta etapa; mantido como estava) -->
         <div class="w-full max-w-full p-2 sm:p-4">
             <div
                 class="rounded-xl bg-linear-to-br from-[#0D1F19] from-0% to-[#0D1626] to-60% border border-emerald-500/30 hover:border-emerald-500/50 duration-150 shadow-md p-4 sm:p-6 flex flex-col gap-6">
@@ -226,343 +271,572 @@
     </main>
 
 
-    <!-- scripts continuam iguais -->
+    <!-- scripts fixos -->
 
     <script src="../../js/utils/storage.js"></script>
     <script src="../../js/utils/selectDiv.js"></script>
     <script src="../../js/utils/toast.js"></script>
     <script src="../../js/auth.js"></script>
     <script src="/libs/chart.js/chart.umd.js"></script>
-    <script src="../../js/components/listaServidores.js"></script>
     <script src="../../js/components/detalhes.js"></script>
     <script src="../../js/components/nivel_acesso.js"></script>
     <script src="../../js/components/sidebar.js"></script>
     <script>
-        let dados;
+    // Dados utilizados pela sidebar
+    let dados;
 
-        async function lerDados() {
-            let response = await fetch('../../js/dados.json');
-            dados = await response.json();
+    async function lerDados() {
+        const resposta = await fetch('../../js/dados.json');
+        dados = await resposta.json();
+    }
+
+    // Configurações
+    const API_FLOWPREDICT = '/api/flowpredict';
+    const URL_DADOS_EXEMPLO = '../../js/dashboard_exemplo.json';
+    const usarExemplo = location.search.includes('mock');
+
+    const labels = ['-12h', '-9h', '-6h', '-3h', 'agora', '+3h', '+6h', '+9h', '+12h'];
+    const POSICAO_AGORA = 4;
+    const PASSO_GRAFICO_H = 3;
+
+    const NIVEIS = {
+        critico: { texto: 'Crítico', classe: 'badge-critico' },
+        alto: { texto: 'Alto', classe: 'badge-alto' },
+        medio: { texto: 'Médio', classe: 'badge-medio' },
+        baixo: { texto: 'Baixo', classe: 'badge-baixo' }
+    };
+
+    const TEXTO_TENDENCIA = {
+        CRESCENTE: 'crescente',
+        DECRESCENTE: 'decrescente',
+        SEM_TENDENCIA: 'sem tendência definida'
+    };
+
+    // Estado atual da página
+    let dashboard = null;
+    let servidorSelecionado = null;
+    let componenteSelecionado = null;
+    let estouroHoras = null;
+    let limiteAtual = 80;
+
+    // Elemento HTML onde o gráfico será desenhado
+    const ctx = document.getElementById('graficoRegressao').getContext('2d');
+
+    // Busca os dados no Node.js ou utiliza o JSON de demonstração
+    async function carregarDashboard() {
+        const url = usarExemplo ? URL_DADOS_EXEMPLO : API_FLOWPREDICT;
+
+        const resposta = await fetch(url);
+
+        if (!resposta.ok) {
+            throw new Error('HTTP ' + resposta.status);
         }
 
+        return await resposta.json();
+    }
 
-        document.addEventListener("DOMContentLoaded", (e) => {
-            autenticarPagina(1)
-            if (sessionStorage.showmsg == 2) {
-                toast({
-                    title: "Usuário já autenticado!",
-                    variant: "success",
-                });
-                storage.remove("showmsg")
+    // Funções auxiliares
+    function definirTexto(id, texto) {
+        document.getElementById(id).textContent = texto;
+    }
+
+    function buscarServidor(id) {
+        for (let i = 0; i < dashboard.servidores.length; i++) {
+            if (dashboard.servidores[i].id === id) {
+                return dashboard.servidores[i];
             }
-
-            listarServidores();
-        });
-
-        const ctx = document.getElementById('graficoRegressao').getContext('2d');
-
-        const labels = ['-12h', '-9h', '-6h', '-3h', 'agora', '+3h', '+6h', '+9h', '+12h'];
-
-        let dashboard = { resumo: {}, ranking: [], servidores: [] };
-        let selecionado = { servidorId: null, componente: 'CPU' };
-        let estouroHoras = null;
-        let limiteAtual = 80;
-
-        // mock, só enquanto a API não fica pronta
-        const margem = [0, 2, 3.5, 5, 6];
-
-        const comp = (real, previsto, estouro_horas) => ({
-            limite: 80,
-            real,
-            previsto,
-            banda_superior: previsto.map((v, i) => Math.min(v + margem[i], 100)),
-            banda_inferior: previsto.map((v, i) => v - margem[i]),
-            estouro_horas
-        });
-
-        const DASHBOARD_MOCK = {
-            resumo: {
-                total_servidores: 12,
-                em_risco: 3,
-                criticos: 2,
-                altos: 1,
-                menor_estouro: { servidor: 'Edge Km 32', componente: 'CPU', horas: 3.25 },
-                anomalias_hoje: 5,
-                confianca_modelo: 87,
-                janela_horas: 72
-            },
-            ranking: [
-                { servidor_id: 1, componente: 'CPU', estouro_horas: 0, nivel: 'critico' },
-                { servidor_id: 2, componente: 'CPU', estouro_horas: 3.25, nivel: 'critico' },
-                { servidor_id: 3, componente: 'Disco', estouro_horas: 9, nivel: 'alto' },
-                { servidor_id: 4, componente: 'RAM', estouro_horas: 22, nivel: 'medio' },
-                { servidor_id: 5, componente: 'Rede', estouro_horas: null, nivel: 'baixo' }
-            ],
-            servidores: [
-                {
-                    id: 1, nome: 'Edge Km 15', componentes: {
-                        CPU: comp([70, 74, 78, 83, 86], [86, 88, 90, 91, 92], 0),
-                        RAM: comp([50, 52, 53, 55, 56], [56, 57, 58, 59, 60], null),
-                        Disco: comp([40, 41, 41, 42, 42], [42, 43, 43, 44, 44], null),
-                        Rede: comp([20, 25, 22, 24, 23], [23, 24, 24, 25, 25], null)
-                    }
-                },
-                {
-                    id: 2, nome: 'Edge Km 32', componentes: {
-                        CPU: comp([48, 52, 51, 59, 72], [72, 79.5, 85, 89, 92], 3.25),
-                        RAM: comp([40, 42, 47, 50, 55], [55, 60, 64, 67, 70], null),
-                        Disco: comp([60, 61, 63, 64, 66], [66, 67, 68, 69, 70], null),
-                        Rede: comp([30, 45, 38, 42, 35], [35, 37, 38, 40, 41], null)
-                    }
-                },
-                {
-                    id: 3, nome: 'Edge Km 48', componentes: {
-                        CPU: comp([30, 32, 31, 33, 32], [32, 33, 33, 34, 34], null),
-                        RAM: comp([45, 46, 47, 47, 48], [48, 49, 49, 50, 50], null),
-                        Disco: comp([64, 67, 70, 72, 75], [75, 77, 78.5, 80, 81.5], 9),
-                        Rede: comp([15, 18, 16, 17, 16], [16, 17, 17, 18, 18], null)
-                    }
-                },
-                {
-                    id: 4, nome: 'Edge Km 07', componentes: {
-                        CPU: comp([35, 36, 38, 37, 39], [39, 40, 41, 42, 43], null),
-                        RAM: comp([50, 52, 54, 56, 58], [58, 61, 64, 67, 70], 22),
-                        Disco: comp([30, 30, 31, 31, 32], [32, 32, 33, 33, 34], null),
-                        Rede: comp([25, 28, 26, 27, 26], [26, 27, 27, 28, 28], null)
-                    }
-                },
-                {
-                    id: 5, nome: 'Edge Km 21', componentes: {
-                        CPU: comp([28, 30, 29, 31, 30], [30, 31, 31, 32, 32], null),
-                        RAM: comp([38, 39, 40, 40, 41], [41, 42, 42, 43, 43], null),
-                        Disco: comp([20, 20, 21, 21, 22], [22, 22, 23, 23, 23], null),
-                        Rede: comp([30, 35, 32, 36, 34], [34, 36, 37, 38, 39], null)
-                    }
-                }
-            ]
-        };
-
-        async function carregarDashboard() {
-            // const resposta = await fetch('/api/flowpredict');
-            // return await resposta.json();
-            return DASHBOARD_MOCK;
         }
 
-        const NIVEIS = {
-            critico: { texto: 'Crítico', classe: 'badge-critico' },
-            alto: { texto: 'Alto', classe: 'badge-alto' },
-            medio: { texto: 'Médio', classe: 'badge-medio' },
-            baixo: { texto: 'Baixo', classe: 'badge-baixo' }
-        };
+        return null;
+    }
 
-        function formatarHoras(h) {
-            const total = Math.round(h * 4) / 4;
-            const hh = Math.floor(total);
-            const mm = Math.round((total - hh) * 60);
-            return mm ? `${hh}h${String(mm).padStart(2, '0')}` : `${hh}h`;
+    function formatarHoras(horas) {
+        const totalMinutos = Math.round(horas * 60);
+        const h = Math.floor(totalMinutos / 60);
+        let m = totalMinutos % 60;
+
+        if (m === 0) {
+            return h + 'h';
         }
 
-        function descreverEstouro(h) {
-            if (h === 0) return 'já acima do limite';
-            if (h !== null) return `estouro em ~${formatarHoras(h)}`;
+        if (m < 10) {
+            m = '0' + m;
+        }
+
+        return h + 'h' + m;
+    }
+
+    function formatarNumero(valor, casas) {
+        return valor.toFixed(casas).replace('.', ',');
+    }
+
+    function formatarDataHora(texto) {
+        return new Date(texto).toLocaleString('pt-BR');
+    }
+
+    function descreverEstouro(horas) {
+        if (horas === null) {
             return 'sem estouro previsto';
         }
 
-        function preencherKpis() {
-            const r = dashboard.resumo;
-            document.getElementById('kpi_em_risco').textContent = `${r.em_risco} de ${r.total_servidores}`;
-            document.getElementById('quantidade_criticos').textContent = r.criticos;
-            document.getElementById('quantidade_alto').textContent = r.altos;
-            document.getElementById('kpi_menor_tempo').textContent = '~' + formatarHoras(r.menor_estouro.horas);
-            document.getElementById('nome_servidor').textContent = r.menor_estouro.servidor;
-            document.getElementById('nome_componente').textContent = r.menor_estouro.componente;
-            document.getElementById('kpi_anomalias').textContent = r.anomalias_hoje;
-            document.getElementById('kpi_confianca').textContent = r.confianca_modelo + '%';
-            document.getElementById('tempo_utilizado_prever').textContent = r.janela_horas;
+        if (horas === 0) {
+            return 'já acima do limite';
         }
 
-        function renderizarRanking() {
-            const lista = document.getElementById('lista_ranking');
+        return 'estouro em ~' + formatarHoras(horas);
+    }
 
-            if (!dashboard.ranking.length) {
-                lista.innerHTML = '<p class="text-xs text-disabled">Nenhum servidor encontrado.</p>';
-                return;
+    function mostrarAviso(mensagem) {
+        const aviso = document.getElementById('aviso_pagina');
+        aviso.textContent = mensagem;
+        aviso.hidden = false;
+    }
+
+    function esconderAviso() {
+        document.getElementById('aviso_pagina').hidden = true;
+    }
+
+    // Indicadores do dashboard
+    function preencherKpis() {
+        const resumo = dashboard.resumo;
+
+        definirTexto('atualizado_em', formatarDataHora(dashboard.gerado_em));
+
+        definirTexto('kpi_em_risco', resumo.em_risco + ' de ' + resumo.total_servidores);
+        definirTexto('quantidade_criticos', resumo.criticos);
+        definirTexto('quantidade_alto', resumo.altos);
+
+        if (resumo.menor_estouro === null) {
+            definirTexto('kpi_menor_tempo', '—');
+            definirTexto('detalhe_menor_tempo', 'nenhum estouro previsto');
+        } else {
+            definirTexto('kpi_menor_tempo', '~' + formatarHoras(resumo.menor_estouro.horas));
+            definirTexto(
+                'detalhe_menor_tempo',
+                resumo.menor_estouro.servidor + ' · ' + resumo.menor_estouro.componente
+            );
+        }
+
+        if (resumo.anomalias_hoje === null) {
+            definirTexto('kpi_anomalias', '—');
+            definirTexto('detalhe_anomalias', 'indisponível nesta versão');
+        } else {
+            definirTexto('kpi_anomalias', resumo.anomalias_hoje);
+            definirTexto('detalhe_anomalias', 'fora do padrão histórico');
+        }
+
+        if (resumo.confianca_modelo === null) {
+            definirTexto('kpi_confianca', '—');
+            definirTexto('detalhe_confianca', 'nenhuma tendência identificada');
+        } else {
+            definirTexto('kpi_confianca', resumo.confianca_modelo + '%');
+            definirTexto(
+                'detalhe_confianca',
+                'média do R² · histórico de até ' + resumo.janela_horas + 'h'
+            );
+        }
+    }
+
+    // Ranking de risco
+    function renderizarRanking() {
+        const lista = document.getElementById('lista_ranking');
+        let html = '';
+
+        if (dashboard.ranking.length === 0) {
+            lista.innerHTML = '<p class="text-xs text-disabled">Nenhum servidor com dados suficientes.</p>';
+            return;
+        }
+
+        for (let i = 0; i < dashboard.ranking.length; i++) {
+            const item = dashboard.ranking[i];
+            const servidor = buscarServidor(item.servidor_id);
+            const nivel = NIVEIS[item.nivel];
+
+            let classeAtivo = '';
+
+            if (item.servidor_id === servidorSelecionado) {
+                classeAtivo = 'rank-ativo';
             }
 
-            lista.innerHTML = dashboard.ranking.map((item, i) => {
-                const servidor = dashboard.servidores.find((s) => s.id === item.servidor_id);
-                const nivel = NIVEIS[item.nivel];
-                const ativo = item.servidor_id === selecionado.servidorId ? 'rank-ativo' : '';
-
-                return `
-        <div class="rank-item ${ativo} flex items-center justify-between gap-2 p-3 rounded-lg bg-surface/50"
-             onclick="selecionarServidor(${item.servidor_id}, '${item.componente}')">
-            <div class="min-w-0">
-                <span class="text-white font-bold text-sm">${i + 1}</span>
-                <span class="text-white text-sm ml-2">${servidor.nome} · ${item.componente}</span>
-                <p class="text-xs text-disabled mt-0.5 ml-5">${descreverEstouro(item.estouro_horas)}</p>
-            </div>
-            <span class="badge ${nivel.classe}">${nivel.texto}</span>
-        </div>`;
-            }).join('');
+            html += `
+                <div class="rank-item ${classeAtivo} flex items-center justify-between gap-2 p-3 rounded-lg bg-surface/50"
+                     onclick="selecionarServidor(${item.servidor_id}, '${item.componente}')">
+                    <div class="min-w-0">
+                        <span class="text-white font-bold text-sm">${i + 1}</span>
+                        <span class="text-white text-sm ml-2">${servidor.nome} · ${item.componente}</span>
+                        <p class="text-xs text-disabled mt-0.5 ml-5">
+                            ${descreverEstouro(item.estouro_horas)}
+                        </p>
+                    </div>
+                    <span class="badge ${nivel.classe}">${nivel.texto}</span>
+                </div>`;
         }
 
-        const comecandoEmAgora = (valores) => [null, null, null, null, ...valores];
+        if (dashboard.resumo.servidores_sem_dados > 0) {
+            html += `
+                <p class="text-xs text-disabled">
+                    ${dashboard.resumo.servidores_sem_dados}
+                    servidor(es) sem dados suficientes para previsão.
+                </p>`;
+        }
 
-        function montarDatasets(c) {
-            limiteAtual = c.limite;
-            estouroHoras = (c.estouro_horas !== null && c.estouro_horas <= 12) ? c.estouro_horas : null;
+        lista.innerHTML = html;
+    }
 
-            return [{
+    // Seleção de componentes
+    function renderizarSeletorComponentes(servidor) {
+        let html = '';
+
+        for (let nome in servidor.componentes) {
+            let classe = 'btn-comp';
+
+            if (nome === componenteSelecionado) {
+                classe = 'btn-comp comp-ativo';
+            }
+
+            html += `
+                <button class="${classe}" onclick="selecionarComponente('${nome}')">
+                    ${nome}
+                </button>`;
+        }
+
+        document.getElementById('seletor_componente').innerHTML = html;
+    }
+
+    // Gráfico de previsão
+    function deslocarParaAgora(valores) {
+        const resultado = [null, null, null, null];
+
+        for (let i = 0; i < valores.length; i++) {
+            resultado.push(valores[i]);
+        }
+
+        return resultado;
+    }
+
+    function montarDatasets(analise) {
+        const linhaLimite = [];
+
+        for (let i = 0; i < labels.length; i++) {
+            linhaLimite.push(analise.limite);
+        }
+
+        return [
+            {
                 label: 'Real',
-                data: c.real,
-                borderColor: '#60a5fa', // Azul
+                data: analise.real,
+                borderColor: '#60a5fa',
                 tension: 0.3,
                 borderWidth: 2,
                 pointRadius: 0
-            }, {
+            },
+            {
                 label: 'Previsto',
-                data: comecandoEmAgora(c.previsto),
-                borderColor: '#4ade80', // Verde
+                data: deslocarParaAgora(analise.previsto),
+                borderColor: '#4ade80',
                 borderDash: [5, 5],
                 tension: 0.3,
                 borderWidth: 2,
                 pointRadius: 0
-            }, {
+            },
+            {
                 label: 'Limite configurado',
-                data: Array(labels.length).fill(c.limite),
-                borderColor: '#f87171', // Vermelho
+                data: linhaLimite,
+                borderColor: '#f87171',
                 borderDash: [4, 4],
                 borderWidth: 1.5,
                 pointRadius: 0
-            }, {
-                label: '_banda_sup',
-                data: comecandoEmAgora(c.banda_superior),
+            },
+            {
+                label: '_banda_superior',
+                data: deslocarParaAgora(analise.banda_superior),
                 borderWidth: 0,
                 pointRadius: 0,
                 tension: 0.3,
                 backgroundColor: 'rgba(74, 222, 128, 0.15)',
                 fill: '+1'
-            }, {
-                label: '_banda_inf',
-                data: comecandoEmAgora(c.banda_inferior),
+            },
+            {
+                label: '_banda_inferior',
+                data: deslocarParaAgora(analise.banda_inferior),
                 borderWidth: 0,
                 pointRadius: 0,
                 tension: 0.3,
                 fill: false
-            }];
-        }
-
-        // linha do "agora" e ponto do estouro
-        const pluginMarcadores = {
-            id: 'marcadores',
-            afterDatasetsDraw(chart) {
-                const { ctx, chartArea, scales: { x, y } } = chart;
-
-                const xAgora = x.getPixelForValue(4);
-                ctx.save();
-                ctx.strokeStyle = '#475569';
-                ctx.setLineDash([3, 3]);
-                ctx.beginPath();
-                ctx.moveTo(xAgora, chartArea.top);
-                ctx.lineTo(xAgora, chartArea.bottom);
-                ctx.stroke();
-                ctx.restore();
-
-                if (estouroHoras === null) return;
-
-                const px = x.getPixelForValue(4 + estouroHoras / 3);
-                const py = y.getPixelForValue(limiteAtual);
-                ctx.save();
-                ctx.fillStyle = '#f87171';
-                ctx.beginPath();
-                ctx.arc(px, py, 4, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.font = '11px sans-serif';
-                ctx.textAlign = 'center';
-                const texto = estouroHoras === 0 ? 'já acima do limite' : `estouro em ~${formatarHoras(estouroHoras)}`;
-                ctx.fillText(texto, Math.min(px, chartArea.right - 45), py + 18);
-                ctx.restore();
             }
-        };
+        ];
+    }
 
-        const grafico = new Chart(ctx, {
-            type: 'line',
-            data: { labels: labels, datasets: [] },
-            plugins: [pluginMarcadores],
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: '#94a3b8',
-                            usePointStyle: true,
-                            pointStyle: 'line',
-                            boxWidth: 24,
-                            filter: (item) => !item.text.startsWith('_')
-                        }
-                    },
-                    tooltip: {
-                        filter: (item) => !item.dataset.label.startsWith('_')
-                    }
-                },
-                scales: {
-                    x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
-                    y: {
-                        min: 0,
-                        max: 100,
-                        grid: { color: '#1e293b' },
-                        ticks: { color: '#94a3b8', stepSize: 25, callback: (v) => v + '%' }
-                    }
-                }
-            }
-        });
+    // Marca o momento atual e o possível estouro do limite
+    const pluginMarcadores = {
+        id: 'marcadores',
 
-        function atualizarGrafico() {
-            const servidor = dashboard.servidores.find((s) => s.id === selecionado.servidorId);
-            const c = servidor.componentes[selecionado.componente];
+        afterDatasetsDraw: function (chart) {
+            const pincel = chart.ctx;
+            const area = chart.chartArea;
+            const eixoX = chart.scales.x;
+            const eixoY = chart.scales.y;
 
-            document.getElementById('nome_servidor_grafico').textContent = servidor.nome;
-            document.getElementById('componente_gráfico').textContent = selecionado.componente;
+            const xAgora = eixoX.getPixelForValue(POSICAO_AGORA);
 
-            document.querySelectorAll('#seletor_componente button').forEach((b) => {
-                b.classList.toggle('comp-ativo', b.dataset.comp === selecionado.componente);
-            });
+            pincel.save();
+            pincel.strokeStyle = '#475569';
+            pincel.setLineDash([3, 3]);
+            pincel.beginPath();
+            pincel.moveTo(xAgora, area.top);
+            pincel.lineTo(xAgora, area.bottom);
+            pincel.stroke();
+            pincel.restore();
 
-            grafico.data.datasets = montarDatasets(c);
-            grafico.update();
-            renderizarRanking();
-        }
-
-        function selecionarServidor(id, componente) {
-            selecionado = { servidorId: id, componente: componente };
-            atualizarGrafico();
-        }
-
-        function selecionarComponente(nome) {
-            selecionado.componente = nome;
-            atualizarGrafico();
-        }
-
-        async function iniciar() {
-            dashboard = await carregarDashboard();
-
-            if (!dashboard.ranking.length) {
-                renderizarRanking();
+            if (estouroHoras === null) {
                 return;
             }
 
-            const primeiro = dashboard.ranking[0];
-            selecionado = { servidorId: primeiro.servidor_id, componente: primeiro.componente };
-            atualizarGrafico();
-            preencherKpis();
+            const px = eixoX.getPixelForValue(
+                POSICAO_AGORA + estouroHoras / PASSO_GRAFICO_H
+            );
+
+            const py = eixoY.getPixelForValue(limiteAtual);
+
+            pincel.save();
+            pincel.fillStyle = '#f87171';
+            pincel.beginPath();
+            pincel.arc(px, py, 4, 0, Math.PI * 2);
+            pincel.fill();
+
+            pincel.font = '11px sans-serif';
+            pincel.textAlign = 'center';
+
+            let texto = 'estouro em ~' + formatarHoras(estouroHoras);
+
+            if (estouroHoras === 0) {
+                texto = 'já acima do limite';
+            }
+
+            let xTexto = px;
+
+            if (xTexto > area.right - 45) {
+                xTexto = area.right - 45;
+            }
+
+            pincel.fillText(texto, xTexto, py + 18);
+            pincel.restore();
+        }
+    };
+
+    const grafico = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: []
+        },
+        plugins: [pluginMarcadores],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#94a3b8',
+                        usePointStyle: true,
+                        pointStyle: 'line',
+                        boxWidth: 24,
+                        filter: function (item) {
+                            return !item.text.startsWith('_');
+                        }
+                    }
+                },
+                tooltip: {
+                    filter: function (item) {
+                        return !item.dataset.label.startsWith('_');
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: '#1e293b' },
+                    ticks: { color: '#94a3b8' }
+                },
+                y: {
+                    min: 0,
+                    max: 100,
+                    grid: { color: '#1e293b' },
+                    ticks: {
+                        color: '#94a3b8',
+                        stepSize: 25,
+                        callback: function (valor) {
+                            return valor + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Informações complementares do gráfico
+    function definirAvisoGrafico(mensagem) {
+        const aviso = document.getElementById('aviso_grafico');
+        aviso.textContent = mensagem;
+        aviso.hidden = mensagem === '';
+    }
+
+    function descreverModelo(analise) {
+        const modelo = analise.modelo;
+
+        let texto = 'Tendência: ' + TEXTO_TENDENCIA[analise.tendencia];
+
+        if (analise.tendencia !== 'SEM_TENDENCIA') {
+            let sinal = '';
+
+            if (modelo.inclinacao_pct_por_hora > 0) {
+                sinal = '+';
+            }
+
+            texto += ' (' + sinal +
+                formatarNumero(modelo.inclinacao_pct_por_hora, 2) + ' p.p./h)';
         }
 
-        iniciar();
-    </script>
+        texto += ' · R²: ' + formatarNumero(modelo.r2, 2);
+        texto += ' · Erro típico: ±' + formatarNumero(modelo.erro_residual_pct, 1) + ' p.p.';
+        texto += ' · Histórico: ' + Math.round(modelo.horas_historico) + 'h';
+
+        return texto;
+    }
+
+    function atualizarGrafico() {
+        const servidor = buscarServidor(servidorSelecionado);
+
+        if (servidor === null) {
+            limparGrafico('Nenhuma análise disponível.');
+            return;
+        }
+
+        const analise = servidor.componentes[componenteSelecionado];
+
+        if (analise === undefined) {
+            limparGrafico('Nenhuma análise disponível.');
+            return;
+        }
+
+        definirTexto('nome_servidor_grafico', servidor.nome);
+        definirTexto('componente_grafico', componenteSelecionado);
+
+        renderizarSeletorComponentes(servidor);
+        renderizarRanking();
+
+        if (analise.status !== 'ok') {
+            estouroHoras = null;
+            grafico.data.datasets = [];
+            grafico.update();
+
+            definirAvisoGrafico(
+                'Histórico insuficiente para prever (' +
+                analise.pontos + ' de ' + analise.pontos_minimos +
+                ' pontos de 15 min). Aguarde mais leituras deste servidor.'
+            );
+
+            definirTexto('detalhe_modelo', '');
+            return;
+        }
+
+        limiteAtual = analise.limite;
+        estouroHoras = null;
+
+        if (analise.estouro_horas !== null && analise.estouro_horas <= 12) {
+            estouroHoras = analise.estouro_horas;
+        }
+
+        definirAvisoGrafico('');
+        grafico.data.datasets = montarDatasets(analise);
+        grafico.update();
+
+        definirTexto('detalhe_modelo', descreverModelo(analise));
+    }
+
+    function limparGrafico(mensagem) {
+        estouroHoras = null;
+        grafico.data.datasets = [];
+        grafico.update();
+
+        definirAvisoGrafico(mensagem);
+        definirTexto('nome_servidor_grafico', '—');
+        definirTexto('componente_grafico', '—');
+        definirTexto('detalhe_modelo', '');
+
+        document.getElementById('seletor_componente').innerHTML = '';
+    }
+
+    // Atualiza a seleção feita pelo usuário
+    function selecionarServidor(id, componente) {
+        servidorSelecionado = id;
+        componenteSelecionado = componente;
+
+        atualizarGrafico();
+    }
+
+    function selecionarComponente(nome) {
+        componenteSelecionado = nome;
+
+        atualizarGrafico();
+    }
+
+    // Seleciona automaticamente o primeiro item do ranking
+    function garantirSelecao() {
+        const servidor = buscarServidor(servidorSelecionado);
+
+        if (
+            servidor !== null &&
+            servidor.componentes[componenteSelecionado] !== undefined
+        ) {
+            return;
+        }
+
+        const primeiro = dashboard.ranking[0];
+
+        servidorSelecionado = primeiro.servidor_id;
+        componenteSelecionado = primeiro.componente;
+    }
+
+    // Carrega os dados e atualiza os elementos da página
+    async function atualizarDashboard() {
+        try {
+            dashboard = await carregarDashboard();
+        } catch (erro) {
+            console.error('FlowPredict: falha ao carregar os dados', erro);
+            mostrarAviso('Não foi possível carregar as previsões (' + erro.message + ').');
+            return;
+        }
+
+        esconderAviso();
+        preencherKpis();
+
+        if (dashboard.ranking.length === 0) {
+            renderizarRanking();
+            limparGrafico('Nenhum servidor com histórico suficiente para previsão.');
+            return;
+        }
+
+        garantirSelecao();
+        atualizarGrafico();
+    }
+
+    // Executa quando o HTML estiver carregado
+    document.addEventListener('DOMContentLoaded', () => {
+        autenticarPagina(1);
+
+        if (sessionStorage.showmsg == 2) {
+            toast({
+                title: 'Usuário já autenticado!',
+                variant: 'success'
+            });
+
+            storage.remove('showmsg');
+        }
+
+        atualizarDashboard();
+    });
+</script>
 </body>
 
 </html>

@@ -1,0 +1,498 @@
+{
+  "versao_schema": 1,
+  "gerado_em": "2026-11-12T01:43:40+00:00",
+  "resumo": {
+    "total_servidores": 5,
+    "em_risco": 1,
+    "criticos": 1,
+    "altos": 0,
+    "servidores_sem_dados": 1,
+    "menor_estouro": {
+      "servidor": "Teste - Crescimento acentuado",
+      "componente": "RAM",
+      "horas": 6.93
+    },
+    "anomalias_hoje": null,
+    "confianca_modelo": 98,
+    "janela_horas": 168
+  },
+  "ranking": [
+    {
+      "servidor_id": 4,
+      "componente": "CPU",
+      "estouro_horas": 0.0,
+      "nivel": "critico"
+    },
+    {
+      "servidor_id": 1,
+      "componente": "CPU",
+      "estouro_horas": 17.04,
+      "nivel": "medio"
+    },
+    {
+      "servidor_id": 2,
+      "componente": "CPU",
+      "estouro_horas": null,
+      "nivel": "baixo"
+    },
+    {
+      "servidor_id": 3,
+      "componente": "RAM",
+      "estouro_horas": null,
+      "nivel": "baixo"
+    }
+  ],
+  "servidores": [
+    {
+      "id": 1,
+      "nome": "Teste - Crescimento gradual",
+      "mac": "AA0000000001",
+      "componentes": {
+        "CPU": {
+          "status": "ok",
+          "limite": 70.0,
+          "valor_atual": 63.5,
+          "real": [
+            64.0,
+            64.9,
+            65.4,
+            66.0,
+            65.8
+          ],
+          "previsto": [
+            66.6,
+            67.2,
+            67.8,
+            68.4,
+            69.0
+          ],
+          "banda_superior": [
+            67.6,
+            68.2,
+            68.8,
+            69.4,
+            70.0
+          ],
+          "banda_inferior": [
+            65.5,
+            66.1,
+            66.7,
+            67.3,
+            67.9
+          ],
+          "estouro_horas": 17.04,
+          "nivel": "medio",
+          "tendencia": "CRESCENTE",
+          "modelo": {
+            "inclinacao_pct_por_hora": 0.1999,
+            "r2": 0.997,
+            "p_valor": 0.0,
+            "erro_residual_pct": 0.53,
+            "pontos": 673,
+            "horas_historico": 168.0
+          },
+          "estatisticas": {
+            "media": 49.8,
+            "desvio_padrao": 9.73,
+            "maximo": 66.8,
+            "pontos_acima_limite": 0
+          }
+        },
+        "RAM": {
+          "status": "ok",
+          "limite": 75.0,
+          "valor_atual": 43.7,
+          "real": [
+            43.8,
+            43.8,
+            43.8,
+            43.9,
+            43.8
+          ],
+          "previsto": [
+            43.8,
+            43.8,
+            43.8,
+            43.8,
+            43.8
+          ],
+          "banda_superior": [
+            44.1,
+            44.1,
+            44.1,
+            44.1,
+            44.1
+          ],
+          "banda_inferior": [
+            43.5,
+            43.5,
+            43.5,
+            43.5,
+            43.5
+          ],
+          "estouro_horas": null,
+          "nivel": "baixo",
+          "tendencia": "SEM_TENDENCIA",
+          "modelo": {
+            "inclinacao_pct_por_hora": 0.0005,
+            "r2": 0.0196,
+            "p_valor": 0.000271,
+            "erro_residual_pct": 0.16,
+            "pontos": 673,
+            "horas_historico": 168.0
+          },
+          "estatisticas": {
+            "media": 43.8,
+            "desvio_padrao": 0.16,
+            "maximo": 44.2,
+            "pontos_acima_limite": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "nome": "Teste - Estavel",
+      "mac": "AA0000000002",
+      "componentes": {
+        "CPU": {
+          "status": "ok",
+          "limite": 70.0,
+          "valor_atual": 36.6,
+          "real": [
+            35.1,
+            35.0,
+            34.8,
+            35.2,
+            35.3
+          ],
+          "previsto": [
+            35.0,
+            35.0,
+            35.0,
+            35.0,
+            35.0
+          ],
+          "banda_superior": [
+            36.0,
+            36.0,
+            36.0,
+            36.0,
+            36.0
+          ],
+          "banda_inferior": [
+            34.0,
+            34.0,
+            34.0,
+            34.0,
+            34.0
+          ],
+          "estouro_horas": null,
+          "nivel": "baixo",
+          "tendencia": "SEM_TENDENCIA",
+          "modelo": {
+            "inclinacao_pct_por_hora": -0.0,
+            "r2": 0.0,
+            "p_valor": 0.964873,
+            "erro_residual_pct": 0.51,
+            "pontos": 673,
+            "horas_historico": 168.0
+          },
+          "estatisticas": {
+            "media": 35.0,
+            "desvio_padrao": 0.51,
+            "maximo": 36.6,
+            "pontos_acima_limite": 0
+          }
+        },
+        "RAM": {
+          "status": "ok",
+          "limite": 75.0,
+          "valor_atual": 36.0,
+          "real": [
+            37.5,
+            37.4,
+            37.4,
+            37.5,
+            37.4
+          ],
+          "previsto": [
+            37.5,
+            37.5,
+            37.5,
+            37.5,
+            37.5
+          ],
+          "banda_superior": [
+            37.8,
+            37.8,
+            37.8,
+            37.8,
+            37.8
+          ],
+          "banda_inferior": [
+            37.1,
+            37.1,
+            37.1,
+            37.1,
+            37.1
+          ],
+          "estouro_horas": null,
+          "nivel": "baixo",
+          "tendencia": "SEM_TENDENCIA",
+          "modelo": {
+            "inclinacao_pct_por_hora": -0.0003,
+            "r2": 0.0066,
+            "p_valor": 0.03527,
+            "erro_residual_pct": 0.17,
+            "pontos": 673,
+            "horas_historico": 168.0
+          },
+          "estatisticas": {
+            "media": 37.5,
+            "desvio_padrao": 0.17,
+            "maximo": 38.0,
+            "pontos_acima_limite": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "nome": "Teste - Oscilante",
+      "mac": "AA0000000003",
+      "componentes": {
+        "CPU": {
+          "status": "ok",
+          "limite": 70.0,
+          "valor_atual": 28.1,
+          "real": [
+            62.5,
+            58.0,
+            46.1,
+            33.4,
+            28.0
+          ],
+          "previsto": [
+            45.2,
+            45.2,
+            45.2,
+            45.2,
+            45.2
+          ],
+          "banda_superior": [
+            70.3,
+            70.3,
+            70.3,
+            70.3,
+            70.4
+          ],
+          "banda_inferior": [
+            20.0,
+            20.0,
+            20.0,
+            20.0,
+            20.0
+          ],
+          "estouro_horas": null,
+          "nivel": "baixo",
+          "tendencia": "SEM_TENDENCIA",
+          "modelo": {
+            "inclinacao_pct_por_hora": 0.0027,
+            "r2": 0.0001,
+            "p_valor": 0.792504,
+            "erro_residual_pct": 12.77,
+            "pontos": 673,
+            "horas_historico": 168.0
+          },
+          "estatisticas": {
+            "media": 44.9,
+            "desvio_padrao": 12.76,
+            "maximo": 63.7,
+            "pontos_acima_limite": 0
+          }
+        },
+        "RAM": {
+          "status": "ok",
+          "limite": 75.0,
+          "valor_atual": 39.0,
+          "real": [
+            48.6,
+            47.4,
+            44.1,
+            40.4,
+            39.0
+          ],
+          "previsto": [
+            43.8,
+            43.8,
+            43.8,
+            43.8,
+            43.8
+          ],
+          "banda_superior": [
+            50.8,
+            50.8,
+            50.8,
+            50.8,
+            50.8
+          ],
+          "banda_inferior": [
+            36.8,
+            36.8,
+            36.8,
+            36.8,
+            36.8
+          ],
+          "estouro_horas": null,
+          "nivel": "baixo",
+          "tendencia": "SEM_TENDENCIA",
+          "modelo": {
+            "inclinacao_pct_por_hora": 0.0007,
+            "r2": 0.0001,
+            "p_valor": 0.792785,
+            "erro_residual_pct": 3.56,
+            "pontos": 673,
+            "horas_historico": 168.0
+          },
+          "estatisticas": {
+            "media": 43.7,
+            "desvio_padrao": 3.56,
+            "maximo": 49.0,
+            "pontos_acima_limite": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "nome": "Teste - Crescimento acentuado",
+      "mac": "AA0000000004",
+      "componentes": {
+        "CPU": {
+          "status": "ok",
+          "limite": 70.0,
+          "valor_atual": 70.0,
+          "real": [
+            64.0,
+            65.7,
+            67.2,
+            68.6,
+            69.6
+          ],
+          "previsto": [
+            62.7,
+            63.5,
+            64.3,
+            65.1,
+            65.9
+          ],
+          "banda_superior": [
+            69.4,
+            70.2,
+            71.0,
+            71.8,
+            72.6
+          ],
+          "banda_inferior": [
+            56.0,
+            56.8,
+            57.6,
+            58.4,
+            59.3
+          ],
+          "estouro_horas": 0.0,
+          "nivel": "critico",
+          "tendencia": "CRESCENTE",
+          "modelo": {
+            "inclinacao_pct_por_hora": 0.2691,
+            "r2": 0.9369,
+            "p_valor": 0.0,
+            "erro_residual_pct": 3.4,
+            "pontos": 673,
+            "horas_historico": 168.0
+          },
+          "estatisticas": {
+            "media": 40.1,
+            "desvio_padrao": 13.52,
+            "maximo": 70.0,
+            "pontos_acima_limite": 0
+          }
+        },
+        "RAM": {
+          "status": "ok",
+          "limite": 75.0,
+          "valor_atual": 72.2,
+          "real": [
+            70.4,
+            71.1,
+            71.8,
+            72.6,
+            72.9
+          ],
+          "previsto": [
+            73.3,
+            74.0,
+            74.8,
+            75.5,
+            76.3
+          ],
+          "banda_superior": [
+            73.6,
+            74.3,
+            75.1,
+            75.8,
+            76.6
+          ],
+          "banda_inferior": [
+            72.9,
+            73.7,
+            74.4,
+            75.2,
+            75.9
+          ],
+          "estouro_horas": 6.93,
+          "nivel": "alto",
+          "tendencia": "CRESCENTE",
+          "modelo": {
+            "inclinacao_pct_por_hora": 0.25,
+            "r2": 0.9998,
+            "p_valor": 0.0,
+            "erro_residual_pct": 0.17,
+            "pontos": 673,
+            "horas_historico": 168.0
+          },
+          "estatisticas": {
+            "media": 52.3,
+            "desvio_padrao": 12.15,
+            "maximo": 73.3,
+            "pontos_acima_limite": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "nome": "Servidor Ancelmo",
+      "mac": "6C946647CDD1",
+      "componentes": {
+        "CPU": {
+          "status": "dados_insuficientes",
+          "limite": 70.0,
+          "pontos": 0,
+          "pontos_minimos": 48,
+          "estouro_horas": null,
+          "nivel": null
+        },
+        "RAM": {
+          "status": "dados_insuficientes",
+          "limite": 75.0,
+          "pontos": 0,
+          "pontos_minimos": 48,
+          "estouro_horas": null,
+          "nivel": null
+        }
+      }
+    }
+  ]
+}
