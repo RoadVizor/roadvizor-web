@@ -32,6 +32,7 @@ app.use(
 app.use("/", indexRouter);
 app.use("/api", router);
 app.use("/api/servidor", servidorRouter);
+app.use("/api/log", logRouter)
 
 app.listen(PORTA_APP, function () {
   console.log(
