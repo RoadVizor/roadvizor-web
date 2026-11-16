@@ -30,15 +30,19 @@ order by c.id_componente;`
 
 function montarGraficoKpi(empresa_id){
    const instrucaoSql = `
-    SELECT l.status, COUNT(*) AS total
-    FROM log l
-    JOIN (
-      SELECT servidor_id, MAX(data_hora) AS ultima
-      FROM log
-      WHERE empresa_id = ${empresa_id}
-      GROUP BY servidor_id
-    ) u ON u.servidor_id = l.servidor_id AND u.ultima = l.data_hora
-    GROUP BY l.status;
+    SELECT COALESCE(l.status, 'inativo') AS status, COUNT(*) AS total
+    FROM servidor s
+    LEFT JOIN log l
+      ON l.servidor_id = s.id_servidor
+     AND l.empresa_id = s.empresa_id
+     AND l.data_hora = (
+       SELECT MAX(lx.data_hora)
+       FROM log lx
+       WHERE lx.servidor_id = s.id_servidor
+         AND lx.empresa_id = s.empresa_id
+     )
+    WHERE s.empresa_id = ${empresa_id}
+    GROUP BY COALESCE(l.status, 'inativo');
   `;
 
 return database.executar(instrucaoSql);
@@ -49,7 +53,7 @@ function montarCardInfo(empresa_id,servidor_id){
     const filtroServidor = servidor_id ? `AND l.servidor_id = ${servidor_id}` : '';
     const instrucaoSql = `
       SELECT s.id_servidor AS servidor_id, s.apelido AS servidor, c.nome AS componente,
-             l.status, l.valor_uso, l.descricao_ia, l.data_hora
+      l.componente_id,l.status, l.valor_uso, l.descricao_ia, l.data_hora
       FROM servidor s
       LEFT JOIN log l ON l.servidor_id = s.id_servidor
         AND l.empresa_id = ${empresa_id}
@@ -83,11 +87,34 @@ function buscarMaiorUso(empresa_id){
 return database.executar(instrucaoSql);
 }
 
+function buscarHistorico(empresa_id, servidor_id, componente_id, dias) {
+  const instrucaoSql = `
+    SELECT DATE_FORMAT(l.data_hora, '%d/%m') AS dia,
+           MAX(l.valor_uso) AS uso,
+           MAX(sc.limite_max) AS limite_max
+    FROM log l
+    LEFT JOIN servidor_componente sc
+      ON sc.servidor_id = l.servidor_id
+     AND sc.componente_id = l.componente_id
+    WHERE l.empresa_id = ${Number(empresa_id)}
+      AND l.servidor_id = ${Number(servidor_id)}
+      AND l.componente_id = ${Number(componente_id)}
+      AND l.valor_uso IS NOT NULL
+      AND l.data_hora >= CURDATE() - INTERVAL ${Number(dias)} DAY
+    GROUP BY DATE(l.data_hora), DATE_FORMAT(l.data_hora, '%d/%m')
+    ORDER BY DATE(l.data_hora);
+  `;
+
+  console.log("[logModel] Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
 module.exports = {
   buscarLogHoje,
   buscarLogPorComponente,
   montarCardInfo,
   montarGraficoKpi,
   buscarLogPorComponente,
-  buscarMaiorUso
+  buscarMaiorUso,
+  buscarHistorico
 };
