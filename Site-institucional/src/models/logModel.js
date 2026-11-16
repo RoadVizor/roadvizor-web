@@ -68,7 +68,7 @@ function montarCardInfo(empresa_id,servidor_id,status,componente_id,descricao_ia
 
 function buscarMaiorUso(empresa_id){
           const instrucaoSql = `
-    SELECT s.nome AS servidor, c.nome AS componente, l.valor_uso
+    SELECT s.apelido AS servidor, c.nome AS componente, l.valor_uso
     FROM log l
     JOIN servidor s ON s.id_servidor = l.servidor_id
     JOIN componente c ON c.id_componente = l.componente_id
