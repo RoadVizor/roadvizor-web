@@ -1,11 +1,30 @@
-const empresaModel = require("../models/empresaModel");
-const usuarioModel = require("../models/usuarioModel");
-const logModel = require("../models/logModel")
-const { isMissing, isEmailValid, isPasswordValid } = require("../utils");
+const logModel = require("../models/logModel");
+const { isMissing } = require("../utils");
 
+async function buscarLogHoje(req, res) {
 
+}
+
+async function montarGraficoKpi(req, res) {
+
+}
+
+async function buscarMaiorUso(req, res) {
+
+}
+
+async function buscarLogPorComponente(req, res) {
+
+}
+
+async function montarCardInfo(req, res) {
+ 
+}
 
 module.exports = {
-  cadastrar,
-  buscarPorID,
+  buscarLogHoje,
+  montarGraficoKpi,
+  buscarMaiorUso,
+  buscarLogPorComponente,
+  montarCardInfo
 };

@@ -15,6 +15,7 @@ const app = express();
 const router = require("./src/routes/router");
 const indexRouter = require("./src/routes/index");
 const servidorRouter = require("./src/routes/servidor");
+const logRouter = require("./src/routes/log")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
