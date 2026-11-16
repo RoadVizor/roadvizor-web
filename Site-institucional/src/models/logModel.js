@@ -13,7 +13,7 @@ function buscarLogHoje(empresa_id) {
 }
 
 
-function buscarLogPorComponente(empresa_id, componente_id){
+function buscarLogPorComponente(empresa_id){
     const instrucaoSql = `select c.nome as componente, count(l.log_id) as total
 from componente c
 left join log l
