@@ -2,8 +2,10 @@ const database = require("../database/config");
 
 function buscarLogHoje(empresa_id) {
   const instrucaoSql = `
-   SELECT COUNT(log_id) as log FROM log
-          WHERE servidor_id = ${empresa_id};
+    SELECT COUNT(*) AS log
+    FROM log
+    WHERE empresa_id = ${empresa_id}
+      AND DATE(data_hora) = CURDATE();
   `;
 
   console.log("[logModel] Executando a instrução SQL: \n" + instrucaoSql);
@@ -27,39 +29,55 @@ order by c.id_componente;`
 
 
 function montarGraficoKpi(empresa_id){
-   const instrucaoSql = `select l.status, count(*) as total
-from log l
-join (
-  select servidor_id, max(data_hora) as ultima
-  from log
-  where empresa_id = ${empresa_id}
-  group by servidor_id
-) u on u.servidor_id = l.servidor_id and u.ultima = l.data_hora
-group by l.status;`
+   const instrucaoSql = `
+    SELECT l.status, COUNT(*) AS total
+    FROM log l
+    JOIN (
+      SELECT servidor_id, MAX(data_hora) AS ultima
+      FROM log
+      WHERE empresa_id = ${empresa_id}
+      GROUP BY servidor_id
+    ) u ON u.servidor_id = l.servidor_id AND u.ultima = l.data_hora
+    GROUP BY l.status;
+  `;
 
 return database.executar(instrucaoSql);
 }
 
 
-function montarCardInfo(empresa_id,servidor_id,status,componente_id,descricao_analista,descricao_ia){
-    const instrucaoSql = `select ${servidor_id}, ${status}, ${componente_id}, ${descricao_analista}, ${descricao_ia}
-          from log
-          where empresa_id = ${empresa_id};`;  
+function montarCardInfo(empresa_id,servidor_id,status,componente_id,descricao_ia){
+    const filtroServidor = servidor_id ? `AND l.servidor_id = ${servidor_id}` : '';
+    const instrucaoSql = `
+      SELECT s.id_servidor AS servidor_id, s.nome AS servidor, c.nome AS componente,
+             l.status, l.valor_uso, l.descricao_ia, l.data_hora
+      FROM servidor s
+      LEFT JOIN log l ON l.servidor_id = s.id_servidor
+        AND l.empresa_id = ${empresa_id}
+        AND l.data_hora = (
+          SELECT MAX(data_hora) FROM log lx WHERE lx.servidor_id = s.id_servidor AND lx.empresa_id = ${empresa_id}
+        )
+      LEFT JOIN componente c ON c.id_componente = l.componente_id
+      WHERE s.empresa_id = ${empresa_id}
+      ${filtroServidor}
+      ;
+    `;
     
     console.log("[logModel] Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
 }
 
 function buscarMaiorUso(empresa_id){
-          const instrucaoSql = `select s.nome as servidor, c.nome as componente, l.valor_uso
-from log l
-join servidor s   on s.id_servidor   = l.servidor_id
-join componente c on c.id_componente = l.componente_id
-where l.empresa_id = ${empresa_id}
-  and l.data_hora >= curdate()
-  and l.valor_uso is not null
-order by l.valor_uso desc
-limit 1;`
+          const instrucaoSql = `
+    SELECT s.nome AS servidor, c.nome AS componente, l.valor_uso
+    FROM log l
+    JOIN servidor s ON s.id_servidor = l.servidor_id
+    JOIN componente c ON c.id_componente = l.componente_id
+    WHERE l.empresa_id = ${empresa_id}
+      AND l.data_hora >= CURDATE()
+      AND l.valor_uso IS NOT NULL
+    ORDER BY l.valor_uso DESC
+    LIMIT 1;
+  `;
 
 return database.executar(instrucaoSql);
 }
