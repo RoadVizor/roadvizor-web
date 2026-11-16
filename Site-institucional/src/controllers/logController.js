@@ -1,10 +1,13 @@
 const logModel = require("../models/logModel");
 const empresaModel = require("../models/empresaModel")
+const servidorModel = require("../models/servidorModel")
 const { isMissing } = require("../utils");
 
 async function buscarLogHoje(req, res) {
   
 const empresa_id = req.query.empresa_id
+
+if(isMissing(empresa_id)) return res.status(400)
 
 const existeEmpresa = await empresaModel.existePorID(empresa_id);
 
@@ -32,11 +35,39 @@ try {
 }
 
 async function montarGraficoKpi(req, res) {
+const empresa_id = req.query.empresa_id
 
+if(isMissing(empresa_id)) return res.status(400)
+
+const existeEmpresa = await empresaModel.existePorID(empresa_id);
+
+try {
+    if (!existeEmpresa) {
+      return res
+        .status(404)
+        .json({ message: "Nenhuma Empresa encontrada para o ID informado." });
+    }
+
+    const logResult = await logModel.montarGraficoKpi(empresa_id);
+
+    res.status(200).json({
+      message: "Gráfico pronto para ser gerado com sucesso!",
+      log: logResult
+    });
+  } catch (error) {
+    const message = error.message || error.sqlMessage;
+    if (message) {
+      res.status(403).send({ message });
+      return;
+    }
+    res.status(500).send({ message: "Erro interno no servidor." });
+  }
 }
 
 async function buscarMaiorUso(req, res) {
 const empresa_id = req.query.empresa_id
+
+if(isMissing(empresa_id)) return res.status(400)
 
 const existeEmpresa = await empresaModel.existePorID(empresa_id);
 
@@ -67,6 +98,8 @@ async function buscarLogPorComponente(req, res) {
 
 const empresa_id = req.query.empresa_id
 
+if(isMissing(empresa_id)) return res.status(400)
+
 const existeEmpresa = await empresaModel.existePorID(empresa_id);
 
 try {
@@ -93,7 +126,44 @@ try {
 }
 
 async function montarCardInfo(req, res) {
- 
+
+  const empresa_id = req.query.empresa_id
+  const servidor_id = req.query.servidor_id
+
+  if(isMissing(empresa_id)) return res.status(400)
+  if(isMissing(servidor_id)) return res.status(400)
+
+ const existeEmpresa = await empresaModel.existePorID(empresa_id);
+ const existeServidor = await servidorModel.buscarPorID(empresa_id, servidor_id);
+
+
+try {
+    if (!existeEmpresa) {
+      return res
+        .status(404)
+        .json({ message: "Nenhuma Empresa encontrada para o ID informado." });
+    }
+
+    if(!existeServidor){
+      return res
+        .status(404)
+        .json({ message: "Nenhum servidor encontrado para o ID informado." });
+    }
+
+    const logResult = await logModel.montarCardInfo(empresa_id,servidor_id);
+
+    res.status(200).json({
+      message: "Card pronto para ser gerado com sucesso!",
+      log: logResult
+    });
+  } catch (error) {
+    const message = error.message || error.sqlMessage;
+    if (message) {
+      res.status(403).send({ message });
+      return;
+    }
+    res.status(500).send({ message: "Erro interno no servidor." });
+  }
 }
 
 module.exports = {
