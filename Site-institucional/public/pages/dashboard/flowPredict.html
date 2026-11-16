@@ -758,6 +758,10 @@
             componenteSelecionado = componente;
 
             atualizarGrafico();
+
+            if (!usarExemplo) {
+                analisarComIA(id);
+            }
         }
 
         function selecionarComponente(nome) {
@@ -804,6 +808,47 @@
 
             garantirSelecao();
             atualizarGrafico();
+
+            if (!usarExemplo) {
+                await analisarComIA(servidorSelecionado);
+            }
+        }
+
+        async function analisarComIA(servidorId) {
+            try {
+                definirTexto('texto_modelo_viu', 'Gerando análise do servidor...');
+                definirTexto('texto_acao_sugerida', 'Aguarde enquanto a IA avalia os componentes.');
+
+                const resposta = await fetch('/api/ia/analisar', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        servidor_id: servidorId
+                    })
+                });
+
+                const dados = await resposta.json();
+
+                if (!resposta.ok) {
+                    throw new Error(dados.erro || 'Erro ao solicitar análise.');
+                }
+
+                const analise = dados.analise;
+
+                definirTexto('texto_modelo_viu', analise.o_que_modelo_viu);
+                definirTexto('texto_acao_sugerida', analise.acao_sugerida);
+
+                console.log('[Roadvizor] Análise recebida:', analise);
+
+            } catch (erro) {
+                console.error('[Roadvizor] Erro na análise:', erro);
+
+                definirTexto('texto_modelo_viu', 'Não foi possível gerar a análise.');
+                definirTexto('texto_acao_sugerida', 'Tente novamente mais tarde.');
+            }
         }
 
         // Executa quando o HTML estiver carregado
