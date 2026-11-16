@@ -45,10 +45,10 @@ return database.executar(instrucaoSql);
 }
 
 
-function montarCardInfo(empresa_id,servidor_id,status,componente_id,descricao_ia){
+function montarCardInfo(empresa_id,servidor_id){
     const filtroServidor = servidor_id ? `AND l.servidor_id = ${servidor_id}` : '';
     const instrucaoSql = `
-      SELECT s.id_servidor AS servidor_id, s.nome AS servidor, c.nome AS componente,
+      SELECT s.id_servidor AS servidor_id, s.apelido AS servidor, c.nome AS componente,
              l.status, l.valor_uso, l.descricao_ia, l.data_hora
       FROM servidor s
       LEFT JOIN log l ON l.servidor_id = s.id_servidor
