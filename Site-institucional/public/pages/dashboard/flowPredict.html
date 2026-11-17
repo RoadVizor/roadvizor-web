@@ -130,6 +130,7 @@
             font-size: .7rem;
             color: #64748b;
         }
+        
     </style>
 </head>
 
@@ -375,7 +376,7 @@
                 return 'já acima do limite';
             }
 
-            return 'estouro em ~' + formatarHoras(horas);
+            return 'estouro em ' + formatarHoras(horas);
         }
 
         function mostrarAviso(mensagem) {
@@ -405,7 +406,7 @@
             } else {
                 definirTexto(
                     'kpi_menor_tempo',
-                    '~' + formatarHoras(resumo.menor_estouro.horas)
+                    '' + formatarHoras(resumo.menor_estouro.horas)
                 );
 
                 definirTexto(
@@ -592,7 +593,7 @@
                 pincel.font = '11px sans-serif';
                 pincel.textAlign = 'center';
 
-                let texto = 'estouro em ~' + formatarHoras(estouroHoras);
+                let texto = 'estouro em ' + formatarHoras(estouroHoras);
 
                 if (estouroHoras === 0) {
                     texto = 'já acima do limite';
@@ -863,7 +864,6 @@
 
                 storage.remove('showmsg');
             }
-
             atualizarDashboard();
         });
     </script>
