@@ -51,6 +51,7 @@ REGRAS ADICIONAIS:
 - Priorize o componente com maior nível de risco.
 - Não faça comparações com outros servidores.
 - Se não houver risco relevante, informe que o servidor está em condições estáveis.
+- Na descrição seja objetivo e não enrole bastante, faça uma dissertação objetiva.
 
 FORMATO DA RESPOSTA:
 Retorne exclusivamente um JSON válido, sem markdown, com estas propriedades:
