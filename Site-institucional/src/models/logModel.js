@@ -50,21 +50,35 @@ return database.executar(instrucaoSql);
 
 
 function montarCardInfo(empresa_id,servidor_id){
-    const filtroServidor = servidor_id ? `AND l.servidor_id = ${servidor_id}` : '';
-    const instrucaoSql = `
-      SELECT s.id_servidor AS servidor_id, s.apelido AS servidor, c.nome AS componente,
-      l.componente_id,l.status, l.valor_uso, l.descricao_ia, l.data_hora
-      FROM servidor s
-      LEFT JOIN log l ON l.servidor_id = s.id_servidor
-        AND l.empresa_id = ${empresa_id}
-        AND l.data_hora = (
-          SELECT MAX(data_hora) FROM log lx WHERE lx.servidor_id = s.id_servidor AND lx.empresa_id = ${empresa_id}
-        )
-      LEFT JOIN componente c ON c.id_componente = l.componente_id
-      WHERE s.empresa_id = ${empresa_id}
-      ${filtroServidor}
-      ;
-    `;
+  const filtroServidor = servidor_id ? `AND s.id_servidor = ${Number(servidor_id)}` : '';
+  const instrucaoSql = `
+    SELECT
+      s.id_servidor AS servidor_id,
+      s.apelido AS servidor,
+      c.nome AS componente,
+      l.componente_id,
+      l.status,
+      l.valor_uso,
+      l.descricao_ia,
+      l.data_hora
+    FROM servidor s
+    LEFT JOIN (
+      SELECT lx.* FROM log lx
+      INNER JOIN (
+        SELECT servidor_id, MAX(data_hora) AS max_dt
+        FROM log
+        WHERE empresa_id = ${Number(empresa_id)}
+        GROUP BY servidor_id
+      ) grouped
+      ON lx.servidor_id = grouped.servidor_id AND lx.data_hora = grouped.max_dt
+      WHERE lx.empresa_id = ${Number(empresa_id)}
+      ORDER BY lx.servidor_id, lx.data_hora DESC, lx.log_id DESC
+    ) l ON l.servidor_id = s.id_servidor
+    LEFT JOIN componente c ON c.id_componente = l.componente_id
+    WHERE s.empresa_id = ${Number(empresa_id)}
+    ${filtroServidor}
+    ;
+  `;
     
     console.log("[logModel] Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
