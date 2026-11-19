@@ -85,20 +85,22 @@ function montarCardInfo(empresa_id,servidor_id){
 }
 
 function buscarMaiorUso(empresa_id){
-          const instrucaoSql = `
-  SELECT s.apelido AS servidor, c.nome AS componente, l.valor_uso, sc.limite_max
+  const instrucaoSql = `
+    SELECT s.apelido AS servidor, c.nome AS componente, l.valor_uso, l.status, sc.limite_max
     FROM log l
     JOIN servidor s ON s.id_servidor = l.servidor_id
     JOIN componente c ON c.id_componente = l.componente_id
-    JOIN servidor_componente sc on sc.servidor_id = l.servidor_id
-    WHERE l.empresa_id = ${empresa_id}
+    LEFT JOIN servidor_componente sc
+      ON sc.servidor_id = l.servidor_id
+     AND sc.componente_id = l.componente_id
+    WHERE l.empresa_id = ${Number(empresa_id)}
       AND l.data_hora >= CURDATE()
       AND l.valor_uso IS NOT NULL
     ORDER BY l.valor_uso DESC
     LIMIT 1;
   `;
 
-return database.executar(instrucaoSql);
+  return database.executar(instrucaoSql);
 }
 
 function buscarHistorico(empresa_id, servidor_id, componente_id, dias) {
@@ -123,6 +125,20 @@ function buscarHistorico(empresa_id, servidor_id, componente_id, dias) {
   return database.executar(instrucaoSql);
 }
 
+function listarLogs(empresa_id,servidor_id,componente_id,dias){
+  const instrucaoSql = `SELECT l.log_id, l.titulo, l.status, l.valor_uso, l.data_hora
+FROM log l
+WHERE l.empresa_id = ${Number(empresa_id)}
+  AND l.servidor_id = ${Number(servidor_id)}
+  AND l.componente_id = ${Number(componente_id)}
+  AND l.data_hora >= NOW() - INTERVAL ${Number(dias)} DAY
+ORDER BY l.data_hora DESC
+LIMIT 50;`
+
+  console.log("[logModel] Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
 module.exports = {
   buscarLogHoje,
   buscarLogPorComponente,
@@ -130,5 +146,6 @@ module.exports = {
   montarGraficoKpi,
   buscarLogPorComponente,
   buscarMaiorUso,
-  buscarHistorico
+  buscarHistorico,
+  listarLogs
 };

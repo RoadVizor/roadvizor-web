@@ -14,6 +14,7 @@
 
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
   </head>
   <body class="flex flex-row items-start gap-4 lg:gap-8">
     <!-- Sidebar -->
@@ -54,14 +55,6 @@
             </select>
           </div>
 
-          <div class="src-select">
-            <i class="ph ph-calendar-blank"></i>
-            <select id="filtro-periodo">
-              <option value="now">Hoje</option>
-              <option value="7">Últimos 7 dias</option>
-              <option value="15">Últimos 15 dias</option>
-            </select>
-          </div>
 
           <button type="button" class="src-reset" title="Limpar filtros" onclick="limparFiltros()">
             <i class="ph ph-arrow-counter-clockwise"></i>
@@ -130,6 +123,10 @@
         <div class="rel-texto">
           <h2 class="rel-title"><i class="ph ph-books"></i> RELATÓRIO - <span id="det-servidor"></span></h2>
           <div id="det-texto"></div>
+          <div class="rel-logs-lista">
+            <h3>Logs recentes</h3>
+            <ul id="det-logs"></ul>
+          </div>
           <button class="srv-btn primary rel-pdf"><span>Exportar PDF</span> <i class="ph ph-file-pdf"></i></button>
         </div>
 
@@ -227,7 +224,7 @@
         async function statusServidores() {
           // usar as mesmas chaves que statusDe() retorna: normal, alerta, critico, inativo
           var counts = { normal: 0, alerta: 0, critico: 0, inativo: 0 };
-          var rows = await api('grafico-kpi', periodoParams());
+          var rows = await api('grafico-kpi');
           rows.forEach(function(r){ const k = statusDe(r.status); counts[k] = (counts[k] || 0) + Number(r.total || 0); });
           document.getElementById('leg-normal').textContent = counts.normal;
           // legenda usa id leg-atencao (mantemos id por compatibilidade DOM), mas lemos counts.alerta
@@ -268,7 +265,7 @@
         }
 
         async function maiorUso() {
-          var rows = await api('buscar-maior-uso', periodoParams());
+          var rows = await api('buscar-maior-uso');
           var response = rows[0] || null;
           var card = document.querySelector('.rel-uso');
           if (!response) {
@@ -300,8 +297,52 @@
           pintarUso(card, estado);
         }
 
+        // ----- Código temporário de simulação (apenas em dev) -----
+        function aplicarMaiorUsoSimulado({ uso, componente, servidor, limite }) {
+          var card = document.querySelector('.rel-uso');
+          card.querySelector('.rel-percent').textContent = Math.round(uso) + '%';
+          card.querySelector('.rel-uso-top b').textContent = nomeComp(componente);
+          card.querySelector('.rel-uso-top small').textContent = servidor || '';
+          card.querySelector('.rel-bar-fill').style.width = Math.min(uso,100) + '%';
+
+          pintarUso(card, uso >= 90 ? 'critico' : uso >= 70 ? 'alerta' : 'normal');
+
+          if (limite !== undefined && limite !== null && limite !== '' && !isNaN(Number(limite))) {
+            card.querySelector('.rel-uso > small').textContent = 'limite ' + Math.round(Number(limite)) + '%';
+            card.querySelector('.rel-bar-limit').style.left = Math.min(Number(limite),100) + '%';
+          }
+        }
+
+        function criarControleSimulacao() {
+          if (!location.hostname.includes('localhost')) return; // só em dev
+          const box = document.createElement('div');
+          box.style.position = 'fixed';
+          box.style.right = '18px';
+          box.style.bottom = '18px';
+          box.style.zIndex = 9999;
+          box.style.display = 'flex';
+          box.style.gap = '8px';
+
+          const btn1 = document.createElement('button'); btn1.textContent = 'Sim Normal';
+          const btn2 = document.createElement('button'); btn2.textContent = 'Sim Atenção';
+          const btn3 = document.createElement('button'); btn3.textContent = 'Sim Crítico';
+
+          [btn1,btn2,btn3].forEach(b=>{ b.style.padding='6px 8px'; b.style.borderRadius='6px'; b.style.border='1px solid rgba(255,255,255,0.06)'; b.style.background='rgba(0,0,0,0.25)'; b.style.color='#fff'; });
+
+          btn1.addEventListener('click', ()=> aplicarMaiorUsoSimulado({ uso:45, componente:'cpu', servidor:'SRV-TEST-NORMAL', limite:80 }));
+          btn2.addEventListener('click', ()=> aplicarMaiorUsoSimulado({ uso:73, componente:'ram', servidor:'SRV-TEST-ATENCAO', limite:85 }));
+          btn3.addEventListener('click', ()=> aplicarMaiorUsoSimulado({ uso:92, componente:'cpu', servidor:'SRV-TEST-CRITICO', limite:90 }));
+
+          box.appendChild(btn1); box.appendChild(btn2); box.appendChild(btn3);
+          document.body.appendChild(box);
+        }
+
+        // criar controle após o carregamento
+        window.addEventListener('load', criarControleSimulacao);
+        // ----- fim do código temporário -----
+
         async function logsPorComponente() {
-          var rows = await api('buscar-componente', periodoParams());
+          var rows = await api('buscar-componente');
           var ul = document.querySelector('.rel-comp ul');
           if (!rows || rows.length === 0) { ul.innerHTML = '<li>Nenhum registro</li>'; return; }
           var maior = 1;
@@ -371,7 +412,7 @@
         }
 
         async function cards() {
-          var rows = await api('renderizar-card', periodoParams());
+          var rows = await api('renderizar-card');
           var track = document.getElementById('rel-track'); track.innerHTML = '';
           if (!rows || rows.length === 0) { track.innerHTML = '<p>Nenhum servidor encontrado.</p>'; return; }
   // sort rows so critical servers come first (critico > atencao > normal > inativo)
@@ -406,11 +447,6 @@
           return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
         }
 
-        // período selecionado -> parâmetro enviado ao back ("now" = sem parâmetro)
-        function periodoParams() {
-          var p = document.getElementById('filtro-periodo').value;
-          return p && p !== 'now' ? { dias: p } : {};
-        }
 
         function aplicarFiltros() {
           var termo = normalizar(document.querySelector('.src-search input').value);
@@ -457,10 +493,6 @@
         document.querySelector('.src-search input').addEventListener('input', aplicarFiltros);
         document.getElementById('filtro-componente').addEventListener('change', aplicarFiltros);
         document.getElementById('filtro-status').addEventListener('change', aplicarFiltros);
-        // mudar o período busca os dados de novo (e reaplica os filtros ao renderizar os cards)
-        document.getElementById('filtro-periodo').addEventListener('change', function () {
-          carregarRelatorios();
-        });
 
         window.carregarRelatorios = async function() {
           try {
@@ -478,7 +510,7 @@
           grad.addColorStop(0, "rgba(40,199,111,0.35)");
           grad.addColorStop(1, "rgba(40,199,111,0)");
           const grade = { color: "rgba(14,90,167,0.2)" };
-          const tick = { color: "#9dafbe", font: { size: 10 } };
+          const tick = { color: "#9dafbe", font: { size: 13 } };
 
           if (chartDetalhe) chartDetalhe.destroy();
           chartDetalhe = new Chart(ctx, {
@@ -500,6 +532,57 @@
               },
             },
           });
+        }
+
+        /* ---------- Lista de logs do servidor ---------- */
+        function formatarDataHora(v) {
+          var d = new Date(v);
+          if (isNaN(d.getTime())) return String(v || '--');
+          return d.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+        }
+
+        async function carregarLogsServidor(servidorId, componenteId) {
+          var ul = document.getElementById('det-logs');
+          ul.innerHTML = '<li class="vazio">Carregando...</li>';
+          if (!servidorId || !componenteId) {
+            ul.innerHTML = '<li class="vazio">Sem logs para este servidor.</li>';
+            return;
+          }
+          try {
+            var logs = await api('listar-logs', { servidor_id: servidorId, componente_id: componenteId, dias: 7 });
+            if (!logs || !logs.length) {
+              ul.innerHTML = '<li class="vazio">Nenhum log nos últimos 7 dias.</li>';
+              return;
+            }
+            ul.innerHTML = '';
+            logs.forEach(function (l) {
+              var st = statusDe(l.status);
+              var li = document.createElement('li');
+              li.className = st;
+
+              var topo = document.createElement('div');
+              topo.className = 'log-topo';
+              var hora = document.createElement('span');
+              hora.className = 'log-hora';
+              hora.textContent = formatarDataHora(l.data_hora);
+              var badge = document.createElement('span');
+              badge.className = 'badge';
+              badge.textContent = STATUS[st][1];
+              var uso = document.createElement('b');
+              uso.textContent = (l.valor_uso !== null && l.valor_uso !== undefined) ? Math.round(Number(l.valor_uso)) + '%' : '--';
+              topo.appendChild(hora); topo.appendChild(badge); topo.appendChild(uso);
+
+              var titulo = document.createElement('p');
+              titulo.textContent = l.titulo || '';
+
+              li.appendChild(topo);
+              li.appendChild(titulo);
+              ul.appendChild(li);
+            });
+          } catch (e) {
+            ul.innerHTML = '<li class="vazio">Não foi possível carregar os logs.</li>';
+            console.error('[logs do servidor]', e);
+          }
         }
 
         async function abrirRelatorio(id) {
@@ -549,6 +632,7 @@
            var p2 = document.createElement('p'); p2.textContent = resumo;
            detTexto.appendChild(p1); detTexto.appendChild(p2);
            graficoDetalhe({ labels: hist.map((h) => h.dia), uso, limite });
+           carregarLogsServidor(servidorId, componenteId);
         }
 
         document.getElementById('rel-track').addEventListener('click', function(e){
@@ -563,9 +647,7 @@
           document.querySelector('.src-search input').value = '';
           document.getElementById('filtro-componente').value = '';
           document.getElementById('filtro-status').value = '';
-          var periodoMudou = document.getElementById('filtro-periodo').value !== 'now';
-          document.getElementById('filtro-periodo').value = 'now';
-          if (periodoMudou) carregarRelatorios(); else aplicarFiltros();
+          aplicarFiltros();
         };
         })();
       

@@ -537,6 +537,8 @@ background-color: #28c76f;
   border: 1px solid var(--line);
   border-radius: 12px;
   min-width: 0; /* deixa o canvas encolher dentro da grid */
+  display: flex;
+  flex-direction: column;
 }
 
 .rel-grafico-head {
@@ -563,10 +565,77 @@ background-color: #28c76f;
 
 .rel-grafico-canvas {
   position: relative;
-  height: 260px;
+  flex: 1;
+  min-height: 260px;
   margin-top: 12px;
+}
+
+/* canvas fora do fluxo: o gráfico acompanha o tamanho do card, sem empurrar o layout */
+.rel-grafico-canvas canvas {
+  position: absolute;
+  inset: 0;
 }
 
 @media (max-width: 1100px) {
   .rel-detalhe { grid-template-columns: 1fr; }
 }
+
+/* ---------- Lista de logs do relatório detalhado ---------- */
+.rel-logs-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+
+.rel-logs-lista h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+#det-logs {
+  list-style: none;
+  margin: 0;
+  padding: 0 4px 0 0;
+  max-height: 240px;
+  overflow-y: auto;
+  display: grid;
+  gap: 8px;
+  scrollbar-width: thin;
+}
+
+#det-logs li {
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--surface) 70%, var(--background));
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--st-normal);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+#det-logs li.alerta  { border-left-color: var(--st-atencao); }
+#det-logs li.critico { border-left-color: var(--st-critico); }
+#det-logs li.inativo { border-left-color: var(--st-inativo); }
+
+#det-logs li.vazio {
+  border-left-color: var(--line);
+  color: var(--muted);
+}
+
+#det-logs .log-topo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#det-logs .log-hora { color: var(--muted); font-size: 0.9rem; font-weight: bold; }
+#det-logs .log-topo b { margin-left: auto; font-size: 1.1rem; font-weight: 700; }
+#det-logs p { margin: 4px 0 0; font-weight: bold; }
+
+#det-logs .badge { margin-left: 0; }
+#det-logs li.normal  .badge { background: var(--success-bg); color: var(--success-text); }
+#det-logs li.alerta  .badge { background: var(--warning-bg); color: var(--warning-text); }
+#det-logs li.critico .badge { background: var(--destructive-bg); color: var(--destructive-text); }

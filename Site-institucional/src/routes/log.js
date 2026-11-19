@@ -10,5 +10,6 @@ router.get('/buscar-maior-uso', logController.buscarMaiorUso);
 router.get('/buscar-componente', logController.buscarLogPorComponente);
 router.get('/renderizar-card', logController.montarCardInfo);
 router.get('/historico', logController.buscarHistorico);
+router.get('/listar-logs', logController.listarLogs);
 
 module.exports = router;

@@ -179,11 +179,30 @@ async function buscarHistorico(req, res) {
   }
 }
 
+function listarLogs(req, res) {
+  const empresa_id = req.usuario.empresa_id;
+  const { servidor_id, componente_id } = req.query;
+  const dias = req.query.dias || 7;
+
+  if (!servidor_id || !componente_id) {
+    return res.status(400).json({ message: "servidor_id e componente_id são obrigatórios" });
+  }
+
+  logModel
+    .listarLogs(empresa_id, servidor_id, componente_id, dias)
+    .then((resultado) => res.status(200).json({ log: resultado }))
+    .catch((erro) => {
+      console.log("Erro ao listar logs:", erro.sqlMessage || erro);
+      res.status(500).json({ message: erro.sqlMessage || "Erro ao listar logs" });
+    });
+}
+
 module.exports = {
   buscarLogHoje,
   montarGraficoKpi,
   buscarMaiorUso,
   buscarLogPorComponente,
   montarCardInfo,
-  buscarHistorico
+  buscarHistorico,
+  listarLogs
 };
