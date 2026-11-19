@@ -306,14 +306,6 @@ select[data-has-errors="true"] {
   font-weight: 700;
   pointer-events: none;
 }
-.rel-status-body::before {
-  content: "5";
-  position: absolute;
-  left: 0; width: 76px;
-  text-align: center;
-  font-size: 1.4rem;
-  font-weight: 700;
-}
 
 .rel-legend { list-style: none; flex: 1; display: grid; gap: 6px; }
 .rel-legend li { display: flex; align-items: center; gap: 8px; }
@@ -326,7 +318,7 @@ select[data-has-errors="true"] {
 
 /*maior uso*/
 .rel-uso-top { display: flex; align-items: center; gap: 10px; }
-.rel-percent { font-size: 2.2rem; font-weight: 700; color: var(--st-atencao); line-height: 1; }
+.rel-percent { font-size: 2.2rem; font-weight: 700; color: var(--st-normal); line-height: 1; }
 .rel-uso-top div { display: flex; flex-direction: column; }
 
 .rel-bar {
@@ -338,7 +330,6 @@ select[data-has-errors="true"] {
 }
 .rel-bar.thin { height: 8px; flex: 1; }
 .rel-bar-fill { height: 100%; border-radius: 999px; background: var(--st-normal); }
-.rel-uso .rel-bar-fill { background: var(--st-atencao); }
 .rel-bar-limit {
   position: absolute; top: -3px;
   width: 2px; height: 16px;
@@ -386,6 +377,7 @@ select[data-has-errors="true"] {
 }
 
 .srv-card::before {
+  content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
@@ -510,8 +502,8 @@ background-color: #28c76f;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  font-size: 0.8rem;
-  line-height: 1.6;
+  font-size: 1.125rem;
+  line-height: 1.75;
 }
 
 #det-texto {
@@ -520,7 +512,7 @@ background-color: #28c76f;
   gap: 16px;
 }
 
-#det-texto p { font-size: 0.8rem; margin: 0; }
+#det-texto p { font-size: 1.125rem; margin: 0; }
 
 .rel-pdf { width: 164px; margin-top: auto; }
 
@@ -538,7 +530,7 @@ background-color: #28c76f;
 }
 
 .rel-grafico-head h3 {
-  font-size: 0.85rem;
+  font-size: 1.25rem;
   font-weight: 700;
   margin: 0;
 }
@@ -548,7 +540,7 @@ background-color: #28c76f;
   align-items: center;
   gap: 6px;
   padding: 4px 12px;
-  font-size: 0.65rem;
+  font-size: 0.95rem;
   background: color-mix(in srgb, var(--primary) 20%, transparent);
   border-radius: 999px;
 }
