@@ -297,50 +297,6 @@
           pintarUso(card, estado);
         }
 
-        // ----- Código temporário de simulação (apenas em dev) -----
-        function aplicarMaiorUsoSimulado({ uso, componente, servidor, limite }) {
-          var card = document.querySelector('.rel-uso');
-          card.querySelector('.rel-percent').textContent = Math.round(uso) + '%';
-          card.querySelector('.rel-uso-top b').textContent = nomeComp(componente);
-          card.querySelector('.rel-uso-top small').textContent = servidor || '';
-          card.querySelector('.rel-bar-fill').style.width = Math.min(uso,100) + '%';
-
-          pintarUso(card, uso >= 90 ? 'critico' : uso >= 70 ? 'alerta' : 'normal');
-
-          if (limite !== undefined && limite !== null && limite !== '' && !isNaN(Number(limite))) {
-            card.querySelector('.rel-uso > small').textContent = 'limite ' + Math.round(Number(limite)) + '%';
-            card.querySelector('.rel-bar-limit').style.left = Math.min(Number(limite),100) + '%';
-          }
-        }
-
-        function criarControleSimulacao() {
-          if (!location.hostname.includes('localhost')) return; // só em dev
-          const box = document.createElement('div');
-          box.style.position = 'fixed';
-          box.style.right = '18px';
-          box.style.bottom = '18px';
-          box.style.zIndex = 9999;
-          box.style.display = 'flex';
-          box.style.gap = '8px';
-
-          const btn1 = document.createElement('button'); btn1.textContent = 'Sim Normal';
-          const btn2 = document.createElement('button'); btn2.textContent = 'Sim Atenção';
-          const btn3 = document.createElement('button'); btn3.textContent = 'Sim Crítico';
-
-          [btn1,btn2,btn3].forEach(b=>{ b.style.padding='6px 8px'; b.style.borderRadius='6px'; b.style.border='1px solid rgba(255,255,255,0.06)'; b.style.background='rgba(0,0,0,0.25)'; b.style.color='#fff'; });
-
-          btn1.addEventListener('click', ()=> aplicarMaiorUsoSimulado({ uso:45, componente:'cpu', servidor:'SRV-TEST-NORMAL', limite:80 }));
-          btn2.addEventListener('click', ()=> aplicarMaiorUsoSimulado({ uso:73, componente:'ram', servidor:'SRV-TEST-ATENCAO', limite:85 }));
-          btn3.addEventListener('click', ()=> aplicarMaiorUsoSimulado({ uso:92, componente:'cpu', servidor:'SRV-TEST-CRITICO', limite:90 }));
-
-          box.appendChild(btn1); box.appendChild(btn2); box.appendChild(btn3);
-          document.body.appendChild(box);
-        }
-
-        // criar controle após o carregamento
-        window.addEventListener('load', criarControleSimulacao);
-        // ----- fim do código temporário -----
-
         async function logsPorComponente() {
           var rows = await api('buscar-componente');
           var ul = document.querySelector('.rel-comp ul');
