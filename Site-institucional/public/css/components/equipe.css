@@ -40,20 +40,20 @@
     margin: 0;
     padding: 0;
   }
-
   body {
     @apply flex min-h-dvh w-full bg-background font-mont text-foreground;
 
     font-family: "Montserrat", sans-serif;
 
+    background-color: #010811;
+
     background-image:
       radial-gradient(
         circle at 15% 0%,
-        color-mix(in srgb, var(--color-primary) 28%, transparent),
+        rgba(14, 90, 167, 0.08),
         transparent 45%
       );
   }
-
   button {
     @apply cursor-pointer font-mont text-foreground;
   }

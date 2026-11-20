@@ -1,24 +1,23 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
-  <title>RoadVizor | Equipe</title>
 
-  <link href="/css/output.css" rel="stylesheet" />
-  Phosphor Icons
+  <link rel="stylesheet" href="../../css/output.css" />
+  <link rel="stylesheet" href="../../css/components/equipe.css" />
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="script.js" defer></script>
+
+  <title>RoadVizor | Equipe</title>
 </head>
 
-<body class="flex flex-row space-x-4 lg:space-x-8">
-<!-- Sidebar -->
-  <div id="sidebar_container"></div>
+<body class="flex min-h-dvh w-full bg-background font-mont text-foreground">
 
-  <!-- Dashboard -->
-<main class="flex min-w-0 flex-1 flex-col gap-5 p-4 md:p-6 lg:px-7">
+  <div id="sidebar_container"></div>
+  <!-- Conteúdo principal -->
+  <main class="flex min-w-0 flex-1 flex-col gap-5 p-4 md:p-6 lg:px-7">
 
     <!-- Título e botão -->
     <header class="flex flex-wrap items-center justify-between gap-4">
@@ -224,36 +223,127 @@
 
   </main>
 
-  <script src="../../js/utils/storage.js"></script>
-  <script src="../../js/utils/toast.js"></script>
-  <script src="../../js/utils/password-toggler.js"></script>
-  <script src="../../js/validations.js"></script>
-  <script src="../../js/auth.js"></script>
-  <script src="../../js/membros.js"></script>
-  <script src="../../js/components/sidebar.js"></script>
-  <script src="../../js/components/nivel_acesso.js"></script>
+<!-- MODAL ADICIONAR COLABORADOR -->
+<div
+    id="modalColaborador"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
 
-  <script>
-    document.addEventListener("DOMContentLoaded", (e) => {
-      autenticarPagina(1)
-      if (sessionStorage.showmsg == 2) {
-        toast({
-          title: "Usuário já autenticado!",
-          variant: "success",
-        });
-        storage.remove("showmsg")
-      }
-    });
+    <div class="w-full max-w-lg rounded-2xl border border-secondary/20 bg-surface p-7 shadow-xl">
 
-    function checkFormFields(form) {
-      const submitBtn = document.getElementById("register-submit");
-      const fields = form.querySelectorAll(".field-input");
-      const hasErrors = Array.from(fields).some(
-        (field) => field.dataset.hasErrors != "false",
-      );
-      submitBtn.disabled = hasErrors;
-    }
-  </script>
+        <!-- CABEÇALHO -->
+        <div class="mb-5 flex items-start justify-between">
+
+            <div>
+                <h2 class="text-xl font-bold">
+                    Adicionar colaborador
+                </h2>
+
+                <p class="mt-1 text-sm text-muted">
+                    Preencha os dados para liberar o acesso.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                onclick="fecharModalColaborador()"
+                class="text-muted hover:text-foreground">
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <!-- FORMULÁRIO -->
+        <form id="formColaborador" class="space-y-4">
+
+            <!-- NOME -->
+            <div>
+                <label class="mb-2 block text-sm font-semibold">
+                    Nome completo
+                </label>
+
+                <input
+                    type="text"
+                    id="nomeColaborador"
+                    placeholder="Ex.: Maria Souza"
+                    required
+                    style="background-color: #010611;"
+                    class="w-full rounded-lg border border-secondary/20 px-3 py-3 text-foreground outline-none focus:border-secondary">
+            </div>
+
+            <!-- CARGO -->
+            <div>
+                <label class="mb-2 block text-sm font-semibold">
+                    Cargo
+                </label>
+
+                <input
+                    type="text"
+                    id="cargoColaborador"
+                    placeholder="Ex.: Analista de suporte"
+                    required
+                    style="background-color: #010611;"
+                    class="w-full rounded-lg border border-secondary/20 px-3 py-3 text-foreground outline-none focus:border-secondary">
+            </div>
+
+            <!-- NÍVEL DE ACESSO -->
+            <div>
+                <label class="mb-2 block text-sm font-semibold">
+                    Nível de acesso
+                </label>
+
+                <select
+                    id="nivelColaborador"
+                    required
+                    style="background-color: #010611;"
+                    class="w-full rounded-lg border border-secondary/20 px-3 py-3 text-foreground outline-none focus:border-secondary">
+
+                    <option value="">Selecione um nível</option>
+                    <option value="1">Administrador</option>
+                    <option value="2">Colaborador</option>
+
+                </select>
+            </div>
+
+            <!-- BOTÕES -->
+            <div class="flex justify-end gap-3 pt-4">
+
+                <button
+                    type="button"
+                    onclick="fecharModalColaborador()"
+                    class="rounded-lg bg-background px-4 py-3 text-sm font-semibold hover:brightness-125">
+
+                    Cancelar
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="rounded-lg bg-accent px-4 py-3 text-sm font-bold text-background hover:brightness-110">
+
+                    Adicionar
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+<script src="../../js/utils/storage.js"></script>
+<script src="../../js/utils/selectDiv.js"></script>
+<script src="../../js/utils/toast.js"></script>
+<script src="../../js/auth.js"></script>
+<script src="/libs/chart.js/chart.umd.js"></script>
+<script src="../../js/components/listaServidores.js"></script>
+<script src="../../js/components/detalhes.js"></script>
+<script src="../../js/components/nivel_acesso.js"></script>
+<script src="../../js/components/sidebar.js"></script>
+
 </body>
 
-</html> 
+</html>
