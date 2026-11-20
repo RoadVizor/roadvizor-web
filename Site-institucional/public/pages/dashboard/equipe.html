@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 <html lang="pt-BR">
 
 <head>
@@ -9,15 +9,15 @@
   <title>RoadVizor | Equipe</title>
 
   <link href="/css/output.css" rel="stylesheet" />
-  <!-- Phosphor Icons -->
+  Phosphor Icons
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 
 <body class="flex flex-row space-x-4 lg:space-x-8">
-  <!-- Sidebar -->
+  Sidebar
   <div id="sidebar_container"></div>
 
-  <!-- Dashboard -->
+  Dashboard
   <main class="w-full min-h-dvh flex flex-col items-start justify-start pt-6 gap-6">
 
 
@@ -124,4 +124,239 @@
   </script>
 </body>
 
-</html>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head> 
+  <meta charset="UTF-8" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="../../css/output.css" />
+  <link rel="stylesheet" href="../../css/components/equipe.css" />
+   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="script.js" defer></script>
+
+
+</head>
+
+<body class="flex min-h-dvh w-full bg-background font-mont text-foreground">
+
+  <!-- Conteúdo principal -->
+  <main class="flex min-w-0 flex-1 flex-col gap-5 p-4 md:p-6 lg:px-7">
+
+    <!-- Título e botão -->
+    <header class="flex flex-wrap items-center justify-between gap-4">
+
+      <div class="min-w-0">
+
+        <h1 class="font-mont text-3xl font-bold">
+          Equipe – RoadVizor
+          <span class="text-accent" id="nomeEmpresa"></span>
+        </h1>
+
+        <p class="mt-1 text-sm text-muted" id="contador"></p>
+
+      </div>
+
+      <button
+        class="rounded-xl bg-accent px-4 py-3 text-sm font-bold text-background transition hover:brightness-110 sm:px-5"
+        onclick="adicionarColaborador()">
+
+        Adicionar colaborador ⊕
+
+      </button>
+
+    </header>
+
+
+    <!-- Cards de estatísticas -->
+    <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+
+      <!-- Total -->
+      <div
+        class="flex min-w-0 items-center gap-4 rounded-xl border border-secondary/20 border-l-4 border-l-primary bg-surface/85 p-5">
+
+        <div class="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-primary/40 text-2xl">
+          👥
+        </div>
+
+        <div class="min-w-0">
+          <strong class="block text-3xl font-bold" id="statTotal"></strong>
+          <span class="font-mont text-base font-bold">Total de colaboradores</span>
+        </div>
+
+      </div>
+
+
+      <!-- Ativos -->
+      <div
+        class="flex min-w-0 items-center gap-4 rounded-xl border border-secondary/20 border-l-4 border-l-accent bg-surface/85 p-5">
+
+        <div
+          class="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-accent text-2xl font-bold text-background">
+          ✔
+        </div>
+
+        <div class="min-w-0">
+          <strong class="block text-3xl font-bold" id="statAtivos"></strong>
+          <span class="font-mont text-base font-bold">Ativos</span>
+        </div>
+
+      </div>
+
+
+      <!-- Inativos -->
+      <div
+        class="flex min-w-0 items-center gap-4 rounded-xl border border-secondary/20 border-l-4 border-l-destructive-text bg-surface/85 p-5">
+
+        <div
+          class="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-destructive-text text-2xl font-bold text-background">
+          −
+        </div>
+
+        <div class="min-w-0">
+          <strong class="block text-3xl font-bold" id="statInativos"></strong>
+          <span class="font-mont text-base font-bold">Inativos</span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Destaque e ranking -->
+    <section class="grid grid-cols-1 gap-5 xl:grid-cols-[2fr_1fr]">
+
+      <!-- Destaque -->
+      <div class="flex min-w-0 flex-wrap items-center gap-6 rounded-xl border-2 border-chart-4 bg-surface/85 p-5 md:p-6"
+        id="destaque">
+
+      </div>
+
+
+      <!-- Ranking -->
+      <div class="min-w-0 rounded-xl border border-secondary/20 bg-surface/85 p-5">
+
+        <h3 class="font-mont text-base font-bold">
+          📊 Ranking de atendimentos (últimos 30 dias)
+        </h3>
+
+        <ol class="flex list-none flex-col gap-3.5" id="ranking"></ol>
+
+      </div>
+
+    </section>
+
+
+    <!-- Filtros e tabela -->
+    <section class="rounded-2xl border border-secondary/20 bg-surface/55 p-4 md:p-5">
+
+      <!-- Filtros -->
+      <div class="mb-5 flex flex-wrap items-center gap-3 md:gap-4">
+
+        <!-- Pesquisa -->
+        <input type="text" id="busca" placeholder="🔍 Pesquisar colaborador..." oninput="filtrar()"
+          class="min-w-0 flex-1 basis-full sm:basis-[220px]" />
+
+
+        <!-- Filtros de status -->
+        <div class="flex flex-wrap gap-2">
+
+          <button class="rounded-full border border-accent bg-accent/15 px-4 py-2.5 font-mont text-base font-bold text-accent"
+            data-status="todos" onclick="filtrarStatus(this)">
+
+            Todos
+
+          </button>
+
+          <button
+            class="rounded-full border border-secondary/20 bg-surface/85 px-4 py-2.5 font-mont text-base font-bold transition hover:border-accent"
+            data-status="ativo" onclick="filtrarStatus(this)">
+
+            Ativos
+
+          </button>
+
+          <button
+            class="rounded-full border border-secondary/20 bg-surface/85 px-4 py-2.5 font-mont text-base font-bold transition hover:border-accent"
+            data-status="inativo" onclick="filtrarStatus(this)">
+
+            Inativos
+
+          </button>
+
+        </div>
+
+
+        <!-- Nível -->
+        <select id="nivel" onchange="filtrar()" class="font-mont text-base font-bold">
+
+          <option value="">Todos os níveis</option>
+
+        </select>
+
+
+        <!-- Limpar filtros -->
+        <button
+          class="h-11 w-11 shrink-0 rounded-xl border border-secondary/20 bg-surface/85 transition hover:border-accent"
+          onclick="limparFiltros()" title="Limpar filtros">
+
+          ⚙
+
+        </button>
+
+      </div>
+
+
+      <!-- Tabela -->
+      <div class="overflow-x-auto">
+
+        <table class="w-full min-w-[760px] border-collapse text-left text-sm">
+
+          <thead class="bg-primary/10 text-xs uppercase text-muted">
+
+            <tr>
+              <th class="px-5 py-4">Colaborador</th>
+              <th class="px-5 py-4">Cargo</th>
+              <th class="px-5 py-4">Nível de acesso</th>
+              <th class="px-5 py-4">Status</th>
+              <th class="px-5 py-4">Data de admissão</th>
+              <th class="px-5 py-4">Ações</th>
+            </tr>
+
+          </thead>
+          <tbody id="tabela">
+          </tbody>
+        </table>
+      </div>
+      <!-- Ver mais -->
+      <div class="mt-4 flex justify-center" id="areaVerMais">
+
+        <button
+          class="rounded-xl border border-secondary/20 bg-surface/85 px-5 py-3 font-mont text-base font-bold transition hover:border-accent hover:bg-primary/20"
+          onclick="verMais()">
+
+          Ver Mais ⌄
+
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</body>
+</html> 
+<script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/selectDiv.js"></script>
+    <script src="../../js/utils/toast.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="/libs/chart.js/chart.umd.js"></script>
+    <script src="../../js/components/listaServidores.js"></script>
+    <script src="../../js/components/detalhes.js"></script>
+    <script src="../../js/components/nivel_acesso.js"></script>
+    <script src="../../js/components/sidebar.js"></script>
+

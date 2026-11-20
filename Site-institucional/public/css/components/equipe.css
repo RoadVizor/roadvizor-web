@@ -1,0 +1,75 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  --color-background: #040d18;
+  --color-foreground: #eaf4fb;
+  --color-surface: #0a192b;
+
+  --color-muted: #9dafbe;
+  --color-disabled: #657481;
+  --color-border-custom: #657481;
+
+  --color-primary: #0e5aa7;
+  --color-secondary: #4fb3e8;
+  --color-accent: #28c76f;
+
+  --color-success-bg: #1e3e2c;
+  --color-success-text: #88ddae;
+
+  --color-warning-bg: #40331c;
+  --color-warning-text: #ebbe70;
+
+  --color-destructive-bg: #401e1c;
+  --color-destructive-text: #ec8179;
+
+  --color-chart-1: #0e5aa7;
+  --color-chart-2: #28c76f;
+  --color-chart-3: #4fb3e8;
+  --color-chart-4: #e4af44;
+  --color-chart-5: #9b6ecf;
+
+  --font-museo: "MuseoModerno", sans-serif;
+  --font-mont: "Montserrat", sans-serif;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    @apply flex min-h-dvh w-full bg-background font-mont text-foreground;
+
+    font-family: "Montserrat", sans-serif;
+
+    background-image:
+      radial-gradient(
+        circle at 15% 0%,
+        color-mix(in srgb, var(--color-primary) 28%, transparent),
+        transparent 45%
+      );
+  }
+
+  button {
+    @apply cursor-pointer font-mont text-foreground;
+  }
+
+  input,
+  select {
+    @apply min-h-11 rounded-[10px] border border-secondary/20 bg-surface px-4 font-mont text-sm text-foreground;
+  }
+
+  input:focus,
+  select:focus {
+    @apply border-accent outline-none;
+  }
+
+  table {
+    @apply w-full border-collapse;
+  }
+}
+
