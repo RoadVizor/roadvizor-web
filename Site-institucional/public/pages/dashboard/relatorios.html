@@ -127,7 +127,7 @@
             <h3>Logs recentes</h3>
             <ul id="det-logs"></ul>
           </div>
-          <button class="srv-btn primary rel-pdf"><span>Exportar PDF</span> <i class="ph ph-file-pdf"></i></button>
+          <button  onclick="exportarPdf()" class="srv-btn primary rel-pdf"><span>Exportar PDF</span> <i class="ph ph-file-pdf"></i></button>
         </div>
 
         <div class="rel-grafico">
@@ -548,6 +548,8 @@
           var componenteId = card.dataset.componenteId;
           var comp = card.querySelector('.srv-comp').textContent.replace('COMPONENTE:', '').trim();
 
+          relatorioAtual = { servidorId, componenteId, servidor: id, componente: comp.toLowerCase() };
+
           document.getElementById('det-servidor').textContent = id;
           document.getElementById('det-grafico-titulo').textContent = 'Uso de ' + comp;
           var all = document.querySelectorAll('.srv-card');
@@ -606,7 +608,42 @@
           aplicarFiltros();
         };
         })();
-      
+
+        async function exportarPdf() {
+            if (!relatorioAtual) return;
+            const params = new URLSearchParams(relatorioAtual);
+
+            try {
+              const res = await fetch("http://localhost:8080/relatorio/pdf?" + params, {
+                credentials: "include"
+              });
+
+              if (!res.ok) {
+                const msg = await res.text().catch(() => "");
+                toast({
+                  title: "Erro ao gerar PDF",
+                  message: msg || `Status ${res.status}`,
+                  variant: "destructive"
+                });
+                return;
+              }
+
+              const blob = await res.blob();
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = `relatorio-${relatorioAtual.servidor}.pdf`;
+              a.click();
+              URL.revokeObjectURL(url);
+            } catch (err) {
+              toast({
+                title: "Erro de conexão",
+                message: "Não foi possível comunicar com a API de PDF.",
+                variant: "destructive"
+              });
+            }
+          }
+          
     </script>
   </body>
 </html>
