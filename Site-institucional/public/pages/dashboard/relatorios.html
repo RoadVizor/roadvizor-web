@@ -145,15 +145,15 @@
 
     <!-- Scripts -->
     <script src="../../js/utils/storage.js"></script>
-    <script src="../../js/utils/selectDiv.js"></script>
     <script src="../../js/utils/toast.js"></script>
     <script src="../../js/auth.js"></script>
     <script src="/libs/chart.js/chart.umd.js"></script>
     <script src="../../js/components/listaServidores.js"></script>
-    <script src="../../js/components/detalhes.js"></script>
     <script src="../../js/components/nivel_acesso.js"></script>
     <script src="../../js/components/sidebar.js"></script>
     <script>
+      
+
       // usados pelo listaServidores.js (precisam ser globais)
       let dados;
       async function lerDados() {
@@ -612,9 +612,11 @@
         async function exportarPdf() {
             if (!relatorioAtual) return;
             const params = new URLSearchParams(relatorioAtual);
+            //  OPTAR POR COLOCAR MOCKADO NO "res" OU NOME DO CONTAINER
+            // const network = process.env.CONTAINER_NAME;
 
             try {
-              const res = await fetch("http://localhost:8080/relatorio/pdf?" + params, {
+              const res = await fetch(`http://localhost:8080/relatorio/pdf?` + params, {
                 credentials: "include"
               });
 
@@ -643,7 +645,6 @@
               });
             }
           }
-          
     </script>
   </body>
 </html>
