@@ -224,3 +224,23 @@ UPDATE roadvizor.usuario SET nivel_acesso = 0, email = "adm@adm.com", senha = SH
 -- CREATE USER 'roadvizor_user' IDENTIFIED BY 'sptech';
 -- GRANT INSERT, SELECT, UPDATE, DELETE ON roadvizor.* TO 'roadvizor_user';
 -- SHOW GRANTS FOR 'roadvizor_user';
+
+
+CREATE TABLE log (
+  log_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  servidor_id INT NOT NULL,
+  empresa_id INT NOT NULL,
+  componente_id INT NOT NULL,
+  titulo VARCHAR(200) NOT NULL,
+  descricao_ia TEXT,
+  status ENUM('Baixo','Médio','Crítico','Inativo') NOT NULL,
+  valor_uso DECIMAL(5,2),
+  data_hora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  CONSTRAINT fk_servidor_log FOREIGN KEY (servidor_id, empresa_id)
+    REFERENCES servidor (id_servidor, empresa_id),
+  CONSTRAINT fk_componente_log FOREIGN KEY (componente_id)
+    REFERENCES componente (id_componente),
+
+  INDEX idx_log_empresa_data (empresa_id, data_hora)
+);

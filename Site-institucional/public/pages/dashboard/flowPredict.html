@@ -152,7 +152,7 @@
 
             <div
                 class="w-56 h-26 px-4 py-3 rounded-xl bg-surface border border-disabled/20 hover:border-accent/40 duration-150 flex flex-col justify-between shadow-md">
-                <h2 class="text-sm text-shadow-disabled">Servidores em risco</h2>
+                <h2 class="text-sm text-shadow-disabled">Servidores com Risco Previsto</h2>
                 <h1 id="kpi_em_risco" class="text-2xl font-bold text-white">—</h1>
                 <p class="text-xs text-shadow-disabled">servidores que exigem atenção</p>
             </div>
@@ -256,6 +256,64 @@
 
         </div>
 
+        <div id="modalSalvarLog"
+            class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+
+            <div class="w-full max-w-lg rounded-2xl border border-gray-700 bg-gray-900 p-6 shadow-2xl">
+
+                <div class="mb-5 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xl font-semibold text-white">
+                            Salvar sugestão
+                        </h2>
+                        <p class="mt-1 text-sm text-gray-400">
+                            Confirme o registro desta análise no histórico.
+                        </p>
+                    </div>
+
+                    <button onclick="fecharModalSalvarLog()" class="text-2xl text-gray-400 transition hover:text-white">
+                        &times;
+                    </button>
+                </div>
+
+                <div class="space-y-4 rounded-xl border border-gray-700 bg-gray-800/70 p-4">
+
+                    <div>
+                        <p class="text-xs font-medium uppercase text-gray-400">Servidor</p>
+                        <p id="confirmarServidor" class="mt-1 text-sm text-white">-</p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-medium uppercase text-gray-400">Componente</p>
+                        <p id="confirmarComponente" class="mt-1 text-sm text-white">-</p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-medium uppercase text-gray-400">Status identificado</p>
+                        <p id="confirmarStatus" class="mt-1 text-sm text-white">-</p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-medium uppercase text-gray-400">Ação sugerida pela IA</p>
+                        <p id="confirmarAcao" class="mt-1 text-sm leading-relaxed text-gray-300">-</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end gap-3">
+                    <button onclick="fecharModalSalvarLog()"
+                        class="rounded-lg border border-gray-600 px-4 py-2 text-sm text-gray-300 transition hover:bg-gray-800">
+                        Cancelar
+                    </button>
+
+                    <button id="btnConfirmarSalvarLog" onclick="confirmarSalvarLog()"
+                        class="rounded-lg bg-emerald-400 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-500">
+                        Confirmar salvamento
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
     </main>
 
     <!-- scripts fixos -->
@@ -305,6 +363,7 @@
         let componenteSelecionado = null;
         let estouroHoras = null;
         let limiteAtual = 80;
+        let analiseAtual = null;
 
         // Elemento HTML onde o gráfico será desenhado
         const ctx = document.getElementById('graficoRegressao').getContext('2d');
@@ -832,6 +891,7 @@
                 }
 
                 const analise = dados.analise;
+                analiseAtual = analise;
 
                 definirTexto('texto_modelo_viu', analise.o_que_modelo_viu);
                 definirTexto('texto_acao_sugerida', analise.acao_sugerida);
@@ -846,6 +906,111 @@
             }
         }
 
+        function registrarLog() {
+            if (!analiseAtual || !dashboard || !servidorSelecionado) {
+                alert('Nenhuma análise disponível para salvar.');
+                return;
+            }
+
+            const servidor = buscarServidor(servidorSelecionado);
+
+            const itemRanking = dashboard.ranking.find(item =>
+                item.servidor_id === servidorSelecionado &&
+                item.componente === componenteSelecionado
+            );
+
+            const statusMap = {
+                critico: 'Crítico',
+                alto: 'Médio',
+                medio: 'Médio',
+                baixo: 'Baixo'
+            };
+
+            const status = statusMap[itemRanking?.nivel] || 'Inativo';
+
+            document.getElementById('confirmarServidor').textContent = servidor.nome;
+            document.getElementById('confirmarComponente').textContent = componenteSelecionado;
+            document.getElementById('confirmarStatus').textContent = status;
+            document.getElementById('confirmarAcao').textContent = analiseAtual.acao_sugerida;
+
+            const modal = document.getElementById('modalSalvarLog');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function fecharModalSalvarLog() {
+            const modal = document.getElementById('modalSalvarLog');
+
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function confirmarSalvarLog() {
+            const servidor = buscarServidor(servidorSelecionado);
+
+            const componente = servidor.componentes[componenteSelecionado];
+
+            const valoresValidos = componente.real.filter(valor => valor !== null);
+            const valorUso = valoresValidos[valoresValidos.length - 1];
+
+            const itemRanking = dashboard.ranking.find(item =>
+                item.servidor_id === servidorSelecionado &&
+                item.componente === componenteSelecionado
+            );
+
+            const statusMap = {
+                critico: 'Crítico',
+                alto: 'Médio',
+                medio: 'Médio',
+                baixo: 'Baixo'
+            };
+
+            const dadosParaSalvar = {
+                servidor_id: servidorSelecionado,
+                componente: componenteSelecionado,
+                titulo: `Recomendação para ${servidor.nome}`,
+                descricao_ia: `${analiseAtual.o_que_modelo_viu}\n\nAção sugerida: ${analiseAtual.acao_sugerida}`,
+                status: statusMap[itemRanking?.nivel] || 'Inativo',
+                valor_uso: valorUso
+            };
+
+            const botao = document.getElementById('btnConfirmarSalvarLog');
+
+            try {
+                botao.disabled = true;
+                botao.textContent = 'Salvando...';
+
+                const resposta = await fetch('/api/flowpredict/salvar', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dadosParaSalvar)
+                });
+
+                const resultado = await resposta.json();
+
+                if (!resposta.ok) {
+                    throw new Error(resultado.erro || 'Erro ao salvar sugestão.');
+                }
+
+                fecharModalSalvarLog();
+                alert('Sugestão registrada com sucesso!');
+
+            } catch (erro) {
+                console.error('[Roadvizor] Erro ao salvar log:', erro);
+                alert(erro.message);
+
+            } finally {
+                botao.disabled = false;
+                botao.textContent = 'Confirmar salvamento';
+            }
+        }
+
+
+
         // Executa quando o HTML estiver carregado
         document.addEventListener('DOMContentLoaded', () => {
             autenticarPagina(1);
@@ -858,6 +1023,7 @@
 
                 storage.remove('showmsg');
             }
+
             atualizarDashboard();
         });
     </script>

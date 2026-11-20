@@ -8,4 +8,10 @@ router.get("/", verificarAutenticacao, (req, res) => {
     flowpredictController.buscarDashboard(req, res);
 });
 
+
+router.post("/salvar", verificarAutenticacao, (req, res) => {
+    flowpredictController.salvarSugestao(req, res);
+});
+
+
 module.exports = router;
