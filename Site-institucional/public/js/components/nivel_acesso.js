@@ -18,6 +18,12 @@ let niveis = {
                 "title":"Servidores",
                 "url":"./servidores.html",
                 "icon":"ph ph-hard-drives text-2xl"
+            },
+            {
+                "id":"RoadVizor | Relatórios",
+                "title":"Relatórios",
+                "url":"./relatorios.html",
+                "icon":"ph ph-books text-2xl"
             }
         ],
     },
@@ -41,6 +47,12 @@ let niveis = {
                 "title":"Servidores",
                 "url":"./servidores.html",
                 "icon":"ph ph-hard-drives text-2xl"
+            },
+            {
+                "id":"RoadVizor | Relatórios",
+                "title":"Relatórios",
+                "url":"./relatorios.html",
+                "icon":"ph ph-books text-2xl"
             }
         ],
     },

@@ -144,3 +144,4 @@ select[data-has-errors="true"] {
 .container {
   @apply max-w-6xl w-full mx-auto px-8 lg:px-12;
 }
+
