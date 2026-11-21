@@ -47,7 +47,6 @@ let niveis = {
 
     2: {
         "dash": [
-
             {
                 "id":"RoadVizor | Relatórios",
                 "title":"Relatórios",

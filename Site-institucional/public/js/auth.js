@@ -134,8 +134,11 @@ function autenticarPagina(page) {
     if (!document.cookie) {
       return;
     }
+
+    let page = 
+
     sessionStorage.setItem("showmsg", 2);
-    window.location.href = "/pages/dashboard/home.html";
+    window.location.href = `/pages/dashboard/${page}`;
   } else {
     if (document.cookie) {
       return;
