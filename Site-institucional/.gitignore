@@ -6,3 +6,4 @@ package-lock.json
 .env*
 !.env.example
 output.css
+AGENTS.md
