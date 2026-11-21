@@ -1,0 +1,17 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "azure/gpt-4.1-mini",
+  "providers": {
+    "azure": {
+      "settings": {
+        "resourceName": "1ccob-ancelmo-pi"
+      },
+      "models": {
+        "gpt-4.1-mini": {
+          "name": "GPT-4.1 Mini",
+          "modelID": "gpt-4.1-mini"
+        }
+      }
+    }
+  }
+}

@@ -15,6 +15,8 @@ const app = express();
 const router = require("./src/routes/router");
 const indexRouter = require("./src/routes/index");
 const servidorRouter = require("./src/routes/servidor");
+const flowpredictRouter = require("./src/routes/flowpredict");
+const iaRouter = require("./src/routes/ia");
 const logRouter = require("./src/routes/log")
 
 app.use(express.json());
@@ -32,6 +34,8 @@ app.use(
 app.use("/", indexRouter);
 app.use("/api", router);
 app.use("/api/servidor", servidorRouter);
+app.use("/api/flowpredict", flowpredictRouter);
+app.use("/api/ia", iaRouter);
 app.use("/api/log", logRouter)
 
 app.listen(PORTA_APP, function () {

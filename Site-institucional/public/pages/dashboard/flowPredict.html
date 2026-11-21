@@ -1,0 +1,1032 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+    <title>RoadVizor | FlowPredict</title>
+
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="../../css/output.css" />
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- ChartJS para o gráfico -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!--
+        Estilos dos elementos novos desta página. Ficam em CSS puro (e não em classes
+        Tailwind) para funcionar mesmo sem recompilar o output.css.
+    -->
+    <style>
+        .btn-comp {
+            padding: .4rem .5rem;
+            border-radius: .5rem;
+            font-size: .8rem;
+            cursor: pointer;
+            border: 1px solid rgba(148, 163, 184, .25);
+            color: #94a3b8;
+            transition: .15s;
+        }
+
+        .btn-comp:hover {
+            border-color: rgba(74, 222, 128, .4);
+        }
+
+        .btn-comp.comp-ativo {
+            border-color: rgba(16, 185, 129, .6);
+            color: #34d399;
+            background: rgba(16, 185, 129, .1);
+        }
+
+        .rank-item {
+            border: 1px solid rgba(148, 163, 184, .2);
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .rank-item:hover {
+            border-color: rgba(74, 222, 128, .4);
+        }
+
+        .rank-item.rank-ativo {
+            border-color: rgba(16, 185, 129, .6);
+        }
+
+        .badge {
+            flex-shrink: 0;
+            font-size: .75rem;
+            font-weight: 500;
+            padding: .25rem .625rem;
+            border-radius: 9999px;
+            border: 1px solid;
+        }
+
+        .badge-critico {
+            border-color: rgba(239, 68, 68, .5);
+            color: #f87171;
+            background: rgba(239, 68, 68, .1);
+        }
+
+        .badge-alto {
+            border-color: rgba(245, 158, 11, .5);
+            color: #fbbf24;
+            background: rgba(245, 158, 11, .1);
+        }
+
+        .badge-medio {
+            border-color: rgba(234, 179, 8, .5);
+            color: #facc15;
+            background: rgba(234, 179, 8, .1);
+        }
+
+        .badge-baixo {
+            border-color: rgba(16, 185, 129, .5);
+            color: #34d399;
+            background: rgba(16, 185, 129, .1);
+        }
+
+        /* Aviso de erro/carregamento no topo da página */
+        .aviso-pagina {
+            margin-top: .75rem;
+            padding: .75rem 1rem;
+            border-radius: .5rem;
+            font-size: .875rem;
+            border: 1px solid rgba(245, 158, 11, .5);
+            color: #fbbf24;
+            background: rgba(245, 158, 11, .1);
+        }
+
+        /* Mensagem exibida sobre o gráfico quando não há previsão para mostrar */
+        .aviso-grafico {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1rem;
+            font-size: .875rem;
+            color: #94a3b8;
+        }
+
+        .aviso-grafico[hidden],
+        .aviso-pagina[hidden] {
+            display: none;
+        }
+
+        /* Linha de métricas do modelo abaixo do gráfico */
+        .detalhe-modelo {
+            margin-top: .75rem;
+            font-size: .75rem;
+            color: #cbd5e1;
+        }
+
+        .nota-modelo {
+            margin-top: .25rem;
+            font-size: .7rem;
+            color: #64748b;
+        }
+    </style>
+</head>
+
+<body class="flex flex-row items-start min-h-dvh">
+
+    <!-- Sidebar -->
+    <div id="sidebar_container" class="shrink-0 sticky top-0 h-dvh"></div>
+
+    <main class="flex-1 min-w-0 p-6 pt-16 md:pt-6 lg:p-8">
+
+        <!-- Título -->
+        <div class="w-full h-auto p-2 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold text-shadow-white">FlowPredict - Analise preditiva</h2>
+            <p>Quais servidores vão estourar o limite, em qual componente e em quanto tempo.</p>
+            <div id="aviso_pagina" class="aviso-pagina" role="alert" hidden></div>
+        </div>
+
+        <!-- 1) KPIs principais -->
+        <div class="w-full h-auto p-2 sm:p-4 flex flex-wrap items-center gap-4">
+
+            <div
+                class="w-56 h-26 px-4 py-3 rounded-xl bg-surface border border-disabled/20 hover:border-accent/40 duration-150 flex flex-col justify-between shadow-md">
+                <h2 class="text-sm text-shadow-disabled">Servidores com Risco Previsto</h2>
+                <h1 id="kpi_em_risco" class="text-2xl font-bold text-white">—</h1>
+                <p class="text-xs text-shadow-disabled">servidores que exigem atenção</p>
+            </div>
+
+            <!-- Destaque em vermelho -->
+            <div
+                class="w-56 h-26 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/50 hover:border-red-500/70 duration-150 flex flex-col justify-between shadow-md">
+                <h2 class="text-sm text-shadow-disabled">Menor tempo até estourar</h2>
+                <h1 id="kpi_menor_tempo" class="text-2xl font-bold text-red-400">—</h1>
+                <p id="detalhe_menor_tempo" class="text-xs text-shadow-disabled">—</p>
+            </div>
+
+            <!-- KPI menor, encostado na direita -->
+            <div
+                class="w-48 h-20 px-3.5 py-2.5 ml-auto rounded-xl bg-surface border border-disabled/20 hover:border-accent/40 duration-150 flex flex-col justify-between shadow-md">
+                <h2 class="text-xs text-shadow-disabled">Dados atualizados</h2>
+                <h1 id="kpi_ultima_captura" class="text-sm font-bold text-white">—</h1>
+            </div>
+
+        </div>
+        <!-- 2) Resumo gerado por IA (subiu para logo abaixo dos KPIs) -->
+        <div class="w-full max-w-full p-2 sm:p-4">
+            <div
+                class="rounded-xl bg-linear-to-br from-[#0D1F19] from-0% to-[#0D1626] to-60% border border-emerald-500/30 hover:border-emerald-500/50 duration-150 shadow-md p-4 sm:p-6 flex flex-col gap-6">
+                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                    <div class="flex flex-col gap-3">
+                        <span
+                            class="w-fit text-xs px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-medium">Resumo
+                            gerado por IA</span>
+                        <h2 class="text-xl font-bold text-white">O que fazer primeiro</h2>
+                    </div>
+
+                    <button id="btn_registrar_log" onclick="registrarLog()"
+                        class="cursor-pointer w-full sm:w-auto px-6 py-2.5 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-black font-semibold text-sm duration-150">
+                        Salvar sugestão
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+                    <div class="min-w-0">
+                        <h3 class="text-xs font-bold tracking-wide text-emerald-400 uppercase mb-2">O que o modelo viu
+                        </h3>
+                        <p id="texto_modelo_viu" class="text-sm text-white/80 leading-relaxed">
+                            No <span id="resumo_servidor">Edge Km 32</span>, a <span id="resumo_componente">CPU</span>
+                            deve ultrapassar o limite de
+                            <span id="resumo_limite">80</span>% em cerca de <span id="resumo_tempo">3h15</span>.
+                            O crescimento segue o padrão de horário de pico observado nos últimos dias.
+                        </p>
+                    </div>
+
+                    <div class="min-w-0">
+                        <h3 class="text-xs font-bold tracking-wide text-emerald-400 uppercase mb-2">Ação sugerida</h3>
+                        <p id="texto_acao_sugerida" class="text-sm text-white/80 leading-relaxed">
+                            Verificar os processos em execução e avaliar redistribuir carga antes do estouro.
+                            O Edge Km 15 já está acima do limite e deve ser tratado antes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3) Ranking (esquerda) + Gráfico (direita) -->
+        <div class="w-full max-w-full flex flex-col md:flex-row gap-4 md:gap-6 p-2 sm:p-4">
+
+            <!-- Lado esquerdo: Ranking de risco -->
+            <div
+                class="relative rounded-xl bg-surface border border-disabled/25 hover:border-accent/40 duration-150 shadow-md w-full md:w-96 md:shrink-0 min-w-0">
+                <div class="p-4 sm:p-5 flex flex-col gap-3 max-h-96 md:max-h-none md:absolute md:inset-0">
+                    <div>
+                        <h2 class="text-sm text-disabled font-medium mb-1">Ranking de risco</h2>
+                        <p class="text-xs text-disabled">Ordenadas por tempo até estourar o limite.</p>
+                    </div>
+                    <div id="lista_ranking" class="scroll-fino flex flex-col gap-3 flex-1 min-h-0 overflow-y-auto pr-1">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lado direito: Gráfico -->
+            <div
+                class="rounded-xl bg-surface border border-disabled/25 hover:border-accent/40 duration-150 shadow-md p-4 sm:p-5 flex-1 min-w-0 flex flex-col">
+                <h2 class="text-sm text-disabled font-medium break-words"> <span id="componente_grafico">—</span>
+                    · <span id="nome_servidor_grafico">—</span> — real vs previsto</h2>
+                <p class="text-xs text-disabled mb-4">A área verde é a faixa de previsão de 95%.</p>
+
+                <div class="flex flex-col lg:flex-row gap-4 flex-1 min-h-0">
+                    <div class="relative w-full min-w-0 h-64 sm:h-72 lg:h-auto lg:min-h-72 lg:flex-1">
+                        <canvas id="graficoRegressao"></canvas>
+                        <div id="aviso_grafico" class="aviso-grafico" hidden></div>
+                    </div>
+
+                    <div class="shrink-0 lg:w-28">
+                        <p class="text-xs text-disabled font-medium mb-2">Componente</p>
+                        <div id="seletor_componente" class="grid grid-cols-4 lg:grid-cols-1 gap-2"></div>
+                    </div>
+                </div>
+
+                <p id="detalhe_modelo" class="detalhe-modelo"></p>
+                <p class="nota-modelo">O R² mede o ajuste da reta ao histórico; não garante que a previsão se confirme.
+                </p>
+            </div>
+
+        </div>
+
+        <div id="modalSalvarLog"
+            class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+
+            <div class="w-full max-w-lg rounded-2xl border border-gray-700 bg-gray-900 p-6 shadow-2xl">
+
+                <div class="mb-5 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xl font-semibold text-white">
+                            Salvar sugestão
+                        </h2>
+                        <p class="mt-1 text-sm text-gray-400">
+                            Confirme o registro desta análise no histórico.
+                        </p>
+                    </div>
+
+                    <button onclick="fecharModalSalvarLog()" class="text-2xl text-gray-400 transition hover:text-white">
+                        &times;
+                    </button>
+                </div>
+
+                <div class="space-y-4 rounded-xl border border-gray-700 bg-gray-800/70 p-4">
+
+                    <div>
+                        <p class="text-xs font-medium uppercase text-gray-400">Servidor</p>
+                        <p id="confirmarServidor" class="mt-1 text-sm text-white">-</p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-medium uppercase text-gray-400">Componente</p>
+                        <p id="confirmarComponente" class="mt-1 text-sm text-white">-</p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-medium uppercase text-gray-400">Status identificado</p>
+                        <p id="confirmarStatus" class="mt-1 text-sm text-white">-</p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-medium uppercase text-gray-400">Ação sugerida pela IA</p>
+                        <p id="confirmarAcao" class="mt-1 text-sm leading-relaxed text-gray-300">-</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end gap-3">
+                    <button onclick="fecharModalSalvarLog()"
+                        class="rounded-lg border border-gray-600 px-4 py-2 text-sm text-gray-300 transition hover:bg-gray-800">
+                        Cancelar
+                    </button>
+
+                    <button id="btnConfirmarSalvarLog" onclick="confirmarSalvarLog()"
+                        class="rounded-lg bg-emerald-400 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-500">
+                        Confirmar salvamento
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- scripts fixos -->
+
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/selectDiv.js"></script>
+    <script src="../../js/utils/toast.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="/libs/chart.js/chart.umd.js"></script>
+    <script src="../../js/components/detalhes.js"></script>
+    <script src="../../js/components/nivel_acesso.js"></script>
+    <script src="../../js/components/sidebar.js"></script>
+    <script>
+        // Dados utilizados pela sidebar
+        let dados;
+
+        async function lerDados() {
+            const resposta = await fetch('../../js/dados.json');
+            dados = await resposta.json();
+        }
+
+        // Configurações
+        const API_FLOWPREDICT = '/api/flowpredict';
+        const URL_DADOS_EXEMPLO = '../../js/dashboard_exemplo.json';
+        const usarExemplo = location.search.includes('mock');
+
+        const labels = ['-12h', '-9h', '-6h', '-3h', 'agora', '+3h', '+6h', '+9h', '+12h'];
+        const POSICAO_AGORA = 4;
+        const PASSO_GRAFICO_H = 3;
+
+        const NIVEIS = {
+            critico: { texto: 'Crítico', classe: 'badge-critico' },
+            alto: { texto: 'Alto', classe: 'badge-alto' },
+            medio: { texto: 'Médio', classe: 'badge-medio' },
+            baixo: { texto: 'Baixo', classe: 'badge-baixo' }
+        };
+
+        const TEXTO_TENDENCIA = {
+            CRESCENTE: 'crescente',
+            DECRESCENTE: 'decrescente',
+            SEM_TENDENCIA: 'sem tendência definida'
+        };
+
+        // Estado atual da página
+        let dashboard = null;
+        let servidorSelecionado = null;
+        let componenteSelecionado = null;
+        let estouroHoras = null;
+        let limiteAtual = 80;
+        let analiseAtual = null;
+
+        // Elemento HTML onde o gráfico será desenhado
+        const ctx = document.getElementById('graficoRegressao').getContext('2d');
+
+        // Busca os dados no Node.js ou utiliza o JSON de demonstração
+        async function carregarDashboard() {
+            const url = usarExemplo ? URL_DADOS_EXEMPLO : API_FLOWPREDICT;
+
+            const resposta = await fetch(url);
+
+            if (!resposta.ok) {
+                throw new Error('HTTP ' + resposta.status);
+            }
+
+            return await resposta.json();
+        }
+
+        // Funções auxiliares
+        function definirTexto(id, texto) {
+            document.getElementById(id).textContent = texto;
+        }
+
+        function buscarServidor(id) {
+            for (let i = 0; i < dashboard.servidores.length; i++) {
+                if (dashboard.servidores[i].id === id) {
+                    return dashboard.servidores[i];
+                }
+            }
+
+            return null;
+        }
+
+        function formatarHoras(horas) {
+            const totalMinutos = Math.round(horas * 60);
+            const h = Math.floor(totalMinutos / 60);
+            let m = totalMinutos % 60;
+
+            if (m === 0) {
+                return h + 'h';
+            }
+
+            if (m < 10) {
+                m = '0' + m;
+            }
+
+            return h + 'h' + m;
+        }
+
+        function formatarNumero(valor, casas) {
+            return valor.toFixed(casas).replace('.', ',');
+        }
+
+        function formatarDataHora(texto) {
+            return new Date(texto).toLocaleString('pt-BR');
+        }
+
+        function descreverEstouro(horas) {
+            if (horas === null) {
+                return 'sem estouro previsto';
+            }
+
+            if (horas === 0) {
+                return 'já acima do limite';
+            }
+
+            return 'estouro em ' + formatarHoras(horas);
+        }
+
+        function mostrarAviso(mensagem) {
+            const aviso = document.getElementById('aviso_pagina');
+            aviso.textContent = mensagem;
+            aviso.hidden = false;
+        }
+
+        function esconderAviso() {
+            document.getElementById('aviso_pagina').hidden = true;
+        }
+
+        // Indicadores do dashboard
+        function preencherKpis() {
+            const resumo = dashboard.resumo;
+
+            // Servidores em risco
+            definirTexto(
+                'kpi_em_risco',
+                resumo.em_risco + ' de ' + resumo.total_servidores
+            );
+
+            // Menor tempo até atingir o limite
+            if (resumo.menor_estouro === null) {
+                definirTexto('kpi_menor_tempo', '—');
+                definirTexto('detalhe_menor_tempo', 'nenhum estouro previsto');
+            } else {
+                definirTexto(
+                    'kpi_menor_tempo',
+                    '' + formatarHoras(resumo.menor_estouro.horas)
+                );
+
+                definirTexto(
+                    'detalhe_menor_tempo',
+                    resumo.menor_estouro.servidor + ' · ' +
+                    resumo.menor_estouro.componente
+                );
+            }
+
+            // Última leitura recebida do Silver
+            definirTexto(
+                'kpi_ultima_captura',
+                formatarDataHora(dashboard.gerado_em)
+            );
+        }
+
+        // Ranking de risco
+        function renderizarRanking() {
+            const lista = document.getElementById('lista_ranking');
+            let html = '';
+
+            if (dashboard.ranking.length === 0) {
+                lista.innerHTML = '<p class="text-xs text-disabled">Nenhum servidor com dados suficientes.</p>';
+                return;
+            }
+
+            for (let i = 0; i < dashboard.ranking.length; i++) {
+                const item = dashboard.ranking[i];
+                const servidor = buscarServidor(item.servidor_id);
+                const nivel = NIVEIS[item.nivel];
+
+                let classeAtivo = '';
+
+                if (item.servidor_id === servidorSelecionado) {
+                    classeAtivo = 'rank-ativo';
+                }
+
+                html += `
+                <div class="rank-item ${classeAtivo} flex items-center justify-between gap-2 p-3 rounded-lg bg-surface/50"
+                     onclick="selecionarServidor(${item.servidor_id}, '${item.componente}')">
+                    <div class="min-w-0">
+                        <span class="text-white font-bold text-sm">${i + 1}</span>
+                        <span class="text-white text-sm ml-2">${servidor.nome} · ${item.componente}</span>
+                        <p class="text-xs text-disabled mt-0.5 ml-5">
+                            ${descreverEstouro(item.estouro_horas)}
+                        </p>
+                    </div>
+                    <span class="badge ${nivel.classe}">${nivel.texto}</span>
+                </div>`;
+            }
+
+            if (dashboard.resumo.servidores_sem_dados > 0) {
+                html += `
+                <p class="text-xs text-disabled">
+                    ${dashboard.resumo.servidores_sem_dados}
+                    servidor(es) sem dados suficientes para previsão.
+                </p>`;
+            }
+
+            lista.innerHTML = html;
+        }
+
+        // Seleção de componentes
+        function renderizarSeletorComponentes(servidor) {
+            let html = '';
+
+            for (let nome in servidor.componentes) {
+                let classe = 'btn-comp';
+
+                if (nome === componenteSelecionado) {
+                    classe = 'btn-comp comp-ativo';
+                }
+
+                html += `
+                <button class="${classe}" onclick="selecionarComponente('${nome}')">
+                    ${nome}
+                </button>`;
+            }
+
+            document.getElementById('seletor_componente').innerHTML = html;
+        }
+
+        // Gráfico de previsão
+        function deslocarParaAgora(valores) {
+            const resultado = [null, null, null, null];
+
+            for (let i = 0; i < valores.length; i++) {
+                resultado.push(valores[i]);
+            }
+
+            return resultado;
+        }
+
+        function montarDatasets(analise) {
+            const linhaLimite = [];
+
+            for (let i = 0; i < labels.length; i++) {
+                linhaLimite.push(analise.limite);
+            }
+
+            return [
+                {
+                    label: 'Real',
+                    data: analise.real,
+                    borderColor: '#60a5fa',
+                    tension: 0.3,
+                    borderWidth: 2,
+                    pointRadius: 0
+                },
+                {
+                    label: 'Previsto',
+                    data: deslocarParaAgora(analise.previsto),
+                    borderColor: '#4ade80',
+                    borderDash: [5, 5],
+                    tension: 0.3,
+                    borderWidth: 2,
+                    pointRadius: 0
+                },
+                {
+                    label: 'Limite configurado',
+                    data: linhaLimite,
+                    borderColor: '#f87171',
+                    borderDash: [4, 4],
+                    borderWidth: 1.5,
+                    pointRadius: 0
+                },
+                {
+                    label: '_banda_superior',
+                    data: deslocarParaAgora(analise.banda_superior),
+                    borderWidth: 0,
+                    pointRadius: 0,
+                    tension: 0.3,
+                    backgroundColor: 'rgba(74, 222, 128, 0.15)',
+                    fill: '+1'
+                },
+                {
+                    label: '_banda_inferior',
+                    data: deslocarParaAgora(analise.banda_inferior),
+                    borderWidth: 0,
+                    pointRadius: 0,
+                    tension: 0.3,
+                    fill: false
+                }
+            ];
+        }
+
+        // Marca o momento atual e o possível estouro do limite
+        const pluginMarcadores = {
+            id: 'marcadores',
+
+            afterDatasetsDraw: function (chart) {
+                const pincel = chart.ctx;
+                const area = chart.chartArea;
+                const eixoX = chart.scales.x;
+                const eixoY = chart.scales.y;
+
+                const xAgora = eixoX.getPixelForValue(POSICAO_AGORA);
+
+                pincel.save();
+                pincel.strokeStyle = '#475569';
+                pincel.setLineDash([3, 3]);
+                pincel.beginPath();
+                pincel.moveTo(xAgora, area.top);
+                pincel.lineTo(xAgora, area.bottom);
+                pincel.stroke();
+                pincel.restore();
+
+                if (estouroHoras === null) {
+                    return;
+                }
+
+                const px = eixoX.getPixelForValue(
+                    POSICAO_AGORA + estouroHoras / PASSO_GRAFICO_H
+                );
+
+                const py = eixoY.getPixelForValue(limiteAtual);
+
+                pincel.save();
+                pincel.fillStyle = '#f87171';
+                pincel.beginPath();
+                pincel.arc(px, py, 4, 0, Math.PI * 2);
+                pincel.fill();
+
+                pincel.font = '11px sans-serif';
+                pincel.textAlign = 'center';
+
+                let texto = 'estouro em ' + formatarHoras(estouroHoras);
+
+                if (estouroHoras === 0) {
+                    texto = 'já acima do limite';
+                }
+
+                let xTexto = px;
+
+                if (xTexto > area.right - 45) {
+                    xTexto = area.right - 45;
+                }
+
+                pincel.fillText(texto, xTexto, py + 18);
+                pincel.restore();
+            }
+        };
+
+        const grafico = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: []
+            },
+            plugins: [pluginMarcadores],
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#94a3b8',
+                            usePointStyle: true,
+                            pointStyle: 'line',
+                            boxWidth: 24,
+                            filter: function (item) {
+                                return !item.text.startsWith('_');
+                            }
+                        }
+                    },
+                    tooltip: {
+                        filter: function (item) {
+                            return !item.dataset.label.startsWith('_');
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#1e293b' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    y: {
+                        min: 0,
+                        max: 100,
+                        grid: { color: '#1e293b' },
+                        ticks: {
+                            color: '#94a3b8',
+                            stepSize: 25,
+                            callback: function (valor) {
+                                return valor + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Informações complementares do gráfico
+        function definirAvisoGrafico(mensagem) {
+            const aviso = document.getElementById('aviso_grafico');
+            aviso.textContent = mensagem;
+            aviso.hidden = mensagem === '';
+        }
+
+        function descreverModelo(analise) {
+            const modelo = analise.modelo;
+
+            let texto = 'Tendência: ' + TEXTO_TENDENCIA[analise.tendencia];
+
+            if (analise.tendencia !== 'SEM_TENDENCIA') {
+                let sinal = '';
+
+                if (modelo.inclinacao_pct_por_hora > 0) {
+                    sinal = '+';
+                }
+
+                texto += ' (' + sinal +
+                    formatarNumero(modelo.inclinacao_pct_por_hora, 2) + ' p.p./h)';
+            }
+
+            texto += ' · R²: ' + formatarNumero(modelo.r2, 2);
+            texto += ' · Erro típico: ±' + formatarNumero(modelo.erro_residual_pct, 1) + ' p.p.';
+            texto += ' · Histórico: ' + Math.round(modelo.horas_historico) + 'h';
+
+            return texto;
+        }
+
+        function atualizarGrafico() {
+            const servidor = buscarServidor(servidorSelecionado);
+
+            if (servidor === null) {
+                limparGrafico('Nenhuma análise disponível.');
+                return;
+            }
+
+            const analise = servidor.componentes[componenteSelecionado];
+
+            if (analise === undefined) {
+                limparGrafico('Nenhuma análise disponível.');
+                return;
+            }
+
+            definirTexto('nome_servidor_grafico', servidor.nome);
+            definirTexto('componente_grafico', componenteSelecionado);
+
+            renderizarSeletorComponentes(servidor);
+            renderizarRanking();
+
+            if (analise.status !== 'ok') {
+                estouroHoras = null;
+                grafico.data.datasets = [];
+                grafico.update();
+
+                definirAvisoGrafico(
+                    'Histórico insuficiente para prever (' +
+                    analise.pontos + ' de ' + analise.pontos_minimos +
+                    ' pontos de 15 min). Aguarde mais leituras deste servidor.'
+                );
+
+                definirTexto('detalhe_modelo', '');
+                return;
+            }
+
+            limiteAtual = analise.limite;
+            estouroHoras = null;
+
+            if (analise.estouro_horas !== null && analise.estouro_horas <= 12) {
+                estouroHoras = analise.estouro_horas;
+            }
+
+            definirAvisoGrafico('');
+            grafico.data.datasets = montarDatasets(analise);
+            grafico.update();
+
+            definirTexto('detalhe_modelo', descreverModelo(analise));
+        }
+
+        function limparGrafico(mensagem) {
+            estouroHoras = null;
+            grafico.data.datasets = [];
+            grafico.update();
+
+            definirAvisoGrafico(mensagem);
+            definirTexto('nome_servidor_grafico', '—');
+            definirTexto('componente_grafico', '—');
+            definirTexto('detalhe_modelo', '');
+
+            document.getElementById('seletor_componente').innerHTML = '';
+        }
+
+        // Atualiza a seleção feita pelo usuário
+        function selecionarServidor(id, componente) {
+            servidorSelecionado = id;
+            componenteSelecionado = componente;
+
+            atualizarGrafico();
+
+            if (!usarExemplo) {
+                analisarComIA(id);
+            }
+        }
+
+        function selecionarComponente(nome) {
+            componenteSelecionado = nome;
+
+            atualizarGrafico();
+        }
+
+        // Seleciona automaticamente o primeiro item do ranking
+        function garantirSelecao() {
+            const servidor = buscarServidor(servidorSelecionado);
+
+            if (
+                servidor !== null &&
+                servidor.componentes[componenteSelecionado] !== undefined
+            ) {
+                return;
+            }
+
+            const primeiro = dashboard.ranking[0];
+
+            servidorSelecionado = primeiro.servidor_id;
+            componenteSelecionado = primeiro.componente;
+        }
+
+        // Carrega os dados e atualiza os elementos da página
+        async function atualizarDashboard() {
+            try {
+                dashboard = await carregarDashboard();
+            } catch (erro) {
+                console.error('FlowPredict: falha ao carregar os dados', erro);
+                mostrarAviso('Não foi possível carregar as previsões (' + erro.message + ').');
+                return;
+            }
+
+            esconderAviso();
+            preencherKpis();
+
+            if (dashboard.ranking.length === 0) {
+                renderizarRanking();
+                limparGrafico('Nenhum servidor com histórico suficiente para previsão.');
+                return;
+            }
+
+            garantirSelecao();
+            atualizarGrafico();
+
+            if (!usarExemplo) {
+                await analisarComIA(servidorSelecionado);
+            }
+        }
+
+        async function analisarComIA(servidorId) {
+            try {
+                definirTexto('texto_modelo_viu', 'Gerando análise do servidor...');
+                definirTexto('texto_acao_sugerida', 'Aguarde enquanto a IA avalia os componentes.');
+
+                const resposta = await fetch('/api/ia/analisar', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        servidor_id: servidorId
+                    })
+                });
+
+                const dados = await resposta.json();
+
+                if (!resposta.ok) {
+                    throw new Error(dados.erro || 'Erro ao solicitar análise.');
+                }
+
+                const analise = dados.analise;
+                analiseAtual = analise;
+
+                definirTexto('texto_modelo_viu', analise.o_que_modelo_viu);
+                definirTexto('texto_acao_sugerida', analise.acao_sugerida);
+
+                console.log('[Roadvizor] Análise recebida:', analise);
+
+            } catch (erro) {
+                console.error('[Roadvizor] Erro na análise:', erro);
+
+                definirTexto('texto_modelo_viu', 'Não foi possível gerar a análise.');
+                definirTexto('texto_acao_sugerida', 'Tente novamente mais tarde.');
+            }
+        }
+
+        function registrarLog() {
+            if (!analiseAtual || !dashboard || !servidorSelecionado) {
+                alert('Nenhuma análise disponível para salvar.');
+                return;
+            }
+
+            const servidor = buscarServidor(servidorSelecionado);
+
+            const itemRanking = dashboard.ranking.find(item =>
+                item.servidor_id === servidorSelecionado &&
+                item.componente === componenteSelecionado
+            );
+
+            const statusMap = {
+                critico: 'Crítico',
+                alto: 'Médio',
+                medio: 'Médio',
+                baixo: 'Baixo'
+            };
+
+            const status = statusMap[itemRanking?.nivel] || 'Inativo';
+
+            document.getElementById('confirmarServidor').textContent = servidor.nome;
+            document.getElementById('confirmarComponente').textContent = componenteSelecionado;
+            document.getElementById('confirmarStatus').textContent = status;
+            document.getElementById('confirmarAcao').textContent = analiseAtual.acao_sugerida;
+
+            const modal = document.getElementById('modalSalvarLog');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function fecharModalSalvarLog() {
+            const modal = document.getElementById('modalSalvarLog');
+
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function confirmarSalvarLog() {
+            const servidor = buscarServidor(servidorSelecionado);
+
+            const componente = servidor.componentes[componenteSelecionado];
+
+            const valoresValidos = componente.real.filter(valor => valor !== null);
+            const valorUso = valoresValidos[valoresValidos.length - 1];
+
+            const itemRanking = dashboard.ranking.find(item =>
+                item.servidor_id === servidorSelecionado &&
+                item.componente === componenteSelecionado
+            );
+
+            const statusMap = {
+                critico: 'Crítico',
+                alto: 'Médio',
+                medio: 'Médio',
+                baixo: 'Baixo'
+            };
+
+            const dadosParaSalvar = {
+                servidor_id: servidorSelecionado,
+                componente: componenteSelecionado,
+                titulo: `Recomendação para ${servidor.nome}`,
+                descricao_ia: `${analiseAtual.o_que_modelo_viu}\n\nAção sugerida: ${analiseAtual.acao_sugerida}`,
+                status: statusMap[itemRanking?.nivel] || 'Inativo',
+                valor_uso: valorUso
+            };
+
+            const botao = document.getElementById('btnConfirmarSalvarLog');
+
+            try {
+                botao.disabled = true;
+                botao.textContent = 'Salvando...';
+
+                const resposta = await fetch('/api/flowpredict/salvar', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dadosParaSalvar)
+                });
+
+                const resultado = await resposta.json();
+
+                if (!resposta.ok) {
+                    throw new Error(resultado.erro || 'Erro ao salvar sugestão.');
+                }
+
+                fecharModalSalvarLog();
+                alert('Sugestão registrada com sucesso!');
+
+            } catch (erro) {
+                console.error('[Roadvizor] Erro ao salvar log:', erro);
+                alert(erro.message);
+
+            } finally {
+                botao.disabled = false;
+                botao.textContent = 'Confirmar salvamento';
+            }
+        }
+
+
+
+        // Executa quando o HTML estiver carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            autenticarPagina(1);
+
+            if (sessionStorage.showmsg == 2) {
+                toast({
+                    title: 'Usuário já autenticado!',
+                    variant: 'success'
+                });
+
+                storage.remove('showmsg');
+            }
+
+            atualizarDashboard();
+        });
+    </script>
+</body>
+
+</html>
