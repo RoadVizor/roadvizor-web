@@ -1,0 +1,47 @@
+{
+  "regiao": {
+    "slug": "norte",
+    "nome": "Norte"
+  },
+  "gerado_em": "2026-11-17T22:50:00-03:00",
+  "dados_defasados": false,
+  "kpis": {
+    "saude_percent": 82,
+    "servidores_totais": 12,
+    "servidores_criticos": 1,
+    "servidores_atencao": 2,
+    "servidores_saudaveis": 9,
+    "servidores_offline": 0,
+    "variacao_vs_ontem": {
+      "saude_percent": 3,
+      "totais": 0,
+      "criticos": 0,
+      "atencao": 1,
+      "saudaveis": -1
+    }
+  },
+  "grafico_horas": {
+    "horas": [
+      "12:00",
+      "13:00"
+    ],
+    "saude_percents": [
+      78,
+      null
+    ]
+  },
+  "servidores": [
+    {
+      "id": 3,
+      "apelido": "SRV-ANCH-1",
+      "status": "SAUDAVEL",
+      "componentes": {
+        "cpu": 42.5,
+        "ram": 56.3,
+        "disco": 68.8,
+        "rede": 78.2
+      },
+      "ultima_atualizacao": "2026-11-17T22:48:00-03:00"
+    }
+  ]
+}

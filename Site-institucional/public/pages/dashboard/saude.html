@@ -21,39 +21,170 @@
     <!-- Dashboard -->
      <main class="w-full min-h-dvh flex flex-col items-start justify-start text-foreground">
 
-        <!-- Topbar + Titulos -->
+       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
+         <!-- Cabeçalho -->
+         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+           <div>
+             <h1 class="text-2xl font-semibold">Saúde da infraestrutura</h1>
+             <p class="text-sm text-muted">Visão geral do estado dos servidores e recursos</p>
+           </div>
+           <div class="flex items-center gap-3">
+             <label class="sr-only" for="sv-search">Pesquisar</label>
+             <input id="sv-search" data-sv-search class="w-full md:w-64 px-3 py-2 border rounded-md text-sm focus:outline-none" placeholder="Pesquisar servidor..." />
+             <select id="sv-filter" data-sv-filter class="px-3 py-2 border rounded-md text-sm bg-surface">
+               <option value="">Todos os servidores</option>
+               <option value="saudavel">Saudável</option>
+               <option value="atencao">Atenção</option>
+               <option value="critico">Crítico</option>
+             </select>
+           </div>
+         </div>
 
-        <section class="w-full h-fit p-8 flex items-center justify-between">
-          <div>
-            <h1 class="font-bold text-2xl">Mapa de <span class="text-accent">saúde</span> da infraestrutura</h1>
-            <p class="text-disabled text-xl">Visão geral da condição dos serviços e componentes monitorados</p>
-          </div>
-          
-          <div class="w-70 flex justify-between items-center">
-            <div class="w-45">
-              <select id="filtro">
-                <option value="dias">Últimos 7 dias</option>
-                <option value="mes">Último mês</option>
-                <option value="meses">Últimos 3 meses</option>
-              </select>
-            </div>
+         <!-- Top panels: donut + evolução + KPIs -->
+         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
+           <!-- Donut / resumo -->
+           <section class="lg:col-span-4 bg-surface/60 border border-border rounded-xl p-5">
+             <div class="flex items-center justify-between mb-4">
+               <h2 class="font-medium">Saúde da infraestrutura</h2>
+               <div class="text-sm text-muted">Últimas 24h</div>
+             </div>
+             <div class="flex gap-6 items-center">
+               <div class="w-40 h-40 relative flex items-center justify-center">
+                 <canvas id="saude-donut" data-chart-placeholder class="w-40 h-40"></canvas>
+                 <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                   <span class="text-3xl font-bold" id="saude-percent">--%</span>
+                   <span class="text-sm text-muted">Saudável</span>
+                 </div>
+               </div>
+               <div class="flex-1">
+                 <ul class="space-y-3">
+                   <li class="flex items-center justify-between">
+                     <div class="flex items-center gap-3">
+                       <span class="inline-block w-3 h-3 rounded-full" style="background:var(--color-chart-2)"></span>
+                       <span class="text-sm">Saudável</span>
+                     </div>
+                     <span class="text-sm" data-kpi-saudavel>0</span>
+                   </li>
+                   <li class="flex items-center justify-between">
+                     <div class="flex items-center gap-3">
+                       <span class="inline-block w-3 h-3 rounded-full" style="background:var(--color-chart-4)"></span>
+                       <span class="text-sm">Atenção</span>
+                     </div>
+                     <span class="text-sm" data-kpi-atencao>0</span>
+                   </li>
+                   <li class="flex items-center justify-between">
+                     <div class="flex items-center gap-3">
+                       <span class="inline-block w-3 h-3 rounded-full" style="background:var(--destructive-text)"></span>
+                       <span class="text-sm">Crítico</span>
+                     </div>
+                     <span class="text-sm" data-kpi-critico>0</span>
+                   </li>
+                 </ul>
+               </div>
+             </div>
+           </section>
 
-            <div class="w-8 h-8 flex items-center justify-center bg-surface border-1 border-disabled rounded-lg cursor-pointer">
-              <i class="ph ph-repeat"></i>
-            </div>
-          </div>
-        </section>
+           <!-- Evolução linha -->
+           <section class="lg:col-span-5 bg-surface/60 border border-border rounded-xl p-5">
+             <div class="flex items-center justify-between mb-3">
+               <h2 class="font-medium">Evolução da saúde ao longo do dia</h2>
+               <div class="text-sm text-muted">24h</div>
+             </div>
+             <div class="h-48">
+               <canvas id="saude-evolucao-chart" class="w-full h-full"></canvas>
+             </div>
+           </section>
 
-        <!-- KPI's -->
+           <!-- KPIs laterais -->
+           <div class="lg:col-span-3 space-y-4">
+             <div class="bg-surface/60 border border-border rounded-xl p-4">
+               <div class="flex items-center justify-between">
+                 <div>
+                   <p class="text-sm text-muted">Servidores totais</p>
+                   <p class="text-3xl font-bold" data-kpi-total>0</p>
+                 </div>
+                 <div class="text-accent">
+                   <i class="ph ph-server" style="font-size:28px"></i>
+                 </div>
+               </div>
+             </div>
+             <div class="bg-surface/60 border border-border rounded-xl p-4">
+               <div class="flex items-center justify-between">
+                 <div>
+                   <p class="text-sm text-muted">Estado crítico</p>
+                   <p class="text-3xl font-bold" data-kpi-critico-main>0</p>
+                 </div>
+                 <div class="text-destructive-foreground">
+                   <i class="ph ph-warning" style="font-size:28px"></i>
+                 </div>
+               </div>
+             </div>
+             <div class="bg-surface/60 border border-border rounded-xl p-4">
+               <div class="flex items-center justify-between">
+                 <div>
+                   <p class="text-sm text-muted">Estado atenção</p>
+                   <p class="text-3xl font-bold" data-kpi-atencao-main>0</p>
+                 </div>
+                 <div class="text-warning-foreground">
+                   <i class="ph ph-warning-square" style="font-size:28px"></i>
+                 </div>
+               </div>
+             </div>
+             <div class="bg-surface/60 border border-border rounded-xl p-4">
+               <div class="flex items-center justify-between">
+                 <div>
+                   <p class="text-sm text-muted">Estado saudável</p>
+                   <p class="text-3xl font-bold" data-kpi-saudavel-main>0</p>
+                 </div>
+                 <div class="text-success-foreground">
+                   <i class="ph ph-check-circle" style="font-size:28px"></i>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
 
-        
+         <!-- Lista de servidores (tabela) -->
+         <section class="bg-surface/60 border border-border rounded-xl p-5">
+           <div class="flex items-center justify-between mb-4">
+             <h2 class="font-medium">Lista de servidores</h2>
+             <div>
+               <select class="px-3 py-2 border rounded-md bg-surface" id="servers-filter">
+                 <option value="">Todos os servidores</option>
+               </select>
+             </div>
+           </div>
+
+           <div class="overflow-x-auto">
+             <table class="w-full text-left">
+               <thead>
+                 <tr class="text-sm text-muted">
+                   <th class="pb-3">Servidor</th>
+                   <th class="pb-3">CPU</th>
+                   <th class="pb-3">RAM</th>
+                   <th class="pb-3">Disco</th>
+                   <th class="pb-3">Rede</th>
+                   <th class="pb-3">Saúde</th>
+                   <th class="pb-3">Última atualização</th>
+                 </tr>
+               </thead>
+               <tbody data-servers-list>
+                 <!-- linhas populadas via JS -->
+               </tbody>
+             </table>
+           </div>
+         </section>
+
+       </div>
+
      </main>
 
 
     <script src="../../js/utils/storage.js"></script>
     <script src="../../js/utils/toast.js"></script>
     <script src="../../js/auth.js"></script>
-    <script src="/libs/chart.js/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/saude.js"></script>
     <script src="../../js/components/nivel_acesso.js"></script>
     <script src="../../js/components/sidebar.js"></script> 
   </body>

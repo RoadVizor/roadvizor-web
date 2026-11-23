@@ -18,6 +18,12 @@ let niveis = {
                 "title":"Servidores",
                 "url":"./servidores.html",
                 "icon":"ph ph-hard-drives text-2xl"
+            },
+            {
+                "id":"RoadVizor | Servidores",
+                "title":"Saude",
+                "url":"./saude.html",
+                "icon":"ph ph-hard-drives text-2xl"
             }
         ],
     },

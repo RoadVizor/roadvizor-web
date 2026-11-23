@@ -1,11 +1,11 @@
 CREATE DATABASE IF NOT EXISTS roadvizor;
 USE roadvizor;
 -- DROP DATABASE roadvizor;
-
+ 
 -- OBS: muitas das decisões tomadas ao criar esta tabela foram motivadas com base na API viaCEP
 -- disponível em: https://viacep.com.br.
 -- e no entendimento de que ambos os endereços de CCOs e Pedágios poderão ser guardados nesta tabela.
-
+ 
 CREATE TABLE IF NOT EXISTS endereco(
 	id_endereco INT PRIMARY KEY AUTO_INCREMENT,
     
@@ -24,19 +24,12 @@ CREATE TABLE IF NOT EXISTS endereco(
     km VARCHAR(20) NULL,
     sentido VARCHAR(30) NULL 
 );
-
-INSERT INTO endereco (cep, logradouro, bairro, localidade, uf, numero, km, sentido
-) VALUES (
-    '01001000', 
-    'Praça da Sé', 
-    'Sé', 
-    'São Paulo', 
-    'SP', 
-    '100', 
-    'KM 15', 
-    'Norte'
-);
-
+ 
+-- Seed: só insere se ainda não existir (o script pode ser executado mais de uma vez)
+INSERT INTO endereco (cep, logradouro, bairro, localidade, uf, numero, km, sentido)
+SELECT '01001000', 'Praça da Sé', 'Sé', 'São Paulo', 'SP', '100', 'KM 15', 'Norte'
+ WHERE NOT EXISTS (SELECT 1 FROM endereco WHERE cep = '01001000');
+ 
 CREATE TABLE IF NOT EXISTS empresa(
 	id_empresa INT PRIMARY KEY AUTO_INCREMENT,
     -- endereco_id INT NOT NULL,
@@ -56,7 +49,7 @@ CREATE TABLE IF NOT EXISTS empresa(
     -- CONSTRAINT fk_empresa_endereco FOREIGN KEY (endereco_id)
 	-- 	REFERENCES endereco(id_endereco)
 );
-
+ 
 CREATE TABLE IF NOT EXISTS usuario(
 	id_usuario INT PRIMARY KEY AUTO_INCREMENT,
     empresa_id INT NOT NULL,
@@ -75,41 +68,67 @@ CREATE TABLE IF NOT EXISTS usuario(
 	CONSTRAINT fk_usuario_usuario FOREIGN KEY (supervisor_id)
 		REFERENCES usuario(id_usuario)
 );
-
-CREATE TABLE IF NOT EXISTS servidor(
-	id_servidor INT NOT NULL AUTO_INCREMENT,
+ 
+CREATE TABLE IF NOT EXISTS regiao(
+    id_regiao INT NOT NULL AUTO_INCREMENT,
     empresa_id INT NOT NULL,
-    endereco_id INT NOT NULL,
-    
-    endereco_mac CHAR(12) NOT NULL UNIQUE,	-- ex: 11:22:33:44:55
-    apelido VARCHAR(60) NOT NULL,			-- ex: hostname ou outro definido pelo usuario
-    modelo VARCHAR(60) NOT NULL,			-- ex: 'PADR-S501-I980' 
-        
+ 
+    nome VARCHAR(40) NOT NULL,          -- ex: 'Norte', 'Centro-Oeste'
+    slug VARCHAR(40) NOT NULL,          -- ex: 'norte' (nome do arquivo JSON no S3)
+ 
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    CONSTRAINT pk_servidor PRIMARY KEY (id_servidor, empresa_id),
-	CONSTRAINT fk_servidor_empresa FOREIGN KEY (empresa_id)
-		REFERENCES empresa(id_empresa),
-	CONSTRAINT fk_servidor_endereco FOREIGN KEY (endereco_id)
-		REFERENCES endereco(id_endereco)
+ 
+    CONSTRAINT pk_regiao PRIMARY KEY (id_regiao),
+    CONSTRAINT uq_regiao_id_empresa UNIQUE (id_regiao, empresa_id),   -- permite a FK composta do servidor
+    CONSTRAINT uq_regiao_empresa_nome UNIQUE (empresa_id, nome),
+    CONSTRAINT uq_regiao_empresa_slug UNIQUE (empresa_id, slug),
+    CONSTRAINT chk_regiao_slug CHECK (slug REGEXP '^[a-z0-9-]+$' AND slug NOT IN ('todas', 'indice')),
+    CONSTRAINT fk_regiao_empresa FOREIGN KEY (empresa_id)
+        REFERENCES empresa(id_empresa)
 );
-
-CREATE TABLE componente (
+ 
+CREATE TABLE IF NOT EXISTS servidor(
+    id_servidor INT NOT NULL AUTO_INCREMENT,
+    empresa_id INT NOT NULL,
+    endereco_id INT NOT NULL,
+    regiao_id INT NULL,                     -- NULL = "Sem região" no dashboard
+ 
+    endereco_mac CHAR(12) NOT NULL UNIQUE,	-- 12 dígitos hex, sem separador. ex: 'AABBCCDDEEFF'
+    apelido VARCHAR(60) NOT NULL,			-- ex: hostname ou outro definido pelo usuario
+    modelo VARCHAR(60) NOT NULL,			-- ex: 'PADR-S501-I980'
+ 
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ 
+    CONSTRAINT pk_servidor PRIMARY KEY (id_servidor, empresa_id),
+    -- id_servidor é AUTO_INCREMENT (já é único na prática). Declarar UNIQUE deixa a FK da
+    -- tabela `log` (que referencia só id_servidor) dentro do padrão: o MySQL 8.4+ recusa,
+    -- por padrão, FK que aponta para coluna não única.
+    CONSTRAINT uq_servidor_id UNIQUE (id_servidor),
+    CONSTRAINT fk_servidor_empresa FOREIGN KEY (empresa_id)
+        REFERENCES empresa(id_empresa),
+    CONSTRAINT fk_servidor_endereco FOREIGN KEY (endereco_id)
+        REFERENCES endereco(id_endereco),
+    CONSTRAINT fk_servidor_regiao FOREIGN KEY (regiao_id, empresa_id)
+        REFERENCES regiao(id_regiao, empresa_id)
+);
+ 
+CREATE TABLE IF NOT EXISTS componente (
     id_componente INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(60) NOT NULL UNIQUE,
     unidade_medida VARCHAR(20) NOT NULL,
     depende_de VARCHAR(120) NOT NULL,
-
+ 
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP,
-
+ 
     CONSTRAINT chk_componente_nome
         CHECK (
             nome IN ('cpu', 'ram', 'disco', 'placa_rede')
         ),
-
+ 
     CONSTRAINT chk_componente_unidade
         CHECK (
             (nome = 'cpu' AND unidade_medida = 'pct')
@@ -121,36 +140,36 @@ CREATE TABLE componente (
             (nome = 'placa_rede' AND unidade_medida IN ('Mbps', 'Gbps'))
         )
 );
-
-CREATE TABLE servidor_componente (
+ 
+CREATE TABLE IF NOT EXISTS servidor_componente (
     servidor_id INT NOT NULL,
     empresa_id INT NOT NULL,
     componente_id INT NOT NULL,
-
-    limite_max DECIMAL(12, 3) NOT NULL,
+ 
+    limite_max DECIMAL(12, 3) NOT NULL,		-- limite crítico, na unidade de `componente`
     limite_min DECIMAL(12, 3) NULL,
     capacidade_total DECIMAL(12, 3) NOT NULL,
-
+ 
     monitorado TINYINT NOT NULL DEFAULT 1,
-
+ 
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP,
-
+ 
     CONSTRAINT pk_servidor_componente
         PRIMARY KEY (servidor_id, empresa_id, componente_id),
-
+ 
     CONSTRAINT fk_servidor_componente_servidor
         FOREIGN KEY (servidor_id, empresa_id)
         REFERENCES servidor (id_servidor, empresa_id),
-
+ 
     CONSTRAINT fk_servidor_componente_componente
         FOREIGN KEY (componente_id)
         REFERENCES componente (id_componente),
-
+ 
     CONSTRAINT chk_servidor_componente_monitorado
         CHECK (monitorado IN (0, 1)),
-
+ 
     CONSTRAINT chk_servidor_componente_limites
         CHECK (
             limite_max >= 0
@@ -160,8 +179,8 @@ CREATE TABLE servidor_componente (
             AND limite_max <= capacidade_total
         )
 );
-
- CREATE TABLE `log`(
+ 
+CREATE TABLE IF NOT EXISTS `log`(
 	log_id INT NOT NULL AUTO_INCREMENT,
 	servidor_id INT NOT NULL,
     titulo VARCHAR(255),
@@ -172,9 +191,11 @@ CREATE TABLE servidor_componente (
     CONSTRAINT fk_log_servidor FOREIGN KEY (servidor_id)
 		REFERENCES servidor(id_servidor)
 );
-
+ 
 -- | Stored Procedure(s) | --
-
+ 
+DROP PROCEDURE IF EXISTS sp_cadastrar_empresa;
+ 
 DELIMITER $$
 CREATE PROCEDURE sp_cadastrar_empresa(
 	IN in_cnpj CHAR(14),
@@ -185,16 +206,16 @@ CREATE PROCEDURE sp_cadastrar_empresa(
     IN in_domain_jira VARCHAR(255),
     IN in_email_jira VARCHAR(255),
     IN in_api_token_jira VARCHAR(255),
-    In in_project_key VARCHAR(255)
+    IN in_project_key VARCHAR(255)
 ) BEGIN
-
+ 
 	-- Tratamento de Erro na Procedure
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
 		ROLLBACK;
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Erro no Cadastro de Empresa.';
 	END;
-
+ 
 	-- Corpo da Procedure
 	START TRANSACTION;
 		-- 1. Criar Empresa
@@ -205,22 +226,45 @@ CREATE PROCEDURE sp_cadastrar_empresa(
 		INSERT INTO usuario(empresa_id, nome, email, senha, nivel_acesso)
 			VALUES (LAST_INSERT_ID(), in_nome_fantasia, in_email, SHA2(in_senha, 256), 1);
     COMMIT;
-
+ 
 END$$
 DELIMITER ;
-
+ 
 -- | Inserts-padrão | --
-INSERT INTO componente (nome, unidade_medida, depende_de)
+-- INSERT IGNORE: o UNIQUE de `componente.nome` impede duplicar ao rodar o script de novo.
+INSERT IGNORE INTO componente (nome, unidade_medida, depende_de)
 VALUES
     ('cpu', 'pct', 'psutil.cpu_percent(interval=1)'),
     ('ram', 'GiB', 'psutil.virtual_memory()'),
     ('disco', 'GiB', 'psutil.disk_usage("/")'),
     ('placa_rede', 'Mbps', 'psutil.net_io_counters()');
-    
-CALL roadvizor.sp_cadastrar_empresa("0000000/200-1", "Roadvizor", "Roadvizor", "admin@adm.com", "Dado1807#", "b", "b", "b", "b");
-UPDATE roadvizor.usuario SET nivel_acesso = 0, email = "adm@adm.com", senha = SHA2("Dado1807#", 256) WHERE id_usuario = 1;
-
+ 
+-- Empresa/usuário padrão: só cadastra se ainda não existir.
+SET @cadastrar = (SELECT COUNT(*) = 0 FROM empresa WHERE cnpj = '0000000/200-1');
+SET @sql = IF(@cadastrar,
+    'CALL sp_cadastrar_empresa(''0000000/200-1'', ''Roadvizor'', ''Roadvizor'', ''admin@adm.com'', ''Dado1807#'', ''b'', ''b'', ''b'', ''b'')',
+    'DO 0');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+ 
+-- Promove a conta criada acima a desenvolvedor (localiza pelo e-mail, não por id fixo).
+UPDATE usuario SET nivel_acesso = 0, email = 'adm@adm.com', senha = SHA2('Dado1807#', 256)
+ WHERE email = 'admin@adm.com';
+ 
 -- [!] Rodar scripts abaixo APENAS com o root do BD.
 -- CREATE USER 'roadvizor_user' IDENTIFIED BY 'sptech';
 -- GRANT INSERT, SELECT, UPDATE, DELETE ON roadvizor.* TO 'roadvizor_user';
 -- SHOW GRANTS FOR 'roadvizor_user';
+ 
+-- OPCIONAL: usuário só-leitura para o ETL Gold (ele só faz SELECT) com senha própria.
+-- CREATE USER 'roadvizor_gold' IDENTIFIED BY '<defina-uma-senha-forte>';
+-- GRANT SELECT ON roadvizor.* TO 'roadvizor_gold';
+ 
+-- OPCIONAL: limite de atenção configurável (o Gold usa esta coluna automaticamente quando
+-- ela existe; sem ela, atenção = limite_max * 0,85).
+-- ALTER TABLE servidor_componente
+--     ADD COLUMN limite_atencao DECIMAL(12, 3) NULL AFTER limite_min,
+--     ADD CONSTRAINT chk_servidor_componente_atencao
+--         CHECK (limite_atencao IS NULL OR limite_atencao <= limite_max);
+ 
