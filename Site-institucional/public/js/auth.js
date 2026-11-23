@@ -135,7 +135,7 @@ function autenticarPagina(page) {
       return;
     }
 
-    let page = 
+    let page = niveis[storage.get("usuario").nivel_acesso].dash[0].url;
 
     sessionStorage.setItem("showmsg", 2);
     window.location.href = `/pages/dashboard/${page}`;
