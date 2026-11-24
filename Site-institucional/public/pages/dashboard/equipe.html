@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../../css/output.css" />
   <link rel="stylesheet" href="../../css/components/equipe.css" />
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <script src="script.js" defer></script>
+  <script src="../../js/equipe.js"></script>
 
   <title>RoadVizor | Equipe</title>
 </head>
@@ -132,41 +132,35 @@
 
         <!-- Pesquisa -->
         <input type="text" id="busca" placeholder="🔍 Pesquisar colaborador..." oninput="filtrar()"
-          class="min-w-0 flex-1 basis-full sm:basis-[220px]" />
-
+          style="width: 750px; flex: 0 0 750px;">
 
         <!-- Filtros de status -->
         <div class="flex flex-wrap gap-2">
 
-          <button
+          <button style="width: 100px; flex: 0 0 100px;"
             class="rounded-full border border-accent bg-accent/15 px-4 py-2.5 font-mont text-base font-bold text-accent"
             data-status="todos" onclick="filtrarStatus(this)">
-
             Todos
-
           </button>
 
-          <button
+          <button style="width: 100px; flex: 0 0 100px;"
             class="rounded-full border border-secondary/20 bg-surface/85 px-4 py-2.5 font-mont text-base font-bold transition hover:border-accent"
             data-status="ativo" onclick="filtrarStatus(this)">
-
             Ativos
-
           </button>
 
-          <button
+          <button style="width: 100px; flex: 0 0 100px;"
             class="rounded-full border border-secondary/20 bg-surface/85 px-4 py-2.5 font-mont text-base font-bold transition hover:border-accent"
             data-status="inativo" onclick="filtrarStatus(this)">
-
             Inativos
-
           </button>
 
         </div>
 
 
         <!-- Nível -->
-        <select id="nivel" onchange="filtrar()" class="font-mont text-base font-bold">
+        <select id="nivel" onchange="filtrar()" class="font-mont text-base font-bold"
+          style="width: 600px; flex: 0 0 600px;">
 
           <option value="">Todos os níveis</option>
 
@@ -223,127 +217,149 @@
 
   </main>
 
-<!-- MODAL ADICIONAR COLABORADOR -->
-<div
-    id="modalColaborador"
+  <!-- MODAL ADICIONAR COLABORADOR -->
+  <div id="modalColaborador"
     class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
 
     <div class="w-full max-w-lg rounded-2xl border border-secondary/20 bg-surface p-7 shadow-xl">
 
-        <!-- CABEÇALHO -->
-        <div class="mb-5 flex items-start justify-between">
+      <!-- CABEÇALHO -->
+      <div class="mb-5 flex items-start justify-between">
 
-            <div>
-                <h2 class="text-xl font-bold">
-                    Adicionar colaborador
-                </h2>
+        <div>
+          <h2 class="text-xl font-bold">
+            Adicionar colaborador
+          </h2>
 
-                <p class="mt-1 text-sm text-muted">
-                    Preencha os dados para liberar o acesso.
-                </p>
-            </div>
+          <p class="mt-1 text-sm text-muted">
+            Preencha os dados para liberar o acesso.
+          </p>
+        </div>
 
-            <button
-                type="button"
-                onclick="fecharModalColaborador()"
-                class="text-muted hover:text-foreground">
+        <button type="button" onclick="fecharModalColaborador()" class="text-muted hover:text-foreground">
 
-                ✕
+          ✕
 
-            </button>
+        </button>
+
+      </div>
+
+      <!-- FORMULÁRIO -->
+      <form id="formColaborador" class="space-y-4">
+
+        <!-- NOME -->
+        <div>
+          <label class="mb-2 block text-sm font-semibold">
+            Nome completo
+          </label>
+
+          <input type="text" id="nomeColaborador" placeholder="Ex.: Maria Souza" required
+            style="background-color: #010611;"
+            class="w-full rounded-lg border border-secondary/20 px-3 py-3 text-foreground outline-none focus:border-secondary">
+        </div>
+
+        <!-- E-MAIL -->
+        <div>
+          <label class="mb-2 block text-sm font-semibold">
+            E-mail
+          </label>
+
+          <input type="email" id="emailColaborador" placeholder="Ex.: maria@empresa.com" required
+            style="background-color: #010611;"
+            class="w-full rounded-lg border border-secondary/20 px-3 py-3 text-foreground outline-none focus:border-secondary">
+        </div>
+
+        <!-- SENHA -->
+        <div>
+          <label class="mb-2 block text-sm font-semibold">
+            Senha inicial
+          </label>
+
+          <input type="password" id="senhaColaborador" placeholder="Digite uma senha inicial" minlength="8" required
+            style="background-color: #010611;"
+            class="w-full rounded-lg border border-secondary/20 px-3 py-3 text-foreground outline-none focus:border-secondary">
+        </div>
+
+        <!-- CARGO -->
+        <div>
+          <label class="mb-2 block text-sm font-semibold">
+            Cargo
+          </label>
+
+          <input type="text" id="cargoColaborador" placeholder="Ex.: Analista de suporte" required
+            style="background-color: #010611;"
+            class="w-full rounded-lg border border-secondary/20 px-3 py-3 text-foreground outline-none focus:border-secondary">
+        </div>
+
+        <!-- NÍVEL DE ACESSO -->
+        <div>
+          <label class="mb-2 block text-sm font-semibold">
+            Nível de acesso
+          </label>
+
+          <select id="nivelColaborador" required style="background-color: #010611;"
+            class="w-full rounded-lg border border-secondary/20 px-3 py-3 text-foreground outline-none focus:border-secondary">
+
+            <option value="">Selecione um nível</option>
+            <option value="1">Administrador</option>
+            <option value="2">Colaborador</option>
+
+          </select>
+        </div>
+
+        <!-- BOTÕES -->
+        <div class="flex justify-end gap-3 pt-4">
+
+          <button type="button" onclick="fecharModalColaborador()"
+            class="rounded-lg bg-background px-4 py-3 text-sm font-semibold hover:brightness-125">
+
+            Cancelar
+
+          </button>
+
+          <button type="submit"
+            class="rounded-lg bg-accent px-4 py-3 text-sm font-bold text-background hover:brightness-110">
+
+            Adicionar
+
+          </button>
 
         </div>
 
-        <!-- FORMULÁRIO -->
-        <form id="formColaborador" class="space-y-4">
-
-            <!-- NOME -->
-            <div>
-                <label class="mb-2 block text-sm font-semibold">
-                    Nome completo
-                </label>
-
-                <input
-                    type="text"
-                    id="nomeColaborador"
-                    placeholder="Ex.: Maria Souza"
-                    required
-                    style="background-color: #010611;"
-                    class="w-full rounded-lg border border-secondary/20 px-3 py-3 text-foreground outline-none focus:border-secondary">
-            </div>
-
-            <!-- CARGO -->
-            <div>
-                <label class="mb-2 block text-sm font-semibold">
-                    Cargo
-                </label>
-
-                <input
-                    type="text"
-                    id="cargoColaborador"
-                    placeholder="Ex.: Analista de suporte"
-                    required
-                    style="background-color: #010611;"
-                    class="w-full rounded-lg border border-secondary/20 px-3 py-3 text-foreground outline-none focus:border-secondary">
-            </div>
-
-            <!-- NÍVEL DE ACESSO -->
-            <div>
-                <label class="mb-2 block text-sm font-semibold">
-                    Nível de acesso
-                </label>
-
-                <select
-                    id="nivelColaborador"
-                    required
-                    style="background-color: #010611;"
-                    class="w-full rounded-lg border border-secondary/20 px-3 py-3 text-foreground outline-none focus:border-secondary">
-
-                    <option value="">Selecione um nível</option>
-                    <option value="1">Administrador</option>
-                    <option value="2">Colaborador</option>
-
-                </select>
-            </div>
-
-            <!-- BOTÕES -->
-            <div class="flex justify-end gap-3 pt-4">
-
-                <button
-                    type="button"
-                    onclick="fecharModalColaborador()"
-                    class="rounded-lg bg-background px-4 py-3 text-sm font-semibold hover:brightness-125">
-
-                    Cancelar
-
-                </button>
-
-                <button
-                    type="submit"
-                    class="rounded-lg bg-accent px-4 py-3 text-sm font-bold text-background hover:brightness-110">
-
-                    Adicionar
-
-                </button>
-
-            </div>
-
-        </form>
+      </form>
 
     </div>
-</div>
+  </div>
 
 
-<script src="../../js/utils/storage.js"></script>
-<script src="../../js/utils/selectDiv.js"></script>
-<script src="../../js/utils/toast.js"></script>
-<script src="../../js/auth.js"></script>
-<script src="/libs/chart.js/chart.umd.js"></script>
-<script src="../../js/components/listaServidores.js"></script>
-<script src="../../js/components/detalhes.js"></script>
-<script src="../../js/components/nivel_acesso.js"></script>
-<script src="../../js/components/sidebar.js"></script>
+  <script src="../../js/utils/storage.js"></script>
+  <script src="../../js/utils/selectDiv.js"></script>
+  <script src="../../js/utils/toast.js"></script>
+  <script src="../../js/auth.js"></script>
+  <script src="/libs/chart.js/chart.umd.js"></script>
+  <script src="../../js/components/listaServidores.js"></script>
+  <script src="../../js/components/detalhes.js"></script>
+  <script src="../../js/components/nivel_acesso.js"></script>
+  <script src="../../js/components/sidebar.js"></script>
 
 </body>
 
 </html>
+<script>
+
+  //Função que vai abrir o modal, vai guardar na variavel modal o elemento id="ModalColaborador"
+  function abrirModalColaborador() {
+    const modal = document.getElementById("modalColaborador");
+    // Remover a classe hidden(que significa no css normal display: none), exibindo o modal adicionando a classe flex
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+  }
+
+  function fecharModalColaborador() {
+    //Função que vai esconder o modal, vai guardar na variavel modal o elemento id="ModalColaborador"
+    const modal = document.getElementById("modalColaborador");
+    //Ele adiciona a classe hiden(display none) que esconde o modal e retira o flex retirando a configuração de exibição 
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
+</script>

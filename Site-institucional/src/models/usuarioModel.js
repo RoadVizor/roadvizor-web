@@ -9,7 +9,7 @@ function buscarPorID(empresa_id, id) {
 }const database = require("../database/config");
 
 const camposPermitidos =
-  "id_usuario, empresa_id, supervisor_id, nome, email, nivel_acesso";
+  "id_usuario, empresa_id, supervisor_id, nome, email, nivel_acesso, cargo, ativo";
 
 function autenticar(email, senha) {
   const instrucaoSql = `
@@ -30,10 +30,11 @@ function cadastrar(
   email,
   senha,
   nivel_acesso,
+  cargo,
 ) {
   const instrucaoSql = `
-    INSERT INTO usuario (empresa_id, supervisor_id, nome, email, senha, nivel_acesso) 
-    VALUES (${empresa_id}, ${supervisor_id}, '${nome}', '${email}', SHA2('${senha}', 256), ${nivel_acesso ?? "default"});
+    INSERT INTO usuario (empresa_id, supervisor_id, nome, email, senha, nivel_acesso, cargo) 
+    VALUES (${empresa_id}, ${supervisor_id}, '${nome}', '${email}', SHA2('${senha}', 256), ${nivel_acesso ?? "default"}, "${cargo}");
   `;
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql);

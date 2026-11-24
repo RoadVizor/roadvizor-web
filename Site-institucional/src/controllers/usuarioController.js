@@ -81,7 +81,7 @@ async function autenticar(req, res) {
 
 async function cadastrar(req, res) {
   const { id_usuario, empresa_id, nivel_acesso: permissao } = req.usuario;
-  const { nome, email, senha, nivel_acesso } = req.body;
+  const { nome, email, senha, nivel_acesso, cargo } = req.body;
 
   // dado que: 0 - desenvolvedor | 1 - administrador | 2 em diante - usuário comum
   if (permissao > 1) {
@@ -146,6 +146,7 @@ async function cadastrar(req, res) {
       email,
       senha,
       nivel_acesso,
+      cargo
     );
 
     res.status(201).send({ message: "Usuário cadastrado com sucesso!" });

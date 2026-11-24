@@ -15,10 +15,12 @@ const app = express();
 const router = require("./src/routes/router");
 const indexRouter = require("./src/routes/index");
 const servidorRouter = require("./src/routes/servidor");
+const equipe = require("./src/routes/equipe")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/equipe", equipe);
 
 app.use(cors());
 app.use(cookieParser());
