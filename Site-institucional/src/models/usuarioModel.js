@@ -9,7 +9,7 @@ function buscarPorID(empresa_id, id) {
 }const database = require("../database/config");
 
 const camposPermitidos =
-  "id_usuario, empresa_id, supervisor_id, nome, email, nivel_acesso, cargo, ativo";
+  "id_usuario, empresa_id, supervisor_id, nome, email, nivel_acesso, cargo, ativo, criado_em";
 
 function autenticar(email, senha) {
   const instrucaoSql = `
