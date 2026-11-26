@@ -27,7 +27,7 @@ async function entrar(event) {
 
     storage.set("usuario", data.usuario);
     toast({
-      title: "Login Efetuado!",
+      title: data.message,
       message: "Redirecionando...",
       variant: "success",
     });
@@ -127,18 +127,24 @@ async function cadastrarEmpresa(event) {
   }
 }
 
-function autenticarPagina(page) {
+async function autenticarPagina(page) {
   if (page == 0) {
-    if (!document.cookie) {
-      return;
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/usuarios/", {
+      method: "GET",
+      credentials: "same-origin"
+    });
+
+    if (!response.ok) {
+      sessionStorage.setItem("showmsg", 1);
+      window.location.href = "/pages/login.html";
     }
-    sessionStorage.setItem("showmsg", 2);
-    window.location.href = "/pages/dashboard/home.html";
-  } else {
-    if (document.cookie) {
-      return;
-    }
-    sessionStorage.setItem("showmsg", 1);
+
+  } catch (error) {
+    console.error("Erro ao verificar autenticação:", error);
     window.location.href = "/pages/login.html";
   }
 }

@@ -190,10 +190,20 @@ CREATE PROCEDURE sp_cadastrar_empresa(
 
 	-- Tratamento de Erro na Procedure
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
-	BEGIN
-		ROLLBACK;
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Erro no Cadastro de Empresa.';
-	END;
+    BEGIN
+        -- Armazena as informações do erro original
+        GET DIAGNOSTICS CONDITION 1
+            @sqlstate = RETURNED_SQLSTATE,
+            @errno = MYSQL_ERRNO,
+            @mensagem = MESSAGE_TEXT;
+
+        -- Desfaz as operações da transação
+        ROLLBACK;
+
+        -- Retorna o erro original
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = @mensagem;
+    END;
 
 	-- Corpo da Procedure
 	START TRANSACTION;
@@ -217,7 +227,7 @@ VALUES
     ('disco', 'GiB', 'psutil.disk_usage("/")'),
     ('placa_rede', 'Mbps', 'psutil.net_io_counters()');
     
-CALL roadvizor.sp_cadastrar_empresa("0000000/200-1", "Roadvizor", "Roadvizor", "admin@adm.com", "Dado1807#", "b", "b", "b", "b");
+CALL roadvizor.sp_cadastrar_empresa("00000000000200", "Roadvizor", "Roadvizor", "admin@adm.com", "Dado1807#", "b", "b", "b", "b");
 UPDATE roadvizor.usuario SET nivel_acesso = 0, email = "adm@adm.com", senha = SHA2("Dado1807#", 256) WHERE id_usuario = 1;
 
 -- [!] Rodar scripts abaixo APENAS com o root do BD.
