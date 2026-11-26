@@ -23,6 +23,11 @@ router.put("/:id", verificarAutenticacao, function (req, res) {
   usuarioController.editar(req, res);
 });
 
+router.patch("/:id/status", verificarAutenticacao, function (req, res) {
+  usuarioController.atualizarStatus(req, res);
+});
+
+
 router.get("/", verificarAutenticacao, function (req, res) {
   usuarioController.buscar(req, res)
 })

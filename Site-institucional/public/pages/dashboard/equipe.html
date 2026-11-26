@@ -330,6 +330,7 @@
     </div>
   </div>
   <!-- MODAL GERENCIAR COLABORADOR -->
+  <!-- MODAL GERENCIAR COLABORADOR -->
   <div id="modalGerenciar"
     class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
 
@@ -337,92 +338,166 @@
 
       <!-- CABEÇALHO -->
       <div class="mb-5 flex items-start justify-between">
+
         <div>
-          <h2 class="text-xl font-bold">Gerenciar colaborador</h2>
-          <p class="mt-1 text-sm text-muted">Edite os dados, altere o status ou exclua.</p>
+          <h2 class="text-xl font-bold">
+            Gerenciar colaborador
+          </h2>
+
+          <p class="mt-1 text-sm text-muted">
+            Edite os dados, altere o status ou exclua.
+          </p>
         </div>
-        <button type="button" onclick="fecharModalGerenciar()" class="text-muted hover:text-foreground">✕</button>
+
+        <!-- BOTÃO FECHAR -->
+        <button type="button" onclick="fecharModalGerenciar()" class="text-muted hover:text-foreground">
+          ✕
+        </button>
+
       </div>
 
-      <!-- CARD DO COLABORADOR -->
+
+      <!-- INFORMAÇÕES DO COLABORADOR -->
       <div
         class="mb-4 flex items-center justify-between gap-3 rounded-xl border border-secondary/20 bg-background/60 p-3">
+
         <div class="min-w-0">
           <strong id="gerNome" class="block truncate font-bold"></strong>
+
           <span id="gerInfo" class="text-xs text-muted"></span>
         </div>
-        <span id="gerBadge" class="shrink-0 rounded-full border px-3 py-1 text-xs font-bold"></span>
+
+        <span id="gerBadge" class="shrink-0 rounded-full border px-3 py-1 text-xs font-bold">
+        </span>
+
       </div>
+
 
       <!-- ABAS -->
       <div class="mb-5 grid grid-cols-3 gap-1 rounded-xl border border-secondary/20 bg-background/60 p-1">
+
         <button type="button" data-aba="editar" aria-selected="true" onclick="trocarAbaGerenciar('editar')"
           class="rounded-lg py-2.5 text-sm font-bold text-muted transition aria-selected:bg-primary/25 aria-selected:text-foreground">
           Editar
         </button>
+
         <button type="button" data-aba="status" aria-selected="false" onclick="trocarAbaGerenciar('status')"
           class="rounded-lg py-2.5 text-sm font-bold text-muted transition aria-selected:bg-chart-4/15 aria-selected:text-chart-4">
           Status
         </button>
+
         <button type="button" data-aba="excluir" aria-selected="false" onclick="trocarAbaGerenciar('excluir')"
           class="rounded-lg py-2.5 text-sm font-bold text-muted transition aria-selected:bg-destructive-text/15 aria-selected:text-destructive-text">
           Excluir
         </button>
+
       </div>
 
-      <!-- ABA: EDITAR -->
+
+      <!-- ABA EDITAR -->
       <form id="formGerenciar" data-painel="editar" class="space-y-4">
 
+        <!-- CARGO -->
         <div>
-          <label class="mb-2 block text-sm font-semibold">Cargo</label>
+          <label class="mb-2 block text-sm font-semibold">
+            Cargo
+          </label>
+
           <input type="text" id="gerCargo" required style="background-color: #010611;"
             class="w-full rounded-lg border border-secondary/20 px-3 py-3 text-foreground outline-none focus:border-secondary">
         </div>
 
+
+        <!-- NÍVEL DE ACESSO -->
         <div>
-          <label class="mb-2 block text-sm font-semibold">Nível de acesso</label>
+          <label class="mb-2 block text-sm font-semibold">
+            Nível de acesso
+          </label>
+
           <select id="gerNivel" required style="background-color: #010611;"
-            class="w-full rounded-lg border border-secondary/20 px-3 py-3 text-foreground outline-none focus:border-secondary"></select>
+            class="w-full rounded-lg border border-secondary/20 px-3 py-3 text-foreground outline-none focus:border-secondary">
+
+            <option value="1">Administrador</option>
+            <option value="2">Colaborador</option>
+
+          </select>
         </div>
 
+
+        <!-- BOTÕES -->
         <div class="flex justify-end gap-3 pt-4">
+
           <button type="button" onclick="fecharModalGerenciar()"
-            class="rounded-lg bg-background px-4 py-3 text-sm font-semibold hover:brightness-125">Cancelar</button>
+            class="rounded-lg bg-background px-4 py-3 text-sm font-semibold hover:brightness-125">
+            Cancelar
+          </button>
+
           <button type="submit"
-            class="rounded-lg bg-accent px-4 py-3 text-sm font-bold text-background hover:brightness-110">Salvar
-            alterações</button>
+            class="rounded-lg bg-accent px-4 py-3 text-sm font-bold text-background hover:brightness-110">
+            Salvar alterações
+          </button>
+
         </div>
+
       </form>
 
-      <!-- ABA: STATUS -->
+
+      <!-- ABA STATUS -->
       <div id="painelStatus" data-painel="status" class="hidden flex-col gap-4">
+
         <p id="gerStatusTexto"
-          class="rounded-lg border border-secondary/20 bg-background/60 p-4 text-sm leading-relaxed"></p>
+          class="rounded-lg border border-secondary/20 bg-background/60 p-4 text-sm leading-relaxed">
+        </p>
+
         <div class="flex justify-end gap-3 pt-2">
+
           <button type="button" onclick="fecharModalGerenciar()"
-            class="rounded-lg bg-background px-4 py-3 text-sm font-semibold hover:brightness-125">Cancelar</button>
+            class="rounded-lg bg-background px-4 py-3 text-sm font-semibold hover:brightness-125">
+            Cancelar
+          </button>
+
           <button type="button" id="btnStatus" onclick="alternarStatusColaborador()"
-            class="rounded-lg px-4 py-3 text-sm font-bold text-background hover:brightness-110"></button>
+            class="rounded-lg px-4 py-3 text-sm font-bold text-background hover:brightness-110">
+          </button>
+
         </div>
+
       </div>
 
-      <!-- ABA: EXCLUIR -->
+
+      <!-- ABA EXCLUIR -->
       <div id="painelExcluir" data-painel="excluir" class="hidden flex-col gap-4">
+
         <p
           class="rounded-lg border border-destructive-text/40 bg-destructive-text/10 p-4 text-sm leading-relaxed text-destructive-text">
-          <strong id="gerExNome"></strong> será removido da equipe e perde o acesso na hora.
+
+          <strong id="gerExNome"></strong> será removido da equipe e perderá o acesso na hora.
+
           Essa ação não pode ser desfeita. Para manter o histórico, use <b>Inativar</b>.
+
         </p>
+
         <div class="flex justify-end gap-3 pt-2">
+
           <button type="button" onclick="fecharModalGerenciar()"
-            class="rounded-lg bg-background px-4 py-3 text-sm font-semibold hover:brightness-125">Cancelar</button>
+            class="rounded-lg bg-background px-4 py-3 text-sm font-semibold hover:brightness-125">
+            Cancelar
+          </button>
+
           <button type="button" onclick="excluirColaborador()"
-            class="rounded-lg bg-destructive-text px-4 py-3 text-sm font-bold text-background hover:brightness-110">Excluir
-            colaborador</button>
+            class="rounded-lg bg-destructive-text px-4 py-3 text-sm font-bold text-background hover:brightness-110">
+            Excluir colaborador
+          </button>
+
         </div>
+
       </div>
 
     </div>
+
+  </div>
+
+  </div>
   </div>
 
 
