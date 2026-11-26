@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+    <title>RoadVizor | Especificações</title>
+
+    <link rel="stylesheet" href="../../css/output.css" />
+    <link rel="stylesheet" href="../../css/especificacoes.css" />
+
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body class="flex flex-row items-start gap-4 lg:gap-8">
+
+    <!-- Sidebar original -->
+    <div id="sidebar_container" class="shrink-0 sticky top-0 h-dvh"></div>
+
+    <main class="flex min-h-dvh min-w-0 flex-1 flex-col gap-7 p-5 lg:p-8">
+
+        <!-- SERVIDORES MONITORADOS -->
+        <section id="container_servidores">
+            <div class="mb-4 flex items-center justify-between gap-3">
+                <h2 class="text-xs font-semibold uppercase tracking-wide text-white/60">
+                    Servidores monitorados
+                </h2>
+
+                <span id="total_servidores" class="text-xs text-white/40">
+                    Carregando...
+                </span>
+            </div>
+
+            <div id="lista_servidores"
+                class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+
+                <div class="col-span-full rounded-xl border border-[#30265B] bg-[#0D1730] p-5 text-sm text-white/40">
+                    Carregando servidores...
+                </div>
+
+            </div>
+        </section>
+
+        <hr class="border-white/10" />
+
+        <!-- SERVIDOR SELECIONADO -->
+        <section id="container_cabecalho_servidor">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+
+                <div class="flex flex-wrap items-center gap-3">
+                    <span id="indicador_servidor"
+                        class="size-3 rounded-full bg-white/30"></span>
+
+                    <h1 id="nome_servidor" class="text-2xl font-bold">
+                        Selecione um servidor
+                    </h1>
+
+                    <span id="status_servidor"
+                        class="rounded-full border border-[#30265B] px-4 py-1 text-[10px] font-bold uppercase tracking-wide text-white/50">
+                        Aguardando dados
+                    </span>
+                </div>
+
+                <p class="text-xs text-white/50">
+                    Última atualização:
+                    <span id="ultima_atualizacao">--</span>
+                </p>
+
+            </div>
+
+            <p class="mt-2 text-xs text-white/50">
+                Desempenho e integridade do servidor selecionado.
+            </p>
+        </section>
+
+        <!-- RECURSOS DO SISTEMA -->
+        <section id="container_recursos">
+
+            <div class="mb-4 flex items-center justify-between gap-3">
+                <h2 class="text-sm font-bold">Recursos do sistema</h2>
+
+                <span id="status_atualizacao" class="text-xs text-white/40">
+                    Aguardando métricas
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+
+                <!-- CPU -->
+                <article class="card-recurso card-cpu rounded-2xl border border-l-4 p-5">
+
+                    <header class="flex items-center gap-3">
+                        <span class="icone-recurso grid size-10 place-items-center rounded-lg">
+                            <i class="ph ph-cpu text-xl"></i>
+                        </span>
+
+                        <div>
+                            <p class="text-xs font-semibold">CPU</p>
+                            <p class="text-[11px] text-white/40">Processamento</p>
+                        </div>
+                    </header>
+
+                    <div class="mt-5 flex items-end justify-between gap-2">
+                        <p class="text-3xl font-bold">
+                            <span id="valor_cpu">--</span>
+                            <span class="text-sm font-normal text-white/50">%</span>
+                        </p>
+
+                        <span id="status_cpu" class="text-xs font-semibold text-white/40">
+                            Sem dados
+                        </span>
+                    </div>
+
+                    <div class="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+                        <div id="barra_cpu" class="barra-recurso h-full rounded-full"
+                            style="width: 0%"></div>
+                    </div>
+
+                    <p class="mt-2 text-[10px] text-white/40">
+                        Limite de referência: 85%
+                    </p>
+                </article>
+
+                <!-- RAM -->
+                <article class="card-recurso card-ram rounded-2xl border border-l-4 p-5">
+
+                    <header class="flex items-center gap-3">
+                        <span class="icone-recurso grid size-10 place-items-center rounded-lg">
+                            <i class="ph ph-memory text-xl"></i>
+                        </span>
+
+                        <div>
+                            <p class="text-xs font-semibold">RAM</p>
+                            <p class="text-[11px] text-white/40">Memória em uso</p>
+                        </div>
+                    </header>
+
+                    <div class="mt-5 flex items-end justify-between gap-2">
+                        <p class="text-3xl font-bold">
+                            <span id="valor_ram">--</span>
+                            <span class="text-sm font-normal text-white/50">%</span>
+                        </p>
+
+                        <span id="status_ram" class="text-xs font-semibold text-white/40">
+                            Sem dados
+                        </span>
+                    </div>
+
+                    <div class="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+                        <div id="barra_ram" class="barra-recurso h-full rounded-full"
+                            style="width: 0%"></div>
+                    </div>
+
+                    <p class="mt-2 text-[10px] text-white/40">
+                        Limite de referência: 85%
+                    </p>
+                </article>
+
+                <!-- REDE -->
+                <article class="card-recurso card-rede rounded-2xl border border-l-4 p-5">
+
+                    <header class="flex items-center gap-3">
+                        <span class="icone-recurso grid size-10 place-items-center rounded-lg">
+                            <i class="ph ph-network text-xl"></i>
+                        </span>
+
+                        <div>
+                            <p class="text-xs font-semibold">REDE</p>
+                            <p class="text-[11px] text-white/40">Tráfego de dados</p>
+                        </div>
+                    </header>
+
+                    <div class="mt-5 grid grid-cols-2 gap-4">
+
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5 text-[11px] text-white/40">
+                                <i class="ph ph-arrow-down text-sm"></i>
+                                Recebido
+                            </div>
+
+                            <p class="mt-2 text-2xl font-bold break-words">
+                                <span id="valor_rede_recebida">--</span>
+                            </p>
+
+                            <span class="text-[10px] text-white/40">MB</span>
+                        </div>
+
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5 text-[11px] text-white/40">
+                                <i class="ph ph-arrow-up text-sm"></i>
+                                Enviado
+                            </div>
+
+                            <p class="mt-2 text-2xl font-bold break-words">
+                                <span id="valor_rede_enviada">--</span>
+                            </p>
+
+                            <span class="text-[10px] text-white/40">MB</span>
+                        </div>
+
+                    </div>
+
+                    <p class="mt-4 text-[10px] text-white/40">
+                        Volume de dados transferidos no intervalo.
+                    </p>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- STATUS OPERACIONAL -->
+        <section id="container_status_operacional">
+
+            <h2 class="mb-4 text-sm font-bold">Status operacional</h2>
+
+            <div class="flex flex-col gap-6 rounded-2xl border border-[#30265B] bg-[#0D1730] p-5 lg:flex-row">
+
+                <div id="bloco_estado_servidor"
+                    class="flex shrink-0 flex-col justify-between gap-5 rounded-xl border border-white/10 bg-white/5 p-4 lg:w-52">
+
+                    <div class="flex items-center gap-3">
+                        <i class="ph ph-power text-2xl"></i>
+
+                        <span id="estado_servidor"
+                            class="text-sm font-bold uppercase tracking-wide">
+                            Indisponível
+                        </span>
+                    </div>
+
+                    <p id="descricao_estado" class="text-xs text-white/40">
+                        Aguardando dados de disponibilidade
+                    </p>
+                </div>
+
+                <div class="flex min-w-0 flex-1 flex-col gap-3">
+
+                    <div class="flex items-center justify-between gap-3">
+                        <h3 class="text-[10px] font-semibold uppercase tracking-wide text-white/50">
+                            Histórico de disponibilidade
+                        </h3>
+
+                        <span id="uptime" class="text-xs font-bold text-white/40">
+                            -- uptime
+                        </span>
+                    </div>
+
+                    <div id="barras_disponibilidade"
+                        class="grid grid-cols-4 gap-2 sm:grid-cols-8">
+
+                        <div class="barra-hora"></div>
+                        <div class="barra-hora"></div>
+                        <div class="barra-hora"></div>
+                        <div class="barra-hora"></div>
+                        <div class="barra-hora"></div>
+                        <div class="barra-hora"></div>
+                        <div class="barra-hora"></div>
+                        <div class="barra-hora"></div>
+
+                    </div>
+
+                    <div class="flex justify-between text-[10px] text-white/40">
+                        <span>8 horas atrás</span>
+                        <span>Agora</span>
+                    </div>
+
+                    <p class="text-[10px] text-white/30">
+                        Histórico aguardando integração com os dados de monitoramento.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- GRÁFICO -->
+        <section id="container_grafico">
+
+            <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+
+                <div>
+                    <h2 class="text-sm font-bold">
+                        Desempenho nas últimas 8 horas
+                    </h2>
+
+                    <p class="mt-1 text-[10px] text-white/40">
+                        Histórico de utilização dos recursos do servidor
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-4">
+
+                    <span class="flex items-center gap-2 text-[11px] text-white/60">
+                        <span class="size-2 rounded-full bg-[#D500F9]"></span>
+                        CPU
+                    </span>
+
+                    <span class="flex items-center gap-2 text-[11px] text-white/60">
+                        <span class="size-2 rounded-full bg-[#F5E500]"></span>
+                        RAM
+                    </span>
+
+                    <span class="flex items-center gap-2 text-[11px] text-white/60">
+                        <span class="w-5 border-t-2 border-dashed border-[#FF0055]"></span>
+                        Limite
+                    </span>
+
+                    <button type="button" id="btn_tempo_real"
+                        class="rounded-full border border-[#00E58B]/50 bg-[#00E58B]/10 px-5 py-2 text-[10px] font-bold uppercase tracking-wide text-[#00E58B] transition hover:bg-[#00E58B]/20">
+
+                        <i class="ph ph-play mr-1"></i>
+                        Ativar tempo real
+                    </button>
+                </div>
+            </div>
+
+            <div class="rounded-2xl border border-[#30265B] bg-[#0D1730] p-4 sm:p-5">
+
+                <div class="grafico-area">
+                    <canvas id="grafico_desempenho"
+                        aria-label="Gráfico de desempenho do servidor nas últimas oito horas"
+                        role="img">
+                    </canvas>
+                </div>
+
+                <p id="mensagem_grafico"
+                    class="mt-3 text-center text-xs text-white/40">
+                    Aguardando integração do histórico de métricas.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/toast.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="/libs/chart.js/chart.umd.js"></script>
+    <script src="../../js/components/nivel_acesso.js"></script>
+    <script src="../../js/components/sidebar.js"></script>
+    <script src="../../js/especificacoes.js"></script>
+
+</body>
+</html>
