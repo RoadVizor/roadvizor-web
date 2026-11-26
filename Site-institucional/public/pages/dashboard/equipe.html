@@ -80,19 +80,46 @@
       </div>
 
 
-      <!-- Inativos -->
+      <!-- Chamados Resolvidos -->
       <div
-        class="flex min-w-0 items-center gap-4 rounded-xl border border-secondary/20 border-l-4 border-l-destructive-text bg-surface/85 p-5">
+        class="flex min-w-0 items-center gap-4 rounded-xl border border-secondary/20 border-l-4 border-l-accent bg-surface/85 p-5">
 
+        <!-- Ícone -->
         <div
-          class="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-destructive-text text-2xl font-bold text-background">
-          −
+          class="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-accent text-2xl font-bold text-background">
+
+          ✔
+
         </div>
 
+        <!-- Informações -->
         <div class="min-w-0">
-          <strong class="block text-3xl font-bold" id="statInativos"></strong>
-          <span class="font-mont text-base font-bold">Chamados Resolvidos</span>
-          <span class="block text-xs text-muted mt-1">Últimos 30 dias</span>
+          <span class="font-mont text-base font-bold">
+            Chamados Resolvidos
+          </span>
+          
+            <!-- Resolvidos / Total -->
+          <strong class="block text-3xl font-bold">
+
+            <span id="statResolvidos">0</span>
+
+            <span class="text-muted">/</span>
+
+            <span id="statTotalChamados">0</span>
+
+          </strong>
+
+          <!-- Percentual -->
+          <span class="mt-1 block text-xs text-muted">
+
+            <span id="statPercentualResolvidos">0</span>% dos chamados
+
+          </span>
+
+          <span class="mt-1 block text-xs text-muted">
+            Últimos 30 dias
+          </span>
+
         </div>
 
       </div>

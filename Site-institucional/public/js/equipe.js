@@ -197,7 +197,66 @@ document.addEventListener("DOMContentLoaded", function () {
         if (statAtivos) statAtivos.textContent = ativos;
         if (contador) contador.textContent = `${total} colaboradores · ${ativos} ativos`;
     }
- 
+
+
+     async function carregarKpiResolvidos() {
+
+        try {
+
+            // busca os indicadores de chamados no backend
+            const resposta = await fetch("/api/jira/kpi/resolvidos", {
+                method: "GET",
+                credentials: "include"
+            });
+
+            // transforma a resposta em objeto javascript
+            const dados = await resposta.json();
+
+            // verifica se o backend retornou algum erro
+            if (!resposta.ok) {
+                throw new Error(
+                    dados.message || "Erro ao buscar KPI do Jira."
+                );
+            }
+
+            // recebe os indicadores retornados pelo controller
+            const kpi = dados.resultado;
+
+            // captura os elementos dos cards no HTML
+            const statResolvidos = document.getElementById("statResolvidos");
+
+            const statTotalChamados = document.getElementById(
+                "statTotalChamados"
+            );
+
+            const statPercentualResolvidos = document.getElementById(
+                "statPercentualResolvidos"
+            );
+
+            // atualiza a quantidade de chamados resolvidos
+            if (statResolvidos) {
+                statResolvidos.textContent = kpi.resolvidos;
+            }
+
+            // atualiza a quantidade total de chamados
+            if (statTotalChamados) {
+                statTotalChamados.textContent = kpi.total;
+            }
+
+            // atualiza o percentual de chamados resolvidos
+            if (statPercentualResolvidos) {
+                statPercentualResolvidos.textContent = kpi.percentual;
+            }
+
+        } catch (erro) {
+
+            console.error("Erro ao carregar KPI do Jira:", erro);
+
+        }
+    }
+
+    // carrega os indicadores do Jira quando a página carregar
+    carregarKpiResolvidos();
  
     // função responsável por montar a tabela de colaboradores
     function renderizarColaboradores() {

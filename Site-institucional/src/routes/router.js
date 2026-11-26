@@ -4,6 +4,7 @@ const middlewares = require("../middlewares/auth");
 const usuarioRouter = require("./usuarios");
 const empresaRouter = require("./empresa");
 const servidorRouter = require("./servidor");
+const jiraRouter = require("./jira");
 
 const router = express.Router();
 
@@ -14,5 +15,9 @@ router.use("/usuarios", usuarioRouter);
 // === Rotas Protegidas (têm acesso a req.usuario) === //
 router.use("/empresas", middlewares.verificarAutenticacao, empresaRouter);
 router.use("/servidores", middlewares.verificarAutenticacao, servidorRouter);
+
+//Rota para o jira
+router.use("/jira", middlewares.verificarAutenticacao, jiraRouter)
+
 
 module.exports = router;
