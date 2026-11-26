@@ -55,13 +55,9 @@ async function obterSaude(req, res) {
 
     // companyId deve vir do token (req.usuario) e, por segurança, não aceitar outro companyId
     const tokenCompanyId = req.usuario?.empresa_id;
-    const requestedCompanyId = req.query.companyId || tokenCompanyId;
-    if (!requestedCompanyId) {
+    
+    if (!tokenCompanyId) {
       return res.status(400).json({ message: "companyId é obrigatório." });
-    }
-    if (String(requestedCompanyId) !== String(tokenCompanyId)) {
-      // Protege isolamento por empresa (usuário só vê dados da sua empresa)
-      return res.status(403).json({ message: "Acesso negado à empresa solicitada." });
     }
 
     const region = req.query.region; // ex: 'norte', 'indice', 'sem-regiao'
@@ -71,7 +67,7 @@ async function obterSaude(req, res) {
     // <S3_PREFIX>/<companyId>/todas.json (default)
     // <S3_PREFIX>/<companyId>/<region>.json
     // <S3_PREFIX>/<companyId>/<file>
-    const base = `${prefix}/${requestedCompanyId}`;
+    const base = `${prefix}/empresa=${tokenCompanyId}`;
     let key;
     if (fileParam) {
       key = `${base}/${ensureJsonExt(fileParam)}`;

@@ -1,47 +1,58 @@
 {
-  "regiao": {
-    "slug": "norte",
-    "nome": "Norte"
-  },
-  "gerado_em": "2026-11-17T22:50:00-03:00",
-  "dados_defasados": false,
   "kpis": {
-    "saude_percent": 82,
-    "servidores_totais": 12,
-    "servidores_criticos": 1,
-    "servidores_atencao": 2,
-    "servidores_saudaveis": 9,
+    "saude_percent": 100,
+    "servidores_totais": 1,
+    "servidores_criticos": 0,
+    "servidores_atencao": 0,
+    "servidores_saudaveis": 1,
     "servidores_offline": 0,
     "variacao_vs_ontem": {
-      "saude_percent": 3,
-      "totais": 0,
-      "criticos": 0,
-      "atencao": 1,
-      "saudaveis": -1
+      "saude_percent": null,
+      "totais": null,
+      "criticos": null,
+      "atencao": null,
+      "saudaveis": null
     }
   },
   "grafico_horas": {
     "horas": [
+      "05:00",
+      "06:00",
+      "07:00",
+      "08:00",
+      "09:00",
+      "10:00",
+      "11:00",
       "12:00",
-      "13:00"
+      "13:00",
+      "14:00"
     ],
     "saude_percents": [
-      78,
-      null
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      100
     ]
   },
   "servidores": [
     {
-      "id": 3,
-      "apelido": "SRV-ANCH-1",
+      "id": 1,
+      "apelido": "SRV-MOCK-1",
       "status": "SAUDAVEL",
       "componentes": {
-        "cpu": 42.5,
-        "ram": 56.3,
-        "disco": 68.8,
-        "rede": 78.2
+        "cpu": 34.7,
+        "ram": 50.3,
+        "disco": 60.1,
+        "rede": 79.8
       },
-      "ultima_atualizacao": "2026-11-17T22:48:00-03:00"
+      "ultima_atualizacao": "2026-11-25T14:33:53-03:00"
     }
-  ]
+  ],
+  "indice": {}
 }

@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+.env
+.env.*
+.DS_Store
+.vscode
+public/css/output.css
+dist
+coverage
+.idea
