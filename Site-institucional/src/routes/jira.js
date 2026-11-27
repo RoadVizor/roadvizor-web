@@ -19,5 +19,10 @@ router.get("/kpi/situacao", function(req, res){
     jiraController.buscarKpiSituacao(req, res)
 });
 
+// ROta para tempo medio de resolução dos chamados da equipe
+router.get("/kpi/tempo-medio-resolucao", function(req, res){
+    jiraController.buscarKpiTempoMedioResolucao(req, res)
+})
+
 
 module.exports = router;

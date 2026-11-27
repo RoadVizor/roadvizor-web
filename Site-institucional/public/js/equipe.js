@@ -384,6 +384,59 @@ document.addEventListener("DOMContentLoaded", function () {
     // carrega os indicadores do Jira quando a página carregar
     carregarKpiResolvidos();
 
+    // carrega a KPI de tempo médio de resolução
+    carregarKpiTempoMedioResolucao();
+
+    // busca a KPI de tempo médio de resolução
+async function carregarKpiTempoMedioResolucao() {
+
+    try {
+
+        // consulta a API do Jira
+        const resposta = await fetch(
+            "/api/jira/kpi/tempo-medio-resolucao",
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+        // converte a resposta para JSON
+        const dados = await resposta.json();
+
+        // verifica se a resposta foi bem-sucedida
+        if (!resposta.ok) {
+            throw new Error(
+                dados.message || "Erro ao buscar tempo médio de resolução."
+            );
+        }
+
+        // captura os dados da KPI
+        const kpi = dados.resultado;
+
+        // seleciona o elemento do HTML
+        const elemento = document.getElementById(
+            "kpiTempoMedioResolucao"
+        );
+
+        // verifica se o elemento existe
+        if (!elemento) {
+            throw new Error("Elemento da KPI não encontrado no HTML.");
+        }
+
+        // exibe o tempo médio em dias
+        elemento.textContent = `${kpi.tempoMedioDias.toLocaleString("pt-BR")} dias`;
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar KPI de tempo médio de resolução:",
+            erro
+        );
+
+    }
+}
+
     // função responsável por montar a tabela de colaboradores
     function renderizarColaboradores() {
 

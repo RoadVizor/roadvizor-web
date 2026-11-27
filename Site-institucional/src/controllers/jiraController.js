@@ -70,8 +70,35 @@ async function  buscarKpiSituacao(req, res) {
     
 }
 
+async function buscarKpiTempoMedioResolucao(req, res) {
+    try {
+
+        // identifica a empresa do usuário autenticado
+        const empresaId = req.usuario.empresa_id;
+
+        // busca o tempo médio de resolução no Jira
+        const kpi = await jiraService.buscarKpiTempoMedioResolucao(empresaId);
+
+        // retorna os dados da KPI
+        res.status(200).json({
+            message: "KPI de tempo médio de resolução encontrada.",
+            resultado: kpi
+        });
+
+    } catch (erro) {
+
+        console.error("Erro ao buscar KPI de tempo médio de resolução:", erro);
+
+        res.status(500).json({
+            message: "Não foi possível buscar a KPI de tempo médio de resolução."
+        });
+
+    }
+}
+
 module.exports = {
     buscarChamados,
     buscarKpiResolvidos,
-    buscarKpiSituacao
+    buscarKpiSituacao,
+    buscarKpiTempoMedioResolucao
 };
