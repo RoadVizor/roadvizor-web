@@ -83,8 +83,13 @@ let niveis = {
                 "title": "Relatórios",
                 "url": "./relatorios.html",
                 "icon": "ph ph-file-text text-2xl"
+            },
+            {
+                "id": "RoadVizor | Vitória",
+                "title": "Vitória",
+                "url": "./vitoria.html",
+                "icon": "ph ph-clipboard-text text-2xl"
             }
         ],
     },
 }
-

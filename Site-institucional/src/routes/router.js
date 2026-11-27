@@ -5,6 +5,7 @@ const usuarioRouter = require("./usuarios");
 const empresaRouter = require("./empresa");
 const servidorRouter = require("./servidor");
 const especificacoesRouter = require("./especificacoes");
+const vitoriaRouter = require("./vitoria");
 
 const router = express.Router();
 
@@ -13,5 +14,7 @@ router.use("/empresas", middlewares.verificarAutenticacao, empresaRouter);
 router.use("/servidores", middlewares.verificarAutenticacao, servidorRouter);
 router.use("/especificacoes", middlewares.verificarAutenticacao, especificacoesRouter);
 router.use("/relatorios", require("./relatorios"));
+router.use("/vitoria", middlewares.verificarAutenticacao, vitoriaRouter);
+
 
 module.exports = router;
