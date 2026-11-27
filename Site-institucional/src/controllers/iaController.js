@@ -1,5 +1,16 @@
 const iaService = require("../services/iaService");
 
+const {
+    S3Client,
+    GetObjectCommand
+} = require("@aws-sdk/client-s3");
+
+const s3 = new S3Client({
+    region: "us-east-1"
+});
+
+const BUCKET_NAME = "datalake-gold-roadvizor-sptech";
+
 async function analisar(req, res) {
     try {
         const { empresa_id } = req.usuario;
@@ -18,23 +29,15 @@ async function analisar(req, res) {
         }
 
         // Busca os dados Gold da empresa
-        const resposta = await fetch(
-            `http://127.0.0.1:5000/api/flowpredict/${empresa_id}`,
-            {
-                method: "GET",
-                headers: {
-                    "X-Internal-Token": "roadvizor-internal-token"
-                }
-            }
+        const resposta = await s3.send(
+            new GetObjectCommand({
+                Bucket: BUCKET_NAME,
+                Key: `flowpredict/empresa_${empresa_id}/dashboard.json`
+            })
         );
 
-        if (!resposta.ok) {
-            const erro = await resposta.json();
-
-            return res.status(resposta.status).json(erro);
-        }
-
-        const dashboard = await resposta.json();
+        const conteudo = await resposta.Body.transformToString();
+        const dashboard = JSON.parse(conteudo);
 
         // Localiza o servidor solicitado
         const servidor = dashboard.servidores.find(

@@ -1,5 +1,16 @@
 const flowpredictModel = require("../models/flowpredictModel");
 
+const {
+    S3Client,
+    GetObjectCommand
+} = require("@aws-sdk/client-s3");
+
+const s3 = new S3Client({
+    region: "us-east-1"
+});
+
+const BUCKET_NAME = "datalake-gold-roadvizor-sptech";
+
 async function buscarDashboard(req, res) {
     try {
         const { empresa_id } = req.usuario;
@@ -10,21 +21,17 @@ async function buscarDashboard(req, res) {
             });
         }
 
-        const resposta = await fetch(
-            `http://127.0.0.1:5000/api/flowpredict/${empresa_id}`,
-            {
-                method: "GET",
-                headers: {
-                    "X-Internal-Token": "roadvizor-internal-token"
-                }
-            }
+        // Busca o dashboard diretamente no S3
+        const resposta = await s3.send(
+            new GetObjectCommand({
+                Bucket: BUCKET_NAME,
+                Key: `flowpredict/empresa_${empresa_id}/dashboard.json`
+            })
         );
 
-        const dados = await resposta.json();
-
-        if (!resposta.ok) {
-            return res.status(resposta.status).json(dados);
-        }
+        // Converte o conteúdo JSON
+        const conteudo = await resposta.Body.transformToString();
+        const dados = JSON.parse(conteudo);
 
         return res.status(200).json(dados);
 
@@ -36,7 +43,6 @@ async function buscarDashboard(req, res) {
         });
     }
 }
-
 
 async function salvarSugestao(req, res) {
     try {
