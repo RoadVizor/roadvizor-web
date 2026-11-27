@@ -129,7 +129,92 @@ console.log("Categorias dos chamados:", categorias);
     };
 }
 
+// busca a KPI de situação dos chamados nos últimos 30 dias
+async function buscarKpiSituacao(empresaId) {
+
+    // busca as configurações da empresa
+    const empresa = await buscarConfiguracaoJira(empresaId);
+
+    // lista que armazenará todos os chamados encontrados
+    const chamados = [];
+
+    // guarda o token da próxima página
+    let nextPageToken = null;
+
+    // consulta todas as páginas de chamados
+    do {
+
+        const corpo = {
+            jql: `project = ${empresa.project_key} AND created >= -30d ORDER BY created DESC`,
+            fields: [
+                "created",
+                "status",
+                "resolutiondate"
+            ],
+            maxResults: 100
+        };
+
+        // adiciona o token quando existir uma próxima página
+        if (nextPageToken) {
+            corpo.nextPageToken = nextPageToken;
+        }
+
+        // consulta o Jira
+        const dados = await consultarJira(empresa, corpo);
+
+        // adiciona os chamados encontrados à lista
+        chamados.push(...dados.issues);
+
+        // atualiza o token da próxima página
+        nextPageToken = dados.nextPageToken;
+
+    } while (nextPageToken);
+
+
+    // total de chamados encontrados
+    const total = chamados.length;
+
+    // inicializa os contadores
+    let aFazer = 0;
+    let emAndamento = 0;
+    let resolvidos = 0;
+
+
+    // percorre os chamados e conta por categoria
+    chamados.forEach(function (chamado) {
+
+        // captura a categoria do status no Jira
+        const categoria = chamado.fields.status.statusCategory.key;
+
+        // categoria new: chamados a fazer
+        if (categoria === "new") {
+            aFazer++;
+        }
+
+        // categoria indeterminate: chamados em andamento
+        else if (categoria === "indeterminate") {
+            emAndamento++;
+        }
+
+        // categoria done: chamados resolvidos
+        else if (categoria === "done") {
+            resolvidos++;
+        }
+
+    });
+
+
+    // retorna os indicadores para o controller
+    return {
+        total,
+        aFazer,
+        emAndamento,
+        resolvidos
+    };
+}
+
 module.exports = {
     buscarChamados,
-    buscarKpiResolvidos
+    buscarKpiResolvidos,
+    buscarKpiSituacao
 };

@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="../../css/output.css" />
   <link rel="stylesheet" href="../../css/components/equipe.css" />
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/libs/chart.js/chart.umd.js"></script>
   <script src="../../js/equipe.js" defer></script>
 
   <title>RoadVizor | Equipe</title>
@@ -97,8 +98,8 @@
           <span class="font-mont text-base font-bold">
             Chamados Resolvidos
           </span>
-          
-            <!-- Resolvidos / Total -->
+
+          <!-- Resolvidos / Total -->
           <strong class="block text-3xl font-bold">
 
             <span id="statResolvidos">0</span>
@@ -112,7 +113,7 @@
           <!-- Percentual -->
           <span class="mt-1 block text-xs text-muted">
 
-            <span id="statPercentualResolvidos">0</span>% dos chamados
+            <span id="statPercentualResolvidos">0</span>% dos Chamados Resolvidos
 
           </span>
 
@@ -130,12 +131,22 @@
     <!-- Destaque e ranking -->
     <section class="grid grid-cols-1 gap-5 xl:grid-cols-[2fr_1fr]">
 
-      <!-- Destaque -->
-      <div class="flex min-w-0 flex-wrap items-center gap-6 rounded-xl border-2 border-chart-4 bg-surface/85 p-5 md:p-6"
-        id="destaque">
+      <!-- GRÁFICO DE SITUAÇÃO DOS CHAMADOS -->
+      <div class="min-w-0 rounded-xl border border-yellow-400 bg-surface/85 p-6">
+
+        <!-- TÍTULO -->
+        <h3 class="mb-5 text-base font-bold text-foreground">
+          Situação dos chamados da equipe
+        </h3>
+
+        <!-- GRÁFICO DE BARRAS -->
+        <div class="relative h-64 w-full">
+
+          <canvas id="graficoSituacaoChamados"></canvas>
+
+        </div>
 
       </div>
-
 
       <!-- Ranking -->
       <div class="min-w-0 rounded-xl border border-secondary/20 bg-surface/85 p-5">

@@ -12,5 +12,12 @@ router.get("/chamados", function (req, res) {
 router.get("/kpi/resolvidos", function(req, res){
     jiraController.buscarKpiResolvidos(req, res)
 });
-//
+
+
+// Busca a situação dos chamados
+router.get("/kpi/situacao", function(req, res){
+    jiraController.buscarKpiSituacao(req, res)
+});
+
+
 module.exports = router;
