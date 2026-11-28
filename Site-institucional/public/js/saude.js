@@ -1,5 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const mockPath = "/data/mock-saude.json";
+  // Configuration
+  const POLL_MS = 15 * 60 * 1000; // 15 minutes
+
+  // State
+  const state = {
+    currentRegion: "todas",
+    regions: [],
+    serversRaw: [],
+    donutChart: null,
+    lineChart: null,
+    pollId: null,
+  };
 
   function getCssVar(name) {
     return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -17,23 +28,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function formatDateISO(iso) {
     try {
+      if (!iso) return "—";
       const d = new Date(iso);
       if (Number.isNaN(d.getTime())) return iso || "—";
-      return d.toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
+      return d.toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     } catch {
       return iso || "—";
     }
   }
 
-  async function loadData() {
+  // Networking: use backend /api/saude only
+  async function fetchRegions() {
     try {
-      const res = await fetch(mockPath, { cache: "no-store" });
-      if (!res.ok) throw new Error("mock not found");
-      return await res.json();
-    } catch (e) {
-      console.warn("Falha ao carregar mock, usando dados de fallback.", e);
-      return null;
+      const res = await fetch("/api/saude?region=indice", { credentials: "include", cache: "no-store" });
+      if (res.status === 401) { window.location.href = "/pages/login.html"; return []; }
+      if (!res.ok) throw new Error(`status ${res.status}`);
+      const json = await res.json();
+      return json.regioes || [];
+    } catch (err) {
+      console.warn("Erro ao carregar regioes:", err);
+      return [];
     }
+  }
+
+  async function fetchRegionData(slug) {
+    const url = `/api/saude${slug ? `?region=${encodeURIComponent(slug)}` : ""}`;
+    const res = await fetch(url, { credentials: "include", cache: "no-store" });
+    if (res.status === 401) {
+      window.location.href = "/pages/login.html";
+      throw new Error("Unauthorized");
+    }
+    if (res.status === 403) {
+      throw new Error("Forbidden");
+    }
+    if (res.status === 404) {
+      throw new Error("NotFound");
+    }
+    if (!res.ok) {
+      throw new Error(`status ${res.status}`);
+    }
+    return await res.json();
+  }
+
+  // Charts
+  function destroyChart(chart) {
+    try { if (chart) chart.destroy(); } catch {}
   }
 
   function createDonut(ctx, kpis) {
@@ -41,11 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const colorWarn = getCssVar("--color-chart-4") || "#e4af44";
     const colorCrit = getCssVar("--destructive-text") || "#ec8179";
 
-    const good = safeNumber(kpis.servidores_saudaveis ?? kpis.servidores_saudaveis);
-    const warn = safeNumber(kpis.servidores_atencao ?? kpis.servidores_atencao);
-    const crit = safeNumber(kpis.servidores_criticos ?? kpis.servidores_criticos);
+    const good = safeNumber(kpis.servidores_saudaveis ?? 0);
+    const warn = safeNumber(kpis.servidores_atencao ?? 0);
+    const crit = safeNumber(kpis.servidores_criticos ?? 0);
 
-    return new Chart(ctx, {
+    destroyChart(state.donutChart);
+    state.donutChart = new Chart(ctx, {
       type: "doughnut",
       data: {
         labels: ["Saudável", "Atenção", "Crítico"],
@@ -67,11 +113,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function createLine(ctx, labels, values) {
     const colorLine = getCssVar("--color-chart-1") || "#0e5aa7";
     const pointColor = getCssVar("--color-chart-3") || "#4fb3e8";
-
-    // Use values as-is (allow nulls for gaps)
     const dataValues = Array.isArray(values) ? values.map(v => (v === null ? null : Number(v))) : [];
 
-    return new Chart(ctx, {
+    destroyChart(state.lineChart);
+    state.lineChart = new Chart(ctx, {
       type: "line",
       data: {
         labels: Array.isArray(labels) ? labels : [],
@@ -89,17 +134,16 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       options: {
         plugins: { legend: { display: false } },
-        scales: {
-          y: { beginAtZero: true, max: 100, ticks: { callback: v => v + "%" } }
-        },
+        scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + "%" } } },
         maintainAspectRatio: false
       }
     });
   }
 
-  function populateKpisFromMock(raw) {
-    const k = raw?.kpis || {};
-    document.querySelectorAll("[data-kpi-total]").forEach(el => el.textContent = k.servidores_totais ?? (raw?.servidores ? raw.servidores.length : 0));
+  // UI population
+  function populateKpis(data) {
+    const k = data?.kpis || {};
+    document.querySelectorAll("[data-kpi-total]").forEach(el => el.textContent = (k.servidores_totais ?? (data?.servidores ? data.servidores.length : 0)));
     document.querySelectorAll("[data-kpi-saudavel]").forEach(el => el.textContent = k.servidores_saudaveis ?? 0);
     document.querySelectorAll("[data-kpi-atencao]").forEach(el => el.textContent = k.servidores_atencao ?? 0);
     document.querySelectorAll("[data-kpi-critico]").forEach(el => el.textContent = k.servidores_criticos ?? 0);
@@ -108,30 +152,57 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("[data-kpi-critico-main]").forEach(el => el.textContent = k.servidores_criticos ?? 0);
 
     const pctEl = document.getElementById("saude-percent");
-    if (pctEl) pctEl.textContent = (k.saude_percent !== undefined ? `${k.saude_percent}%` : (raw?.kpis?.saude_percent ? `${raw.kpis.saude_percent}%` : "--"));
+    if (pctEl) pctEl.textContent = (k.saude_percent !== undefined && k.saude_percent !== null) ? `${k.saude_percent}%` : "--";
   }
 
-  function populateServersFromMock(rawServers) {
+  function humanStatus(s) {
+    if (!s) return "";
+    const st = String(s).toLowerCase();
+    if (st.includes("saud")) return "Saudável";
+    if (st.includes("aten")) return "Atenção";
+    if (st.includes("crit")) return "Crítico";
+    if (st.includes("offline")) return "Offline";
+    return String(s);
+  }
+
+  function statusBg(saude) {
+    if (!saude) return "transparent";
+    const st = String(saude).toLowerCase();
+    if (st.includes("saud")) return getCssVar("--success-bg") || "#1e3e2c";
+    if (st.includes("aten")) return getCssVar("--warning-bg") || "#40331c";
+    if (st.includes("offline")) return getCssVar("--muted-bg") || "#666";
+    return getCssVar("--destructive-bg") || "#401e1c";
+  }
+  function statusColor(saude) {
+    if (!saude) return "inherit";
+    const st = String(saude).toLowerCase();
+    if (st.includes("saud")) return getCssVar("--success-text") || "#88ddae";
+    if (st.includes("aten")) return getCssVar("--warning-text") || "#ebbe70";
+    if (st.includes("offline")) return getCssVar("--muted-text") || "#ddd";
+    return getCssVar("--destructive-text") || "#ec8179";
+  }
+
+  function populateServers(list) {
     const tbody = document.querySelector("[data-servers-list]");
     const countEl = document.querySelector("[data-servers-count]");
     if (!tbody) return;
     tbody.innerHTML = "";
-    const list = Array.isArray(rawServers) ? rawServers : [];
-    if (list.length === 0) {
+    const arr = Array.isArray(list) ? list : [];
+    if (arr.length === 0) {
       const tr = document.createElement("tr");
       tr.innerHTML = `<td colspan="7" class="py-4 text-center text-muted">Nenhum servidor encontrado</td>`;
       tbody.appendChild(tr);
       if (countEl) countEl.textContent = "0";
       return;
     }
-    list.forEach(s => {
+    arr.forEach(s => {
       const name = s.apelido || s.name || `srv-${s.id ?? ""}`;
-      const cpu = s.componentes?.cpu !== undefined ? `${s.componentes.cpu}%` : (s.cpu ?? "—");
-      const ram = s.componentes?.ram !== undefined ? `${s.componentes.ram}%` : (s.ram ?? "—");
-      const disco = s.componentes?.disco !== undefined ? `${s.componentes.disco}%` : (s.disco ?? "—");
-      const rede = s.componentes?.rede !== undefined ? `${s.componentes.rede} Mbps` : (s.rede ?? "—");
-      const status = s.status ?? s.saude ?? s.health ?? "";
-      const updated = s.ultima_atualizacao ?? s.updated ?? s.ultimaAtualizacao ?? "";
+      const cpu = s.componentes?.cpu !== undefined && s.componentes?.cpu !== null ? `${s.componentes.cpu}%` : "—";
+      const ram = s.componentes?.ram !== undefined && s.componentes?.ram !== null ? `${s.componentes.ram}%` : "—";
+      const disco = s.componentes?.disco !== undefined && s.componentes?.disco !== null ? `${s.componentes.disco}%` : "—";
+      const rede = s.componentes?.rede !== undefined && s.componentes?.rede !== null ? `${s.componentes.rede} Mbps` : "—";
+      const status = s.status ?? "";
+      const updated = s.ultima_atualizacao ?? s.updated ?? "";
 
       const tr = document.createElement("tr");
       tr.className = "border-b";
@@ -154,64 +225,115 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
       tbody.appendChild(tr);
     });
-    if (countEl) countEl.textContent = String(list.length);
+    if (countEl) countEl.textContent = String(arr.length);
   }
 
-  function humanStatus(s) {
-    if (!s) return "";
-    const st = String(s).toLowerCase();
-    if (st.includes("saud")) return "Saudável";
-    if (st.includes("aten")) return "Atenção";
-    if (st.includes("crit") || st.includes("critico")) return "Crítico";
-    return String(s);
+  function applyFiltersAndRender() {
+    const search = (document.querySelector("[data-sv-search]")?.value || "").trim().toLowerCase();
+    const statusFilter = (document.getElementById("servers-filter")?.value || "").trim().toUpperCase();
+    let list = Array.isArray(state.serversRaw) ? state.serversRaw.slice() : [];
+    if (search) list = list.filter(s => (s.apelido || "").toLowerCase().includes(search));
+    if (statusFilter) list = list.filter(s => ((s.status || "").toString().toUpperCase()) === statusFilter);
+    populateServers(list);
   }
 
-  function statusBg(saude) {
-    if (!saude) return "transparent";
-    const st = String(saude).toLowerCase();
-    if (st.includes("saud")) return getCssVar("--success-bg") || "#1e3e2c";
-    if (st.includes("aten")) return getCssVar("--warning-bg") || "#40331c";
-    return getCssVar("--destructive-bg") || "#401e1c";
-  }
-  function statusColor(saude) {
-    if (!saude) return "inherit";
-    const st = String(saude).toLowerCase();
-    if (st.includes("saud")) return getCssVar("--success-text") || "#88ddae";
-    if (st.includes("aten")) return getCssVar("--warning-text") || "#ebbe70";
-    return getCssVar("--destructive-text") || "#ec8179";
-  }
-
-  // bootstrap
+  // Boot
   (async () => {
-    const raw = await loadData();
-    const data = raw || {};
-
-    // KPIs & Donut
+    const regionSelect = document.getElementById("saude-region");
+    const searchInput = document.querySelector("[data-sv-search]");
+    const serversFilter = document.getElementById("servers-filter");
+    const refreshBtn = document.getElementById("saude-refresh");
     const donutEl = document.getElementById("saude-donut");
-    if (donutEl && window.Chart) {
-      const kpis = data.kpis || {};
-      createDonut(donutEl.getContext("2d"), kpis);
-    }
-
-    // Line chart
     const lineEl = document.getElementById("saude-evolucao-chart");
-    if (lineEl && window.Chart) {
-      const labels = data.grafico_horas?.horas ?? [];
-      const values = data.grafico_horas?.saude_percents ?? [];
-      createLine(lineEl.getContext("2d"), labels, values);
+
+    // ensure servers-filter options
+    if (serversFilter) {
+      serversFilter.innerHTML = `
+        <option value="">Todos os servidores</option>
+        <option value="SAUDAVEL">Saudável</option>
+        <option value="ATENCAO">Atenção</option>
+        <option value="CRITICO">Crítico</option>
+        <option value="OFFLINE">Offline</option>
+      `;
     }
 
-    // KPIs values
-    if (data.kpis) populateKpisFromMock(data);
-
-    // Servers
-    if (Array.isArray(data.servidores)) {
-      populateServersFromMock(data.servidores);
-    } else if (Array.isArray(data.servers)) {
-      // fallback if servers key exists
-      populateServersFromMock(data.servers);
-    } else {
-      populateServersFromMock([]);
+    // load regions
+    if (regionSelect) {
+      const regions = await fetchRegions();
+      state.regions = regions;
+      regionSelect.innerHTML = "";
+      const first = { slug: "todas", nome: "Todas as regiões" };
+      const list = [first, ...regions.filter(r => r.slug !== "todas")];
+      list.forEach(r => {
+        const opt = document.createElement("option");
+        opt.value = r.slug || "";
+        opt.textContent = r.nome || r.slug;
+        regionSelect.appendChild(opt);
+      });
+      regionSelect.value = "todas";
+      state.currentRegion = "todas";
     }
+
+    async function loadRegion(slug) {
+      try {
+        const data = await fetchRegionData(slug);
+        // charts
+        if (donutEl && window.Chart) createDonut(donutEl.getContext("2d"), data.kpis || {});
+        if (lineEl && window.Chart) createLine(lineEl.getContext("2d"), data.grafico_horas?.horas ?? [], data.grafico_horas?.saude_percents ?? []);
+        if (data.kpis) populateKpis(data);
+        const servers = Array.isArray(data.servidores) ? data.servidores : (Array.isArray(data.servers) ? data.servers : []);
+        state.serversRaw = servers;
+        applyFiltersAndRender();
+      } catch (err) {
+        if (String(err.message).includes("NotFound")) {
+          state.serversRaw = [];
+          populateServers([]);
+        } else if (String(err.message).includes("Forbidden")) {
+          if (window.toast) window.toast("Acesso negado à empresa solicitada.", "error");
+        } else {
+          console.error("Erro ao carregar região:", err);
+          if (window.toast) window.toast("Erro ao carregar dados. Tente novamente.", "error");
+        }
+      }
+    }
+
+    // initial load
+    await loadRegion(state.currentRegion);
+
+    // handlers
+    if (regionSelect) {
+      regionSelect.addEventListener("change", async (e) => {
+        const slug = e.target.value || "todas";
+        state.currentRegion = slug;
+        if (searchInput) searchInput.value = "";
+        await loadRegion(slug);
+      });
+    }
+    if (searchInput) {
+      let debounce;
+      searchInput.addEventListener("input", () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(() => applyFiltersAndRender(), 300);
+      });
+    }
+    if (serversFilter) serversFilter.addEventListener("change", () => applyFiltersAndRender());
+    if (refreshBtn) refreshBtn.addEventListener("click", async () => { await loadRegion(state.currentRegion); });
+
+    // polling
+    function startPolling() {
+      if (state.pollId) return;
+      state.pollId = setInterval(async () => {
+        if (document.visibilityState !== "visible") return;
+        await loadRegion(state.currentRegion);
+      }, POLL_MS);
+    }
+    function stopPolling() {
+      if (state.pollId) { clearInterval(state.pollId); state.pollId = null; }
+    }
+    startPolling();
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") startPolling(); else stopPolling();
+    });
+    window.addEventListener("beforeunload", stopPolling);
   })();
 });
